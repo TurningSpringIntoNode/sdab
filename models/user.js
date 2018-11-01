@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { Schema } = mongoose.Schema;
+const { Schema } = mongoose;
 
 const bcrypt = require('bcrypt');
 
@@ -9,20 +9,44 @@ const UserSchema = new Schema({
     unique: true,
     required: true
   },
-  password: String
+  password: String,
+  roles: {
+    admin: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Admin' 
+    },
+    account: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Account'
+    }
+  }
 });
 
-UserSchema.encryptPassword = (password, done) => {
-  bcrypt.genSalt(10, (err, salt) => {
-    if (err) {
-      return done(err);
-    }
-    bcrypt.hash(password, salt, done);
+UserSchema.statics.encryptPassword = (password) => {
+  return new Promise((resolve, reject) => {
+    bcrypt.genSalt(10, (err, salt) => {
+      if (err) {
+        return reject(err);
+      }
+      bcrypt.hash(password, salt, (err, hash) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(hash);
+      });
+    });
   });
 };
 
-UserSchema.validatePassword = (password, hash, done) => {
-  bcrypt.compare(password, hash, done);
+UserSchema.statics.validatePassword = (password, hash) => {
+  return new Promise((resolve, reject) => {
+    bcrypt.compare(password, hash, (err, same) => {
+      if (err) {
+        return reject(err);
+      }
+      resolve(same);
+    });
+  });
 };
 
 const User = mongoose.model('User', UserSchema);
