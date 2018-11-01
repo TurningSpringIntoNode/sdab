@@ -21,11 +21,11 @@ const jwtSign = obj => {
 const jwtDecode = token => {
   let decoded = null;
   try {
-    decoded = jwt.verify(token)
+    decoded = jwt.verify(token, config.jwt.secret);
   } catch (e) {
     return Promise.reject();
   }
-  return decoded;
+  return Promise.resolve(decoded);
 };
 
 module.exports = {

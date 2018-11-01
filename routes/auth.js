@@ -50,7 +50,9 @@ router.post('/login', passport.authenticate('local', { session: false }), (req, 
         .validatePassword(password, fdUser.password)
         .then(samePassword => {
           if (samePassword) {
-            res.send(fdUser);
+            res.send({
+              token: fdUser.generateAuthToken()
+            });
           } else {
             res
               .status(400)

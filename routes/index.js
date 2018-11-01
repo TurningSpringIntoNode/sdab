@@ -1,10 +1,9 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
+const { authenticate } = require('../middlewares/auth');
 
-/* GET home page. */
-const passport = require('passport');
-router.post('/', passport.authenticate('local', {session: false}), function(req, res, next) {
-  res.send('It works');
+router.get('/me', authenticate, function(req, res) {
+  res.send(req.user);
 });
 
 module.exports = router;

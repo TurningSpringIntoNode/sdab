@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const bcrypt = require('bcrypt');
 
-const { jwtSign } = require('../utils/auth');
+const { jwtSign, jwtDecode } = require('../utils/auth');
 
 const UserSchema = new Schema({
   email: {
@@ -26,11 +26,9 @@ const UserSchema = new Schema({
 UserSchema.methods.generateAuthToken = function () {
   const user = this;
 
-  return Promise.resolve(
-    jwtSign({
-      id: user._id
-    })
-  );
+  return jwtSign({
+    id: user._id
+  });
 };
 
 UserSchema.statics.encryptPassword = (password) => {
@@ -57,6 +55,29 @@ UserSchema.statics.validatePassword = (password, hash) => {
       }
       resolve(same);
     });
+  });
+};
+
+UserSchema.statics.findByToken = function (token) {
+  const User = this;
+
+  return new Promise((resolve, reject) => {
+    jwtDecode(token)
+      .then(({id}) => {
+        User
+          .findById(id)
+          .populate('roles.admin')
+          .populate('roles.account')
+          .exec((err, user) => {
+            if (err) {
+              return reject(err);
+            }
+            return resolve(user);
+          });
+      })
+      .catch(() => {
+        resolve(null);
+      });
   });
 };
 

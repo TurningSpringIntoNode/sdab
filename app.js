@@ -7,6 +7,7 @@ const logger = require('morgan');
 
 require('./config/passport-setup');
 require('./config/mongodb').connect();
+require('./models');
 
 const app = express();
 
