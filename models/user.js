@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-
 const bcrypt = require('bcrypt');
+
+const { jwtSign } = require('../utils/auth');
 
 const UserSchema = new Schema({
   email: {
     type: String,
-    unique: true,
     required: true
   },
   password: String,
@@ -21,6 +21,14 @@ const UserSchema = new Schema({
     }
   }
 });
+
+UserSchema.methods.generateAuthToken = function () {
+  const user = this;
+
+  return Promise.resolve(jwtSign({
+    id: user._id
+  }));
+};
 
 UserSchema.statics.encryptPassword = (password) => {
   return new Promise((resolve, reject) => {

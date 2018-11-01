@@ -8,9 +8,18 @@ router.post('/signup', async (req, res) => {
   const user = new User({
     email: req.body.email,
     password,
-  })
-  user.save();
-  res.send(user);
+  });
+  user
+    .save()
+    .then(dbUser => {
+      dbUser
+      .generateAuthToken()
+      .then(token => {
+        res.send({
+          token
+        })
+      })
+    });
 });
 
 module.exports = router;
