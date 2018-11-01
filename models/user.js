@@ -7,7 +7,8 @@ const { jwtSign } = require('../utils/auth');
 const UserSchema = new Schema({
   email: {
     type: String,
-    required: true
+    required: true,
+    unique: true
   },
   password: String,
   roles: {
@@ -25,9 +26,11 @@ const UserSchema = new Schema({
 UserSchema.methods.generateAuthToken = function () {
   const user = this;
 
-  return Promise.resolve(jwtSign({
-    id: user._id
-  }));
+  return Promise.resolve(
+    jwtSign({
+      id: user._id
+    })
+  );
 };
 
 UserSchema.statics.encryptPassword = (password) => {
