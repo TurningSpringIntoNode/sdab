@@ -32,7 +32,45 @@ router.post('/signup', async (req, res) => {
 });
 
 router.post('/login', passport.authenticate('local', { session: false }), (req, res) => {
-  res.send(req.user);
+  const { authInfo } = req;
+  const { email, password } = authInfo;
+  User
+    .findOne({ email })
+    .then(fdUser => {
+      if (!fdUser) {
+        return res
+                .status(400)
+                .send({
+                  error: {
+                    message: 'User not found'
+                  }
+                });
+      }
+      User
+        .validatePassword(password, fdUser.password)
+        .then(samePassword => {
+          if (samePassword) {
+            res.send(fdUser);
+          } else {
+            res
+              .status(400)
+              .send({
+                error: {
+                  message: 'Incorrect password'
+                }
+              });
+          }
+        })
+        .catch(() => {
+          res
+            .status(400)
+            .send({
+              error: {
+                message: 'Incorrect password'
+              }
+            });
+        });
+    });
 });
 
 module.exports = router;
