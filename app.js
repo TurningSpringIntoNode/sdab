@@ -6,7 +6,8 @@ const compression = require('compression');
 const logger = require('morgan');
 
 require('./config/passport-setup');
-require('./config/mongodb').connect();
+if(process.env.NODE_ENV == 'production')
+  require('./config/mongodb').connect();
 require('./models');
 
 const app = express();

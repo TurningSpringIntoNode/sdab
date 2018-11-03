@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "NODE_ENV=production node ./bin/www",
-    "dev": "NODE_ENV=development node ./bin/www"
+    "dev": "NODE_ENV=development node ./bin/www",
+    "coverage": "NODE_ENV=test jest --detectOpenHandles --setupTestFrameworkScriptFile=./tests/setup.js --coverage --forceExit --runInBand --no-cache"
   },
   "dependencies": {
     "bcrypt": "^3.0.2",
@@ -19,5 +20,10 @@
     "morgan": "^1.9.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "chai": "^4.2.0",
+    "jest": "^23.6.0",
+    "supertest": "^3.3.0"
   }
 }
