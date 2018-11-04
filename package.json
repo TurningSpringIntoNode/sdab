@@ -5,7 +5,7 @@
   "scripts": {
     "start": "NODE_ENV=production node ./bin/www",
     "dev": "NODE_ENV=development node ./bin/www",
-    "test": "NODE_ENV=test jest --detectOpenHandles --setupTestFrameworkScriptFile=./tests/setup.js --forceExit --runInBand --no-cache",
+    "test": "NODE_ENV=test jest --detectOpenHandles --setupTestFrameworkScriptFile=./tests/setup.js --forceExit --runInBand --no-cache && codecov",
     "coverage": "NODE_ENV=test jest --detectOpenHandles --setupTestFrameworkScriptFile=./tests/setup.js --coverage --forceExit --runInBand --no-cache"
   },
   "dependencies": {
@@ -26,5 +26,9 @@
     "chai": "^4.2.0",
     "jest": "^23.6.0",
     "supertest": "^3.3.0"
+  },
+  "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   }
 }
