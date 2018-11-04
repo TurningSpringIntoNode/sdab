@@ -1,8 +1,14 @@
-require('dotenv').config();
+if(process.env.NODE_ENV == 'production')
+  require('dotenv').config();
 
 const express = require('express');
 const compression = require('compression');
 const logger = require('morgan');
+
+require('./config/passport-setup');
+if(process.env.NODE_ENV == 'production')
+  require('./config/mongodb').connect();
+require('./models');
 
 const app = express();
 
