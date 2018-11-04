@@ -5,6 +5,7 @@
   "scripts": {
     "start": "NODE_ENV=production node ./bin/www",
     "dev": "NODE_ENV=development node ./bin/www",
+    "coverage": "NODE_ENV=test jest --detectOpenHandles --setupTestFrameworkScriptFile=./tests/setup.js --forceExit --runInBand --no-cache",
     "coverage": "NODE_ENV=test jest --detectOpenHandles --setupTestFrameworkScriptFile=./tests/setup.js --coverage --forceExit --runInBand --no-cache"
   },
   "dependencies": {
