@@ -5,6 +5,6 @@ const AdminSchema = new Schema({
 
 });
 
-const Admin = mongoose.model('Admin', AdminSchema);
+const AdminModel = mongoose.model('AdminModel', AdminSchema);
 
-module.exports = Admin;
+module.exports = AdminModel;

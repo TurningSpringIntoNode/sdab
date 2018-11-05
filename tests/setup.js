@@ -12,9 +12,10 @@ beforeAll((done) => {
 });
 
 beforeEach( async (done) => {
-  for(const model in mongoose.connection.models){
-    await mongoose.connection.models[model].deleteMany({})
-  }
+  // TODO:
+  // for(const model in mongoose.connection.models) {
+  //   await mongoose.connection.models[model].deleteMany({})
+  // }
   done();
 });
 

@@ -44,6 +44,18 @@ UserSchema.pre('save', function (next) {
     });
 });
 
+UserSchema.methods.getRole = function () {
+  const user = this;
+
+  if (user.roles.account) {
+    return 'Account';
+  } else if (user.roles.admin) {
+    return 'Admin';
+  } else {
+    throw new Error('User without role');
+  }
+};
+
 UserSchema.methods.generateAuthToken = function () {
   const user = this;
 

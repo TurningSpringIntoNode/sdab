@@ -3,7 +3,11 @@ const router = express.Router();
 const passport = require('passport');
 
 const authCtrl = require('../controllers/auth.controller');
+
 const User = require('../models/user.model');
+const Roles = require('../models/roles');
+
+const authMiddleware = require('../middlewares/auth');
 
 const parseUserData = (req, res, next) => {
   const { name, gender, birth, email, password, checkPassword } = req.body;
@@ -36,7 +40,22 @@ const parseUserData = (req, res, next) => {
 
 };
 
-router.use('/signup/social', parseUserData, authCtrl.signupSocial);
-router.use('/login/social', passport.authenticate('Local', { session: false }), authCtrl.loginSocial);
+const setupRole = (role) => {
+  if (!Roles[role]) {
+    throw new Error('Invalid role requested');
+  }
+  return (req, res, next) => {
+    const roleInstance = new Roles[role]({});
+    req.role = roleInstance;
+    next();
+  };
+};
+
+router.post('/signup/social', parseUserData, setupRole('Account'), authCtrl.signupSocial);
+router.post('/login/social', passport.authenticate('Local', { session: false }), authCtrl.loginSocial);
+
+router.all('/admin/*', authMiddleware.authenticate);
+router.all('/admin/*', authMiddleware.hasRole('Admin'));
+router.post('/admin/', parseUserData, setupRole('Admin'), authCtrl.signupSocial);
 
 module.exports = router;

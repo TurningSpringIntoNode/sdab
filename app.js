@@ -10,7 +10,7 @@ if(process.env.NODE_ENV == 'production')
   require('./config/mongodb').connect();
 require('./models/index');
 
-require('./config/admin-setup');
+require('./config/admin-setup')();
 
 const app = express();
 

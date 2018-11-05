@@ -1,6 +1,6 @@
 const User = require('./user.model');
-const Admin = require('./admin');
-const Account = require('./account');
+const Admin = require('./roles/admin.model');
+const Account = require('./roles/account.model');
 
 module.exports = {
   User,

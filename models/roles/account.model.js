@@ -5,6 +5,6 @@ const AccountSchema = new Schema({
 
 });
 
-const Account = mongoose.model('Account', AccountSchema);
+const AccountModel = mongoose.model('AccountModel', AccountSchema);
 
-module.exports = Account;
+module.exports = AccountModel;

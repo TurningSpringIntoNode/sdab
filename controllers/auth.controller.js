@@ -1,9 +1,8 @@
 const User = require('../models/user.model');
-const Account = require('../models/account');
 
 const signupSocial = (req, res) => {
 
-  const { user } = req;
+  const { user, role } = req;
 
   User
     .findOne({ email: user.email })
@@ -17,11 +16,9 @@ const signupSocial = (req, res) => {
           });
       }
 
-      const account = new Account({});
+      await role.save();
 
-      await account.save();
-
-      user.roles.account = account._id;
+      user.roles.account = role._id;
 
       user
         .save()
@@ -33,6 +30,7 @@ const signupSocial = (req, res) => {
               status: 'OK',
               message: 'OK',
               content: {
+                role: dbUser.getRole(),
                 token
               }
             });
@@ -40,6 +38,9 @@ const signupSocial = (req, res) => {
     });
 };
 
+const signupSocialAdmin = (req, res) => {
+
+};
 const loginSocial = (req, res) => {
   const { authInfo } = req;
   const { email, password } = authInfo;
@@ -57,7 +58,6 @@ const loginSocial = (req, res) => {
       User
         .validatePassword(password, dbUser.password)
         .then(same => {
-          console.log(same);
           if (same) {
             const token = dbUser.generateAuthToken();
             res
@@ -65,6 +65,7 @@ const loginSocial = (req, res) => {
                 status: 'OK',
                 message: 'OK',
                 content: {
+                  role: dbUser.getRole(),
                   token
                 }
               });

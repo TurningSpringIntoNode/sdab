@@ -1,9 +1,9 @@
 const User = require('../models/user.model');
-const Admin = require('../models/admin');
+const Admin = require('../models/roles/admin.model');
 const config = require('../app.config');
 
 
-(async () => {
+module.exports = async () => {
 
   const admin = new Admin();
 
@@ -20,5 +20,5 @@ const config = require('../app.config');
   adminUser.roles.admin = admin._id;
 
   await adminUser.save();
-})();
+};
 
