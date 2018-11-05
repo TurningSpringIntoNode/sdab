@@ -5,6 +5,18 @@ const bcrypt = require('bcrypt');
 const { jwtSign, jwtDecode } = require('../utils/auth');
 
 const UserSchema = new Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  gender: {
+    type: String,
+    enum: ['MALE', 'FEMALE']
+  },
+  birth : {
+    type: Date,
+    required: true
+  },
   email: {
     type: String,
     required: true,
