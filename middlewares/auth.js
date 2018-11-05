@@ -1,4 +1,4 @@
-const User = require('../models/user');
+const User = require('../models/user.model');
 const { getRequestAuthToken } = require('../utils/auth');
 const authenticate = (req, res, next) => {
   const token = getRequestAuthToken(req);

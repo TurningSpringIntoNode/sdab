@@ -8,20 +8,27 @@ const app = require('../app');
 describe('Auth', () => {
 
   test('Signup & login', (done) => {
+    const user = {
+      name: 'Felipe',
+      email: 'ff@ff.com',
+      gender: 'MALE',
+      birth: '01/01/1901',
+      password: 'lolo',
+      checkPassword: 'lolo'
+    };
     request(app)
-      .post('/auth/signup')
-      .send({
-        email: 'ff@mail.com',
-        password: '12345678'
-      })
+      .post('/signup/social')
+      .send(user)
       .expect(200)
       .then(res => res.body)
-      .then(() => {
+      .then(res => {
+        expect(res.status).to.deep.equal('OK');
+        expect(res.content).to.have.property('token');
         request(app)
-          .post('/auth/login')
+          .post('/login/social')
           .send({
-            username: 'ff@mail.com',
-            password: '12345678'
+            email: user.email,
+            password: user.password
           })
           .expect(200)
           .end(done);

@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
 const config = require('../app.config');
 
 const getRequestAuthToken = req => {
@@ -28,8 +30,25 @@ const jwtDecode = token => {
   return Promise.resolve(decoded);
 };
 
+const encryptPassword = (password) => {
+  return new Promise((resolve, reject) => {
+    bcrypt.genSalt(10, (err, salt) => {
+      if (err) {
+        return reject(err);
+      }
+      bcrypt.hash(password, salt, (err, hash) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve(hash);
+      });
+    });
+  });
+};
+
 module.exports = {
   getRequestAuthToken,
   jwtSign,
-  jwtDecode
+  jwtDecode,
+  encryptPassword
 };

@@ -8,7 +8,9 @@ const logger = require('morgan');
 require('./config/passport-setup');
 if(process.env.NODE_ENV == 'production')
   require('./config/mongodb').connect();
-require('./models');
+require('./models/index');
+
+require('./config/admin-setup');
 
 const app = express();
 

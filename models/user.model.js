@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const { Schema } = mongoose;
 const bcrypt = require('bcrypt');
 
-const { jwtSign, jwtDecode } = require('../utils/auth');
+const { jwtSign, jwtDecode, encryptPassword } = require('../utils/auth');
 
 const UserSchema = new Schema({
   name: {
@@ -35,27 +35,20 @@ const UserSchema = new Schema({
   }
 });
 
+UserSchema.pre('save', function (next) {
+  const user = this;
+  encryptPassword(user.password)
+    .then(encPassword => {
+      user.password = encPassword;
+      next();
+    });
+});
+
 UserSchema.methods.generateAuthToken = function () {
   const user = this;
 
   return jwtSign({
     id: user._id
-  });
-};
-
-UserSchema.statics.encryptPassword = (password) => {
-  return new Promise((resolve, reject) => {
-    bcrypt.genSalt(10, (err, salt) => {
-      if (err) {
-        return reject(err);
-      }
-      bcrypt.hash(password, salt, (err, hash) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve(hash);
-      });
-    });
   });
 };
 
@@ -93,6 +86,7 @@ UserSchema.statics.findByToken = function (token) {
   });
 };
 
-const User = mongoose.model('User', UserSchema);
 
-module.exports = User;
+const UserModel = mongoose.model('UserModel', UserSchema);
+
+module.exports = UserModel;

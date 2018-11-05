@@ -1,19 +1,28 @@
-const User = require('../models/user');
+const User = require('../models/user.model');
+const Account = require('../models/account');
 
-const signupSocial = async (req, res) => {
-  const { email, password } = req.body;
-  const encPassword = await User.encryptPassword(password);
+const signupSocial = (req, res) => {
+
+  const { user } = req;
 
   User
-    .findOne({ email })
-    .then(dbUser => {
+    .findOne({ email: user.email })
+    .then(async (dbUser) => {
       if (dbUser) {
-        return res.sendStatus(400);
+        return res
+          .status(400)
+          .send({
+            status: 'ERROR',
+            message: 'User already exists'
+          });
       }
-      const user = new User({
-        email,
-        password: encPassword
-      });
+
+      const account = new Account({});
+
+      await account.save();
+
+      user.roles.account = account._id;
+
       user
         .save()
         .then(dbUser => {
@@ -21,7 +30,11 @@ const signupSocial = async (req, res) => {
             .generateAuthToken()
           res
             .send({
-              token
+              status: 'OK',
+              message: 'OK',
+              content: {
+                token
+              }
             });
         });
     });
@@ -37,9 +50,8 @@ const loginSocial = (req, res) => {
         return res
           .status(400)
           .send({
-            error: {
-              message: 'User not found'
-            }
+            status: 'ERROR',
+            message: 'User not found'
           });
       }
       User
@@ -50,25 +62,22 @@ const loginSocial = (req, res) => {
             const token = dbUser.generateAuthToken();
             res
               .send({
-                token
-              });
-          } else {
-            res
-              .status(400)
-              .send({
-                error: {
-                  message: 'Incorrect password'
+                status: 'OK',
+                message: 'OK',
+                content: {
+                  token
                 }
               });
+          } else {
+            return Promise.reject();
           }
         })
         .catch(() => {
           res
             .status(400)
             .send({
-              error: {
-                message: 'Incorrect password'
-              }
+              status: 'ERROR',
+              message: 'Incorrect password'
             });
         });
     });
