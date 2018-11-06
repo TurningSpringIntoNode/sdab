@@ -8,10 +8,9 @@ const authenticate = (req, res, next) => {
     .then((user) => {
       if (!user) {
         return Promise.reject();
-      } else {
-        req.user = user;
-        next();
       }
+      req.user = user;
+      next();
     })
     .catch(() => {
       res

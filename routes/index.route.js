@@ -8,8 +8,8 @@ const userCtrl = require('../controllers/user.controller');
 router.get('/me', authMiddleware.authenticate, (req, res) => res.send({
   status: 'OK',
   message: 'OK',
-  content: req.user
-}))
+  content: req.user,
+}));
 
 router.delete('/me', authMiddleware.authenticate, userCtrl.deleteOwnUser);
 

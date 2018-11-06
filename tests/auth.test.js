@@ -7,6 +7,8 @@ const config = require('../app.config');
 
 const app = require('../app');
 
+const { User, Account } = require('../config/mongodb').mongoose.models;
+
 const user = {
   name: 'Felipe',
   email: 'ff@ff.com',
@@ -186,6 +188,82 @@ describe('Auth', () => {
               role: 'Account',
             });
             done();
+          })
+      });
+  });
+
+  test('delete user', (done) => {
+    const { email, password } = user;
+    const authInfo = { email, password };
+    request(app)
+      .post('/login/social')
+      .send(authInfo)
+      .expect(200)
+      .then(res => res.body)
+      .then(res => {
+        expect(res.status).to.deep.equal('OK');
+        expect(res.content.role).to.deep.equal('Account');
+        expect(res.content).to.have.property('token');
+        return res.content.token;
+      })
+      .then(token => {
+        request(app)
+          .delete('/me')
+          .set('authorization', 'Bearer ' + token)
+          .expect(200)
+          .then(res => res.body)
+          .then(res => {
+            expect(res.status).to.deep.equal('OK');
+            User
+              .findOne({ email })
+              .exec((err, user) => {
+                expect(err).to.be.a('null');
+                expect(user).to.be.a('null');
+                done();
+              })
+          });
+      });
+  });
+
+  test('Admin delete user', async (done) => {
+    const account = new Account({});
+    await account.save();
+
+    const {name, email, gender, birth, password} = user;
+    const dbUser = new User({ name, email, gender, birth, password });
+    dbUser.roles.Account = account._id;
+
+    await dbUser.save();
+
+    request(app)
+      .post('/login/social')
+      .send({
+        email: config.admin.email,
+        password: config.admin.password
+      })
+      .expect(200)
+      .then(res => res.body)
+      .then(res => {
+        expect(res.status).to.deep.equal('OK');
+        expect(res.content.role).to.deep.equal('Admin');
+        expect(res.content).to.have.property('token');
+        return res.content.token;
+      })
+      .then(token => {
+        request(app)
+          .delete(`/admin/users/${dbUser._id}`)
+          .set('authorization', `Bearer ${token}`)
+          .expect(200)
+          .then(res => res.body)
+          .then(res => {
+            expect(res.status).to.deep.equal('OK');
+            User
+              .findOne({ email })
+              .exec((err, user) => {
+                  expect(err).to.be.a('null');
+                  expect(user).to.be.a('null');
+                  done();
+              });
           })
       });
   });

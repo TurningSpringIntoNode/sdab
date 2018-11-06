@@ -61,7 +61,8 @@ module.exports = (db, mongoose) => {
 
     if (user.roles.Account) {
       return 'Account';
-    } if (user.roles.Admin) {
+    }
+    if (user.roles.Admin) {
       return 'Admin';
     }
     throw new Error('User without role');
@@ -124,6 +125,47 @@ module.exports = (db, mongoose) => {
         })
         .catch(() => {
           resolve(null);
+        });
+    });
+  };
+
+  UserSchema.statics.recDeleteById = function (id) {
+    const User = this;
+
+    return new Promise((resolve, reject) => {
+      User
+        .findById(id)
+        .exec((err, user) => {
+          if (err) {
+            // TODO
+            reject();
+          } else {
+            if (user) {
+              const deleteUserCb = (err) => {
+                if (err) {
+                  reject(err);
+                } else {
+                  User
+                    .deleteOne({ _id: id })
+                    .exec((err) => {
+                      if (err) {
+                        reject(err);
+                      } else {
+                        resolve();
+                      }
+                    });
+                }
+              };
+              if (user.roles.Admin) {
+                Admin.deleteOne({ _id: user.roles.Admin }).exec(deleteUserCb);
+              }
+              if (user.roles.Account) {
+                Account.deleteOne({ _id: user.roles.Account }).exec(deleteUserCb);
+              }
+            } else {
+              resolve();
+            }
+          }
         });
     });
   };
