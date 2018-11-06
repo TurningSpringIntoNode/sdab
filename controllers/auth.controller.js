@@ -65,12 +65,12 @@ const loginSocial = (req, res) => {
                   },
                 });
             } else {
-              Promise.reject();
+              return Promise.reject();
             }
           })
           .catch(() => {
             res
-              .status(400)
+              .status(401)
               .send({
                 status: 'ERROR',
                 message: 'Incorrect password',

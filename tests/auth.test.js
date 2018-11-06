@@ -7,17 +7,27 @@ const config = require('../app.config');
 
 const app = require('../app');
 
+const user = {
+  name: 'Felipe',
+  email: 'ff@ff.com',
+  gender: 'MALE',
+  birth: '01/01/1901',
+  password: 'lolo',
+  checkPassword: 'lolo'
+};
+
+const admin = {
+  name: 'Admin2',
+  email: 'ad2@ff.com',
+  gender: 'MALE',
+  birth: '01/01/1901',
+  password: 'lolo',
+  checkPassword: 'lolo'
+};
+
 describe('Auth', () => {
 
   test('Signup & login', (done) => {
-    const user = {
-      name: 'Felipe',
-      email: 'ff@ff.com',
-      gender: 'MALE',
-      birth: '01/01/1901',
-      password: 'lolo',
-      checkPassword: 'lolo'
-    };
     request(app)
       .post('/signup/social')
       .send(user)
@@ -77,14 +87,6 @@ describe('Auth', () => {
   });
 
   test('Create admin', (done) => {
-    const admin = {
-      name: 'Admin2',
-      email: 'ad2@ff.com',
-      gender: 'MALE',
-      birth: '01/01/1901',
-      password: 'lolo',
-      checkPassword: 'lolo'
-    };
     request(app)
       .post('/login/social')
       .send({
@@ -122,5 +124,34 @@ describe('Auth', () => {
         expect(res.message).to.deep.equal('Unauthorized user');
         done();
       })
+  });
+
+  test('Sign up already signed user', (done) => {
+    request(app)
+      .post('/signup/social')
+      .send(user)
+      .expect(400)
+      .then(res => res.body)
+      .then(res => {
+          expect(res.status).to.deep.equal('ERROR');
+          expect(res.message).to.deep.equal('User already exists');
+          done();
+      });
+  });
+
+  test('Login with wrong password', (done) => {
+    request(app)
+      .post('/login/social')
+      .send({
+        email: user.email,
+        password: 'notfound'
+      })
+      .expect(401)
+      .then(res => res.body)
+      .then(res => {
+          expect(res.status).to.deep.equal('ERROR');
+          expect(res.message).to.deep.equal('Incorrect password');
+          done();
+      });
   });
 });
