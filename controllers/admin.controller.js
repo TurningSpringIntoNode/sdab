@@ -15,5 +15,5 @@ const deleteUserById = (req, res) => {
 };
 
 module.exports = {
-  deleteUserById
+  deleteUserById,
 };

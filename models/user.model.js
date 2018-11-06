@@ -139,32 +139,30 @@ module.exports = (db, mongoose) => {
           if (err) {
             // TODO
             reject();
-          } else {
-            if (user) {
-              const deleteUserCb = (err) => {
-                if (err) {
-                  reject(err);
-                } else {
-                  User
-                    .deleteOne({ _id: id })
-                    .exec((err) => {
-                      if (err) {
-                        reject(err);
-                      } else {
-                        resolve();
-                      }
-                    });
-                }
-              };
-              if (user.roles.Admin) {
-                Admin.deleteOne({ _id: user.roles.Admin }).exec(deleteUserCb);
+          } else if (user) {
+            const deleteUserCb = (err) => {
+              if (err) {
+                reject(err);
+              } else {
+                User
+                  .deleteOne({ _id: id })
+                  .exec((err) => {
+                    if (err) {
+                      reject(err);
+                    } else {
+                      resolve();
+                    }
+                  });
               }
-              if (user.roles.Account) {
-                Account.deleteOne({ _id: user.roles.Account }).exec(deleteUserCb);
-              }
-            } else {
-              resolve();
+            };
+            if (user.roles.Admin) {
+              Admin.deleteOne({ _id: user.roles.Admin }).exec(deleteUserCb);
             }
+            if (user.roles.Account) {
+              Account.deleteOne({ _id: user.roles.Account }).exec(deleteUserCb);
+            }
+          } else {
+            resolve();
           }
         });
     });
