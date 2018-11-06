@@ -1,9 +1,7 @@
-const User = require('./user');
-const Admin = require('./admin');
-const Account = require('./account');
+const UserModel = require('./user.model');
+const RolesModel = require('./roles');
 
-module.exports = {
-  User,
-  Admin,
-  Account
+module.exports = (db, mongoose) => {
+  RolesModel(db, mongoose);
+  UserModel(db, mongoose);
 };

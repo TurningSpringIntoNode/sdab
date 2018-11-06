@@ -5,8 +5,7 @@
   "scripts": {
     "start": "NODE_ENV=production node ./bin/www",
     "dev": "NODE_ENV=development node ./bin/www",
-    "test": "NODE_ENV=test jest --detectOpenHandles --setupTestFrameworkScriptFile=./tests/setup.js --forceExit --runInBand --no-cache",
-    "coverage": "NODE_ENV=test jest --detectOpenHandles --setupTestFrameworkScriptFile=./tests/setup.js --coverage --forceExit --runInBand --no-cache"
+    "test": "NODE_ENV=test jest --detectOpenHandles --setupTestFrameworkScriptFile=./tests/setup.js --forceExit --runInBand --no-cache"
   },
   "dependencies": {
     "bcrypt": "^3.0.2",
@@ -24,7 +23,14 @@
   },
   "devDependencies": {
     "chai": "^4.2.0",
+    "eslint": "^5.8.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-plugin-import": "^2.14.0",
     "jest": "^23.6.0",
     "supertest": "^3.3.0"
+  },
+  "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
   }
 }

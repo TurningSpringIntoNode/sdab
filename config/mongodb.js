@@ -3,16 +3,15 @@ const config = require('../app.config');
 
 mongoose.Promise = global.Promise;
 
-exports.mongoose = mongoose;
+const mongoURI = process.env.NODE_ENV === 'test' ? `mongodb://127.0.0.1:27017/${process.env.TEST_SUITE}` : config.mongo.uri;
 
-exports.connect = () => {
-  mongoose.connect(config.mongo.uri, {
-    useNewUrlParser: true,
-    useCreateIndex: true
-  });
-  return mongoose;
-};
+const connection = mongoose.createConnection(mongoURI, {
+  useNewUrlParser: true,
+  useCreateIndex: true,
+});
 
-exports.disconnect = (cb) => {
-  mongoose.disconnect(cb);
-};
+if (process.env.NODE_ENV === 'test') {
+  connection.dropDatabase();
+}
+
+exports.mongoose = connection;

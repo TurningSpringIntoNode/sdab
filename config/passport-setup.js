@@ -1,13 +1,14 @@
 const passport = require('passport');
-const config = require('../app.config');
-
 const LocalStrategy = require('passport-local').Strategy;
 
-passport.use('local', new LocalStrategy(
-  function (email, password, done) {
-    done(null, true, {
-      email,
-      password
-    });
-  }
-));
+const config = require('../app.config');
+
+passport.use('Local', new LocalStrategy({
+  usernameField: 'email',
+},
+((email, password, done) => {
+  done(null, true, {
+    email,
+    password,
+  });
+})));

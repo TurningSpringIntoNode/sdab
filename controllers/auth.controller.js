@@ -1,80 +1,86 @@
-const User = require('../models/user');
+const { User } = require('../config/mongodb').mongoose.models;
 
-const signupSocial = async (req, res) => {
-  const { email, password } = req.body;
-  const encPassword = await User.encryptPassword(password);
+const signupSocial = (req, res) => {
+  const { user, role } = req;
 
   User
-    .findOne({ email })
-    .then(dbUser => {
+    .findOne({ email: user.email })
+    .then(async (dbUser) => {
       if (dbUser) {
-        return res.sendStatus(400);
+        res
+          .status(400)
+          .send({
+            status: 'ERROR',
+            message: 'User already exists',
+          });
+      } else {
+        await user.setupRole(role);
+
+        user
+          .save()
+          .then((dbUser) => {
+            const token = dbUser
+              .generateAuthToken();
+            res
+              .send({
+                status: 'OK',
+                message: 'OK',
+                content: {
+                  role: dbUser.getRole(),
+                  token,
+                },
+              });
+          });
       }
-      const user = new User({
-        email,
-        password: encPassword
-      });
-      user
-        .save()
-        .then(dbUser => {
-          const token = dbUser
-            .generateAuthToken()
-          res
-            .send({
-              token
-            });
-        });
     });
 };
+
 
 const loginSocial = (req, res) => {
   const { authInfo } = req;
   const { email, password } = authInfo;
   User
     .findOne({ email })
-    .then(dbUser => {
+    .then((dbUser) => {
       if (!dbUser) {
-        return res
+        res
           .status(400)
           .send({
-            error: {
-              message: 'User not found'
+            status: 'ERROR',
+            message: 'User not found',
+          });
+      } else {
+        User
+          .validatePassword(password, dbUser.password)
+          .then((same) => {
+            if (same) {
+              const token = dbUser.generateAuthToken();
+              res
+                .send({
+                  status: 'OK',
+                  message: 'OK',
+                  content: {
+                    role: dbUser.getRole(),
+                    token,
+                  },
+                });
+            } else {
+              return Promise.reject();
             }
+          })
+          .catch(() => {
+            res
+              .status(401)
+              .send({
+                status: 'ERROR',
+                message: 'Incorrect password',
+              });
           });
       }
-      User
-        .validatePassword(password, dbUser.password)
-        .then(same => {
-          console.log(same);
-          if (same) {
-            const token = dbUser.generateAuthToken();
-            res
-              .send({
-                token
-              });
-          } else {
-            res
-              .status(400)
-              .send({
-                error: {
-                  message: 'Incorrect password'
-                }
-              });
-          }
-        })
-        .catch(() => {
-          res
-            .status(400)
-            .send({
-              error: {
-                message: 'Incorrect password'
-              }
-            });
-        });
     });
 };
 
 module.exports = {
   signupSocial,
-  loginSocial
-}
+  loginSocial,
+};
