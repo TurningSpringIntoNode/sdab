@@ -154,4 +154,39 @@ describe('Auth', () => {
           done();
       });
   });
+
+  test('/me test', (done) => {
+    const { email, password } = user;
+    const authInfo = { email, password };
+    request(app)
+      .post('/login/social')
+      .send(authInfo)
+      .expect(200)
+      .then(res => res.body)
+      .then(res => {
+        expect(res.status).to.deep.equal('OK');
+        expect(res.content.role).to.deep.equal('Account');
+        expect(res.content).to.have.property('token');
+        return res.content.token;
+      })
+      .then(token => {
+        request(app)
+          .get('/me')
+          .set('authorization', 'Bearer ' + token)
+          .expect(200)
+          .then(res => res.body)
+          .then(res => {
+            const { name, email, gender, birth } = user;
+            expect(res.status).to.deep.equal('OK');
+            expect(res.content).to.deep.equal({
+              name,
+              email,
+              birth: new Date(birth).toISOString(),
+              gender,
+              role: 'Account',
+            });
+            done();
+          })
+      });
+  });
 });

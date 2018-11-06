@@ -31,7 +31,10 @@ module.exports = (db, mongoose) => {
       required: true,
       unique: true,
     },
-    password: String,
+    password: {
+      type: String,
+      required: true,
+    },
     roles: {
       Admin: {
         type: mongoose.Schema.Types.ObjectId,
@@ -79,6 +82,17 @@ module.exports = (db, mongoose) => {
     return jwtSign({
       id: user._id,
     });
+  };
+
+  UserSchema.methods.toJSON = function () {
+    const user = this;
+    return {
+      name: user.name,
+      email: user.email,
+      birth: user.birth,
+      gender: user.gender,
+      role: user.getRole(),
+    };
   };
 
   UserSchema.statics.validatePassword = (password, hash) => new Promise((resolve, reject) => {

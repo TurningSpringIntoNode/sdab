@@ -7,12 +7,7 @@ const authenticate = (req, res, next) => {
     .findByToken(token)
     .then((user) => {
       if (!user) {
-        res
-          .status(401)
-          .send({
-            status: 'ERROR',
-            message: 'Unauthorized user',
-          });
+        return Promise.reject();
       } else {
         req.user = user;
         next();
