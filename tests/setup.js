@@ -1,14 +1,7 @@
-const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
+
 
 beforeAll((done) => {
-  mongoose.connect(`mongodb://127.0.0.1:27017/${process.env.TEST_SUITE}`, {
-    useNewUrlParser: true,
-    useCreateIndex: true,
-  }, () => {
-    mongoose.connection.db.dropDatabase();
-    done();
-  });
+  done();
 });
 
 beforeEach( async (done) => {
@@ -19,6 +12,6 @@ beforeEach( async (done) => {
   done();
 });
 
-afterAll(async () => {
-  await mongoose.disconnect();
+afterAll(async (done) => {
+  done();
 });

@@ -1,4 +1,4 @@
-const User = require('../models/user.model');
+const User = require('../config/mongodb').mongoose.models.User;
 
 const signupSocial = (req, res) => {
 
@@ -16,15 +16,13 @@ const signupSocial = (req, res) => {
           });
       }
 
-      await role.save();
-
-      user.roles.account = role._id;
+      await user.setupRole(role);
 
       user
         .save()
         .then(dbUser => {
           const token = dbUser
-            .generateAuthToken()
+            .generateAuthToken();
           res
             .send({
               status: 'OK',
@@ -38,9 +36,7 @@ const signupSocial = (req, res) => {
     });
 };
 
-const signupSocialAdmin = (req, res) => {
 
-};
 const loginSocial = (req, res) => {
   const { authInfo } = req;
   const { email, password } = authInfo;

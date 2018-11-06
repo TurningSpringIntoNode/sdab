@@ -1,7 +1,6 @@
-const User = require('../models/user.model');
-const Admin = require('../models/roles/admin.model');
+const User = require('../config/mongodb').mongoose.models.User;
+const Admin = require('../config/mongodb').mongoose.models.Admin;
 const config = require('../app.config');
-
 
 module.exports = async () => {
 
@@ -17,7 +16,7 @@ module.exports = async () => {
     gender: config.admin.gender
   });
 
-  adminUser.roles.admin = admin._id;
+  adminUser.roles.Admin = admin._id;
 
   await adminUser.save();
 };

@@ -4,8 +4,15 @@ const passport = require('passport');
 
 const authCtrl = require('../controllers/auth.controller');
 
-const User = require('../models/user.model');
-const Roles = require('../models/roles');
+const User = require('../config/mongodb').mongoose.models.User;
+
+const Account = require('../config/mongodb').mongoose.models.Account;
+const Admin = require('../config/mongodb').mongoose.models.Admin;
+
+const Roles = {
+  Account,
+  Admin
+};
 
 const authMiddleware = require('../middlewares/auth');
 
@@ -45,8 +52,7 @@ const setupRole = (role) => {
     throw new Error('Invalid role requested');
   }
   return (req, res, next) => {
-    const roleInstance = new Roles[role]({});
-    req.role = roleInstance;
+    req.role = role;
     next();
   };
 };
@@ -55,7 +61,7 @@ router.post('/signup/social', parseUserData, setupRole('Account'), authCtrl.sign
 router.post('/login/social', passport.authenticate('Local', { session: false }), authCtrl.loginSocial);
 
 router.all('/admin/*', authMiddleware.authenticate);
-router.all('/admin/*', authMiddleware.hasRole('Admin'));
+router.all('/admin/*', authMiddleware.hasRole(['Admin']));
 router.post('/admin/', parseUserData, setupRole('Admin'), authCtrl.signupSocial);
 
 module.exports = router;

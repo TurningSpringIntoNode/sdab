@@ -1,10 +1,9 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+module.exports = (db, mongoose) => {
+  const { Schema } = mongoose;
 
-const AccountSchema = new Schema({
+  const AccountSchema = new Schema({
 
-});
+  });
 
-const AccountModel = mongoose.model('AccountModel', AccountSchema);
-
-module.exports = AccountModel;
+  db.model('Account', AccountSchema);
+};

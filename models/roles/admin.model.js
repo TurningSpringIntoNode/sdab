@@ -1,10 +1,9 @@
-const mongoose = require('mongoose');
-const Schema = mongoose.Schema;
+module.exports = (db, mongoose) => {
+  const { Schema } = mongoose;
 
-const AdminSchema = new Schema({
+  const AdminSchema = new Schema({
 
-});
+  });
 
-const AdminModel = mongoose.model('AdminModel', AdminSchema);
-
-module.exports = AdminModel;
+  db.model('Admin', AdminSchema);
+};
