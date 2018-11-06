@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 
 const config = require('../app.config');
 
-const getRequestAuthToken = req => {
+const getRequestAuthToken = (req) => {
   if (!req.headers || !req.headers.authorization) {
     return false;
   }
@@ -14,13 +14,11 @@ const getRequestAuthToken = req => {
   return false;
 };
 
-const jwtSign = obj => {
-  return jwt.sign(obj, config.jwt.secret, {
-    expiresIn: '2h'
-  });
-};
+const jwtSign = obj => jwt.sign(obj, config.jwt.secret, {
+  expiresIn: '2h',
+});
 
-const jwtDecode = token => {
+const jwtDecode = (token) => {
   let decoded = null;
   try {
     decoded = jwt.verify(token, config.jwt.secret);
@@ -30,25 +28,23 @@ const jwtDecode = token => {
   return Promise.resolve(decoded);
 };
 
-const encryptPassword = (password) => {
-  return new Promise((resolve, reject) => {
-    bcrypt.genSalt(10, (err, salt) => {
+const encryptPassword = password => new Promise((resolve, reject) => {
+  bcrypt.genSalt(10, (err, salt) => {
+    if (err) {
+      return reject(err);
+    }
+    bcrypt.hash(password, salt, (err, hash) => {
       if (err) {
         return reject(err);
       }
-      bcrypt.hash(password, salt, (err, hash) => {
-        if (err) {
-          return reject(err);
-        }
-        resolve(hash);
-      });
+      resolve(hash);
     });
   });
-};
+});
 
 module.exports = {
   getRequestAuthToken,
   jwtSign,
   jwtDecode,
-  encryptPassword
+  encryptPassword,
 };

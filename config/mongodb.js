@@ -7,7 +7,7 @@ const mongoURI = process.env.NODE_ENV === 'test' ? `mongodb://127.0.0.1:27017/${
 
 const connection = mongoose.createConnection(mongoURI, {
   useNewUrlParser: true,
-  useCreateIndex: true
+  useCreateIndex: true,
 });
 
 if (process.env.NODE_ENV === 'test') {

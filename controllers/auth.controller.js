@@ -1,7 +1,6 @@
 const User = require('../config/mongodb').mongoose.models.User;
 
 const signupSocial = (req, res) => {
-
   const { user, role } = req;
 
   User
@@ -12,7 +11,7 @@ const signupSocial = (req, res) => {
           .status(400)
           .send({
             status: 'ERROR',
-            message: 'User already exists'
+            message: 'User already exists',
           });
       }
 
@@ -20,7 +19,7 @@ const signupSocial = (req, res) => {
 
       user
         .save()
-        .then(dbUser => {
+        .then((dbUser) => {
           const token = dbUser
             .generateAuthToken();
           res
@@ -29,8 +28,8 @@ const signupSocial = (req, res) => {
               message: 'OK',
               content: {
                 role: dbUser.getRole(),
-                token
-              }
+                token,
+              },
             });
         });
     });
@@ -42,18 +41,18 @@ const loginSocial = (req, res) => {
   const { email, password } = authInfo;
   User
     .findOne({ email })
-    .then(dbUser => {
+    .then((dbUser) => {
       if (!dbUser) {
         return res
           .status(400)
           .send({
             status: 'ERROR',
-            message: 'User not found'
+            message: 'User not found',
           });
       }
       User
         .validatePassword(password, dbUser.password)
-        .then(same => {
+        .then((same) => {
           if (same) {
             const token = dbUser.generateAuthToken();
             res
@@ -62,8 +61,8 @@ const loginSocial = (req, res) => {
                 message: 'OK',
                 content: {
                   role: dbUser.getRole(),
-                  token
-                }
+                  token,
+                },
               });
           } else {
             return Promise.reject();
@@ -74,7 +73,7 @@ const loginSocial = (req, res) => {
             .status(400)
             .send({
               status: 'ERROR',
-              message: 'Incorrect password'
+              message: 'Incorrect password',
             });
         });
     });
@@ -82,5 +81,5 @@ const loginSocial = (req, res) => {
 
 module.exports = {
   signupSocial,
-  loginSocial
-}
+  loginSocial,
+};

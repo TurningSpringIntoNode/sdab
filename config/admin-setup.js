@@ -3,7 +3,6 @@ const Admin = require('../config/mongodb').mongoose.models.Admin;
 const config = require('../app.config');
 
 module.exports = async () => {
-
   const admin = new Admin();
 
   await admin.save();
@@ -13,11 +12,10 @@ module.exports = async () => {
     email: config.admin.email,
     password: config.admin.password,
     birth: config.admin.birth,
-    gender: config.admin.gender
+    gender: config.admin.gender,
   });
 
   adminUser.roles.Admin = admin._id;
 
   await adminUser.save();
 };
-

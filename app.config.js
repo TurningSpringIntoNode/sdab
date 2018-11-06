@@ -12,5 +12,5 @@ module.exports = {
     password: process.env.ADMIN_PASSWORD || 'admin',
     birth: process.env.ADMIN_BIRTH || '01/01/1901',
     gender: process.env.ADMIN_GENDER || 'MALE',
-  }
+  },
 };

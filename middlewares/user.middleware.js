@@ -5,18 +5,20 @@ const Admin = require('../config/mongodb').mongoose.models.Admin;
 
 const Roles = {
   Account,
-  Admin
+  Admin,
 };
 
 const parseUserData = (req, res, next) => {
-  const { name, gender, birth, email, password, checkPassword } = req.body;
+  const {
+    name, gender, birth, email, password, checkPassword,
+  } = req.body;
 
   if (password != checkPassword) {
     return res
       .status(400)
       .send({
         status: 'error',
-        message: 'Password and confirmation password differs'
+        message: 'Password and confirmation password differs',
       });
   }
 
@@ -25,7 +27,7 @@ const parseUserData = (req, res, next) => {
     gender,
     birth,
     email,
-    password
+    password,
   });
 
   const error = user.validateSync();
@@ -36,7 +38,6 @@ const parseUserData = (req, res, next) => {
     req.user = user;
     next();
   }
-
 };
 
 const setupRole = (role) => {
@@ -51,5 +52,5 @@ const setupRole = (role) => {
 
 module.exports = {
   parseUserData,
-  setupRole
+  setupRole,
 };
