@@ -1,11 +1,12 @@
+const bcrypt = require('bcrypt');
+
+const { jwtSign, jwtDecode, encryptPassword } = require('../utils/auth');
+
 module.exports = (db, mongoose) => {
   const { Schema } = mongoose;
-  const bcrypt = require('bcrypt');
 
-  const { jwtSign, jwtDecode, encryptPassword } = require('../utils/auth');
-
-  const Account = db.models.Account;
-  const Admin = db.models.Admin;
+  const { Account } = db.models;
+  const { Admin } = db.models;
 
   const Roles = {
     Account,
@@ -83,9 +84,10 @@ module.exports = (db, mongoose) => {
   UserSchema.statics.validatePassword = (password, hash) => new Promise((resolve, reject) => {
     bcrypt.compare(password, hash, (err, same) => {
       if (err) {
-        return reject(err);
+        reject(err);
+      } else {
+        resolve(same);
       }
-      resolve(same);
     });
   });
 

@@ -1,4 +1,4 @@
-const User = require('../config/mongodb').mongoose.models.User;
+const { User } = require('../config/mongodb').mongoose.models;
 
 const signupSocial = (req, res) => {
   const { user, role } = req;
@@ -7,31 +7,31 @@ const signupSocial = (req, res) => {
     .findOne({ email: user.email })
     .then(async (dbUser) => {
       if (dbUser) {
-        return res
+        res
           .status(400)
           .send({
             status: 'ERROR',
             message: 'User already exists',
           });
+      } else {
+        await user.setupRole(role);
+
+        user
+          .save()
+          .then((dbUser) => {
+            const token = dbUser
+              .generateAuthToken();
+            res
+              .send({
+                status: 'OK',
+                message: 'OK',
+                content: {
+                  role: dbUser.getRole(),
+                  token,
+                },
+              });
+          });
       }
-
-      await user.setupRole(role);
-
-      user
-        .save()
-        .then((dbUser) => {
-          const token = dbUser
-            .generateAuthToken();
-          res
-            .send({
-              status: 'OK',
-              message: 'OK',
-              content: {
-                role: dbUser.getRole(),
-                token,
-              },
-            });
-        });
     });
 };
 
@@ -43,39 +43,40 @@ const loginSocial = (req, res) => {
     .findOne({ email })
     .then((dbUser) => {
       if (!dbUser) {
-        return res
+        res
           .status(400)
           .send({
             status: 'ERROR',
             message: 'User not found',
           });
-      }
-      User
-        .validatePassword(password, dbUser.password)
-        .then((same) => {
-          if (same) {
-            const token = dbUser.generateAuthToken();
+      } else {
+        User
+          .validatePassword(password, dbUser.password)
+          .then((same) => {
+            if (same) {
+              const token = dbUser.generateAuthToken();
+              res
+                .send({
+                  status: 'OK',
+                  message: 'OK',
+                  content: {
+                    role: dbUser.getRole(),
+                    token,
+                  },
+                });
+            } else {
+              Promise.reject();
+            }
+          })
+          .catch(() => {
             res
+              .status(400)
               .send({
-                status: 'OK',
-                message: 'OK',
-                content: {
-                  role: dbUser.getRole(),
-                  token,
-                },
+                status: 'ERROR',
+                message: 'Incorrect password',
               });
-          } else {
-            return Promise.reject();
-          }
-        })
-        .catch(() => {
-          res
-            .status(400)
-            .send({
-              status: 'ERROR',
-              message: 'Incorrect password',
-            });
-        });
+          });
+      }
     });
 };
 

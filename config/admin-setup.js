@@ -1,5 +1,5 @@
-const User = require('../config/mongodb').mongoose.models.User;
-const Admin = require('../config/mongodb').mongoose.models.Admin;
+const { User } = require('../config/mongodb').mongoose.models;
+const { Admin } = require('../config/mongodb').mongoose.models;
 const config = require('../app.config');
 
 module.exports = async () => {

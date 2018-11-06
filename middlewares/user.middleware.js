@@ -1,7 +1,7 @@
-const User = require('../config/mongodb').mongoose.models.User;
+const { User } = require('../config/mongodb').mongoose.models;
 
-const Account = require('../config/mongodb').mongoose.models.Account;
-const Admin = require('../config/mongodb').mongoose.models.Admin;
+const { Account } = require('../config/mongodb').mongoose.models;
+const { Admin } = require('../config/mongodb').mongoose.models;
 
 const Roles = {
   Account,
@@ -13,30 +13,30 @@ const parseUserData = (req, res, next) => {
     name, gender, birth, email, password, checkPassword,
   } = req.body;
 
-  if (password != checkPassword) {
-    return res
+  if (password !== checkPassword) {
+    res
       .status(400)
       .send({
         status: 'error',
         message: 'Password and confirmation password differs',
       });
-  }
-
-  const user = new User({
-    name,
-    gender,
-    birth,
-    email,
-    password,
-  });
-
-  const error = user.validateSync();
-
-  if (error) {
-
   } else {
-    req.user = user;
-    next();
+    const user = new User({
+      name,
+      gender,
+      birth,
+      email,
+      password,
+    });
+
+    const error = user.validateSync();
+
+    if (error) {
+      // TODO
+    } else {
+      req.user = user;
+      next();
+    }
   }
 };
 

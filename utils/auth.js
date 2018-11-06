@@ -8,7 +8,7 @@ const getRequestAuthToken = (req) => {
     return false;
   }
   const authorization = req.headers.authorization.split(' ');
-  if (authorization.length == 2 && authorization[0] == 'Bearer') {
+  if (authorization.length === 2 && authorization[0] === 'Bearer') {
     return authorization[1];
   }
   return false;
@@ -31,14 +31,16 @@ const jwtDecode = (token) => {
 const encryptPassword = password => new Promise((resolve, reject) => {
   bcrypt.genSalt(10, (err, salt) => {
     if (err) {
-      return reject(err);
+      reject(err);
+    } else {
+      bcrypt.hash(password, salt, (err, hash) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(hash);
+        }
+      });
     }
-    bcrypt.hash(password, salt, (err, hash) => {
-      if (err) {
-        return reject(err);
-      }
-      resolve(hash);
-    });
   });
 });
 
