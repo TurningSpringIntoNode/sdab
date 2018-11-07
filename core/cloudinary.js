@@ -33,6 +33,7 @@ const videoParser = multer({
 });
 
 module.exports = {
+  cloudinary,
   thumbParser,
   videoParser
 };
