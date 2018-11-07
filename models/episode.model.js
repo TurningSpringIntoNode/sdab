@@ -1,3 +1,4 @@
+const { cloudinary } = require('../core/cloudinary');
 
 module.exports = (db, mongoose) => {
 
@@ -13,12 +14,24 @@ module.exports = (db, mongoose) => {
       required: true,
     },
     thumb: {
-      type: String,
-      required: true,
+      id: {
+        type: String,
+        required: true,
+      },
+      url: {
+        type: String,
+        required: true,
+      },
     },
     video: {
-      type: String,
-      required: true,
+      id: {
+        type: String,
+        required: true
+      },
+      url: {
+        type: String,
+        required: true
+      }
     },
     description: {
       type: String,
@@ -30,6 +43,40 @@ module.exports = (db, mongoose) => {
       ref: 'Anime'
     }
   });
+
+  EpisodeSchema.statics.deleteManyByAnimeId = function (id) {
+    const Episode = this;
+
+    return Episode
+      .find({anime: id})
+      .then(episodes => {
+        const destroyEpisodePromises = episodes
+          .map(episode => new Promise((resolve, reject) => {
+            cloudinary.uploader.destroy(episode.thumb.id, (err) => {
+              if (err) {
+                reject(err);
+              } else {
+                cloudinary.uploader.destroy(episode.video.id, (err) => {
+                  if (err) {
+                    reject(err);
+                  } else {
+                    resolve();
+                  }
+                });
+              }
+            })
+          }));
+        return Promise
+          .all(destroyEpisodePromises)
+          .then(() => {
+            return Episode
+              .deleteMany({anime: id});
+          })
+          .catch(() => {
+
+          });
+      });
+  };
 
   db.model('Episode', EpisodeSchema);
 };

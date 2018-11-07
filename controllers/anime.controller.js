@@ -1,4 +1,4 @@
-const { Anime } = require('../core/mongodb').mongoose.models;
+const { Anime, Episode } = require('../core/mongodb').mongoose.models;
 
 const { cloudinary } = require('../core/cloudinary');
 
@@ -37,14 +37,18 @@ const deleteAnime = (req, res) => {
   Anime
     .findById(id)
     .then(animeDb => {
-      cloudinary.uploader.destroy(animeDb.thumb.id, (result) => {
+      cloudinary.uploader.destroy(animeDb.thumb.id, () => {
         Anime
           .deleteOne({ _id: id })
           .then(() => {
-            res
-              .send({
-                status: 'OK',
-                message: 'OK'
+            Episode
+              .deleteManyByAnimeId(id)
+              .then(() => {
+                res
+                  .send({
+                    status: 'OK',
+                    message: 'OK'
+                  });
               });
           });
       });
