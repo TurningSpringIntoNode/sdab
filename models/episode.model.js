@@ -16,6 +16,10 @@ module.exports = (db, mongoose) => {
       type: String,
       required: true,
     },
+    video: {
+      type: String,
+      required: true,
+    },
     description: {
       type: String,
       required: true,
