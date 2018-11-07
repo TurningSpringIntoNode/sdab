@@ -13,4 +13,11 @@ module.exports = {
     birth: process.env.ADMIN_BIRTH || '01/01/1901',
     gender: process.env.ADMIN_GENDER || 'MALE',
   },
+  cloudinary: {
+    name: process.env.CLOUDINARY_NAME,
+    api: {
+      key: process.env.CLOUDINARY_API_KEY,
+      secret: process.env.CLOUDINARY_API_SECRET,
+    },
+  },
 };

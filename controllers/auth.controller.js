@@ -1,4 +1,4 @@
-const { User } = require('../config/mongodb').mongoose.models;
+const { User } = require('../core/mongodb').mongoose.models;
 
 const signupSocial = (req, res) => {
   const { user, role } = req;

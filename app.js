@@ -1,6 +1,6 @@
 const dotenv = require('dotenv');
 
-if (process.env.NODE_ENV === 'production') {
+if (process.env.NODE_ENV !== 'test') {
   dotenv.config();
 }
 
@@ -8,13 +8,13 @@ const express = require('express');
 const compression = require('compression');
 const logger = require('morgan');
 
-require('./config/passport-setup');
+require('./core/passport-setup');
 
 const mongoose = require('mongoose');
-const connection = require('./config/mongodb').mongoose;
+const connection = require('./core/mongodb').mongoose;
 require('./models')(connection, mongoose);
 
-require('./config/admin-setup')();
+require('./core/admin-setup')();
 
 const app = express();
 

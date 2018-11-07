@@ -27,6 +27,7 @@ module.exports = (db, mongoose) => {
     anime: {
       type: Schema.Types.ObjectId,
       required: true,
+      ref: 'Anime'
     }
   });
 

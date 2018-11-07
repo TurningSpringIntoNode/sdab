@@ -1,4 +1,4 @@
-const { User } = require('../config/mongodb').mongoose.models;
+const { User } = require('../core/mongodb').mongoose.models;
 const { getRequestAuthToken } = require('../utils/auth');
 
 const authenticate = (req, res, next) => {
