@@ -20,7 +20,10 @@ const thumbStorage = cloudinaryStorage({
 const videoStorage = cloudinaryStorage({
   cloudinary,
   folder: 'videos',
-  allowedFormats: ["mp4"],
+  allowedFormats: ['mp4'],
+  params: {
+    resource_type: 'video',
+  },
   // TODO: setup transformation
 });
 

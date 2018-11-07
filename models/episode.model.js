@@ -13,16 +13,6 @@ module.exports = (db, mongoose) => {
       type: String,
       required: true,
     },
-    thumb: {
-      id: {
-        type: String,
-        required: true,
-      },
-      url: {
-        type: String,
-        required: true,
-      },
-    },
     video: {
       id: {
         type: String,
