@@ -27,16 +27,36 @@ const videoStorage = cloudinaryStorage({
   // TODO: setup transformation
 });
 
-let thumbParser = multer({
+const thumbParser = multer({
   storage: thumbStorage,
 });
 
-let videoParser = multer({
+const videoParser = multer({
   storage: videoStorage,
 });
 
+const thumbParserMock = {
+  single: () => {
+    return (req, res, next) => {
+      req.file = {
+        url: req.body.thumb,
+        public_id: req.body.thumb_id,
+      };
+      next();
+    };
+  },
+};
+
+const videoParserMock = {
+  single: () => (req, res, next) => {
+    req.file.url = req.body.video;
+    req.file.public_id = req.body.video_id;
+    next();
+  },
+};
+
 module.exports = {
   cloudinary,
-  thumbParser,
-  videoParser,
+  thumbParser: process.env.NODE_ENV === 'test' ? thumbParserMock : thumbParser,
+  videoParser: process.env.NODE_ENV === 'test' ? videoParserMock : videoParser,
 };

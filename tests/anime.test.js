@@ -22,14 +22,15 @@ describe('Create anime', () => {
           .set('authorization', `Bearer ${token}`)
           .send({
             name: 'Test',
-            gender: 'LOL',
+            genre: 'LOL',
             resume: 'LOL',
-            thumb: 'none'
+            thumb: 'none',
+            thumb_id: 'fuck',
           })
           .expect(200)
           .then(res => res.body)
           .then(res => {
-            console.log(res);
+
             done();
           })
       });
