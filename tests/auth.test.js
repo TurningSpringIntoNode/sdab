@@ -7,7 +7,7 @@ const config = require('../app.config');
 
 const app = require('../app');
 
-const { User, Account } = require('../config/mongodb').mongoose.models;
+const { User, Account } = require('../core/mongodb').mongoose.models;
 
 const user = {
   name: 'Felipe',

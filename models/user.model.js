@@ -37,11 +37,11 @@ module.exports = (db, mongoose) => {
     },
     roles: {
       Admin: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Admin',
       },
       Account: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: Schema.Types.ObjectId,
         ref: 'Account',
       },
     },

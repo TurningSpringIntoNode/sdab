@@ -1,7 +1,7 @@
-const { User } = require('../config/mongodb').mongoose.models;
+const { User } = require('../core/mongodb').mongoose.models;
 
-const { Account } = require('../config/mongodb').mongoose.models;
-const { Admin } = require('../config/mongodb').mongoose.models;
+const { Account } = require('../core/mongodb').mongoose.models;
+const { Admin } = require('../core/mongodb').mongoose.models;
 
 const Roles = {
   Account,
