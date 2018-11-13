@@ -1,6 +1,5 @@
 
 module.exports = (db, mongoose) => {
-
   const { Schema } = mongoose;
 
   const AnimeSchema = new Schema({
@@ -15,17 +14,17 @@ module.exports = (db, mongoose) => {
     thumb: {
       id: {
         type: String,
-        required: true
+        required: true,
       },
       url: {
         type: String,
-        required: true
+        required: true,
       },
     },
     resume: {
       type: String,
       required: true,
-    }
+    },
   });
 
   db.model('Anime', AnimeSchema);

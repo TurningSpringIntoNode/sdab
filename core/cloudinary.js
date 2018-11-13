@@ -13,7 +13,7 @@ cloudinary.config({
 const thumbStorage = cloudinaryStorage({
   cloudinary,
   folder: 'thumbs',
-  allowedFormats: ["jpg"],
+  allowedFormats: ['jpg'],
   // TODO: setup transformation
 });
 
@@ -28,15 +28,15 @@ const videoStorage = cloudinaryStorage({
 });
 
 const thumbParser = multer({
-  storage: thumbStorage
+  storage: thumbStorage,
 });
 
 const videoParser = multer({
-  storage: videoStorage
+  storage: videoStorage,
 });
 
 module.exports = {
   cloudinary,
   thumbParser,
-  videoParser
+  videoParser,
 };

@@ -1,7 +1,6 @@
 const { Episode } = require('../core/mongodb').mongoose.models;
 
 const createEpisode = (req, res) => {
-
   console.log('aq');
 
   const video = {
@@ -9,7 +8,9 @@ const createEpisode = (req, res) => {
     url: req.file.url,
   };
 
-  const { name, chapter, description, anime } = req.body;
+  const {
+    name, chapter, description, anime,
+  } = req.body;
 
   const episode = new Episode({
     name,
@@ -21,19 +22,18 @@ const createEpisode = (req, res) => {
 
   episode
     .save()
-    .then(episodeDb => {
+    .then((episodeDb) => {
       res
         .send({
           status: 'OK',
           message: 'OK',
           content: {
-            episode: episodeDb
+            episode: episodeDb,
           },
         });
     });
 };
 
 module.exports = {
-  createEpisode
+  createEpisode,
 };
-
