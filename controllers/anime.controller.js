@@ -2,6 +2,21 @@ const { Anime, Episode } = require('../core/mongodb').mongoose.models;
 
 const { cloudinary } = require('../core/cloudinary');
 
+const getAnimes = (req, res) => {
+  Anime
+    .find({})
+    .then(animes => {
+      res
+        .send({
+          status: 'OK',
+          message: 'OK',
+          content: {
+            animes,
+          },
+        });
+    })
+};
+
 const createAnime = (req, res) => {
   const { name, genre, resume } = req.body;
   const { public_id, url } = req.file;
@@ -54,6 +69,7 @@ const deleteAnime = (req, res) => {
 };
 
 module.exports = {
+  getAnimes,
   createAnime,
   deleteAnime,
 };

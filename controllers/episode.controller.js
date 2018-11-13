@@ -1,5 +1,27 @@
 const { Episode } = require('../core/mongodb').mongoose.models;
 
+
+const getEpisodes = (req, res) => {
+
+  const { anime_id } = req.params;
+
+  Episode
+    .find({
+      anime: anime_id
+    })
+    .then(episodes => {
+      res
+        .send({
+          status: 'OK',
+          message: 'OK',
+          content: {
+            episodes,
+          },
+        });
+    });
+};
+
+
 const createEpisode = (req, res) => {
 
   const video = {
@@ -8,14 +30,18 @@ const createEpisode = (req, res) => {
   };
 
   const {
-    name, chapter, description, anime,
+    name, chapter, description,
   } = req.body;
+
+  const {
+    anime_id
+  } = req.params;
 
   const episode = new Episode({
     name,
     chapter,
     description,
-    anime,
+    anime: anime_id,
     video,
   });
 
@@ -35,11 +61,12 @@ const createEpisode = (req, res) => {
 
 const deleteEpisode = (req, res) => {
 
-  const { id } = req.params;
+  const { anime_id, id } = req.params;
 
   Episode
     .deleteOne({
-      _id: id
+      _id: id,
+      anime: anime_id,
     })
     .then(() => {
       res
@@ -51,6 +78,7 @@ const deleteEpisode = (req, res) => {
 };
 
 module.exports = {
+  getEpisodes,
   createEpisode,
   deleteEpisode,
 };
