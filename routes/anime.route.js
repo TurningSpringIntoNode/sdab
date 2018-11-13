@@ -6,7 +6,7 @@ const animeCtrl = require('../controllers/anime.controller');
 
 const episodeRouter = require('./episode.route');
 
-const { thumbParser } = require('../core/cloudinary');
+let { thumbParser } = require('../core/cloudinary');
 
 const router = express.Router();
 

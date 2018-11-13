@@ -7,7 +7,7 @@ const config = require('../app.config');
 
 const app = require('../app');
 
-const { Anime } = require('../core/mongodb').mongoose.models;
+const { Anime, User } = require('../core/mongodb').mongoose.models;
 
 const authUtils = require('./utils/auth');
 
@@ -32,7 +32,7 @@ describe('Create anime', () => {
             console.log(res);
             done();
           })
-      })
+      });
   });
 
 });

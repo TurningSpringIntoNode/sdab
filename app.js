@@ -14,7 +14,7 @@ const mongoose = require('mongoose');
 const connection = require('./core/mongodb').mongoose;
 require('./models')(connection, mongoose);
 
-require('./core/admin-setup')();
+require('./core/admin-setup')(connection);
 
 const app = express();
 

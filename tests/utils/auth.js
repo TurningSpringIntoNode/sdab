@@ -11,10 +11,7 @@ const getAdminToken = () => request(app)
   })
   .expect(200)
   .then(res => res.body)
-  .then(res => {
-    console.log(res);
-    return res.content.token
-  });
+  .then(res => res.content.token);
 
 module.exports = {
   getAdminToken,
