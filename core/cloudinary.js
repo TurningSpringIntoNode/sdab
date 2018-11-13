@@ -49,8 +49,10 @@ const thumbParserMock = {
 
 const videoParserMock = {
   single: () => (req, res, next) => {
-    req.file.url = req.body.video;
-    req.file.public_id = req.body.video_id;
+    req.file = {
+      url: req.body.video,
+      public_id: req.body.video_id,
+    };
     next();
   },
 };
