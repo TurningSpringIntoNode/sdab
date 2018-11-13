@@ -1,7 +1,6 @@
 const { Episode } = require('../core/mongodb').mongoose.models;
 
 const createEpisode = (req, res) => {
-  console.log('aq');
 
   const video = {
     id: req.file.public_id,
@@ -34,6 +33,24 @@ const createEpisode = (req, res) => {
     });
 };
 
+const deleteEpisode = (req, res) => {
+
+  const { id } = req.params;
+
+  Episode
+    .deleteOne({
+      _id: id
+    })
+    .then(() => {
+      res
+        .send({
+          status: 'OK',
+          message: 'OK',
+        })
+    });
+};
+
 module.exports = {
   createEpisode,
+  deleteEpisode,
 };
