@@ -36,14 +36,12 @@ const videoParser = multer({
 });
 
 const thumbParserMock = {
-  single: () => {
-    return (req, res, next) => {
-      req.file = {
-        url: req.body.thumb,
-        public_id: req.body.thumb_id,
-      };
-      next();
+  single: () => (req, res, next) => {
+    req.file = {
+      url: req.body.thumb,
+      public_id: req.body.thumb_id,
     };
+    next();
   },
 };
 

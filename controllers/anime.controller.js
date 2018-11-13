@@ -5,7 +5,7 @@ const { cloudinary } = require('../core/cloudinary');
 const getAnimes = (req, res) => {
   Anime
     .find({})
-    .then(animes => {
+    .then((animes) => {
       res
         .send({
           status: 'OK',
@@ -14,7 +14,7 @@ const getAnimes = (req, res) => {
             animes,
           },
         });
-    })
+    });
 };
 
 const createAnime = (req, res) => {

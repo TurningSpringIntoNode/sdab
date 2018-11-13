@@ -45,9 +45,9 @@ module.exports = (db, mongoose) => {
               if (err) {
                 reject(err);
               } else {
-                cloudinary.uploader.destroy(episode.video.id, (err) => {
-                  if (err) {
-                    reject(err);
+                cloudinary.uploader.destroy(episode.video.id, (uerr) => {
+                  if (uerr) {
+                    reject(uerr);
                   } else {
                     resolve();
                   }

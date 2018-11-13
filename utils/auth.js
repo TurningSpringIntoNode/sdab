@@ -33,9 +33,9 @@ const hashPassword = password => new Promise((resolve, reject) => {
     if (err) {
       reject(err);
     } else {
-      bcrypt.hash(password, salt, (err, hash) => {
-        if (err) {
-          reject(err);
+      bcrypt.hash(password, salt, (herr, hash) => {
+        if (herr) {
+          reject(herr);
         } else {
           resolve(hash);
         }

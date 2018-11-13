@@ -1,7 +1,6 @@
 const config = require('../app.config');
 
 module.exports = async (mongoose) => {
-
   const { Admin, User } = mongoose.models;
 
   const admin = new Admin();

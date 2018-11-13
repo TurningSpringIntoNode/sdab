@@ -140,15 +140,15 @@ module.exports = (db, mongoose) => {
             // TODO
             reject();
           } else if (user) {
-            const deleteUserCb = (err) => {
-              if (err) {
-                reject(err);
+            const deleteUserCb = (derr) => {
+              if (derr) {
+                reject(derr);
               } else {
                 User
                   .deleteOne({ _id: id })
-                  .exec((err) => {
-                    if (err) {
-                      reject(err);
+                  .exec((eerr) => {
+                    if (eerr) {
+                      reject(eerr);
                     } else {
                       resolve();
                     }

@@ -1,4 +1,4 @@
-const { User, Admin, Account } = require('../core/mongodb').mongoose.models;
+const { User } = require('../core/mongodb').mongoose.models;
 
 const deleteUserById = (req, res) => {
   const { id } = req.params;

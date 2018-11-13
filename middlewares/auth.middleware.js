@@ -10,7 +10,7 @@ const authenticate = (req, res, next) => {
         return Promise.reject();
       }
       req.user = user;
-      next();
+      return next();
     })
     .catch(() => {
       res

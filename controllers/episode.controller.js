@@ -2,14 +2,13 @@ const { Episode } = require('../core/mongodb').mongoose.models;
 
 
 const getEpisodes = (req, res) => {
-
   const { anime_id } = req.params;
 
   Episode
     .find({
-      anime: anime_id
+      anime: anime_id,
     })
-    .then(episodes => {
+    .then((episodes) => {
       res
         .send({
           status: 'OK',
@@ -23,7 +22,6 @@ const getEpisodes = (req, res) => {
 
 
 const createEpisode = (req, res) => {
-
   const video = {
     id: req.file.public_id,
     url: req.file.url,
@@ -34,7 +32,7 @@ const createEpisode = (req, res) => {
   } = req.body;
 
   const {
-    anime_id
+    anime_id,
   } = req.params;
 
   const episode = new Episode({
@@ -60,7 +58,6 @@ const createEpisode = (req, res) => {
 };
 
 const deleteEpisode = (req, res) => {
-
   const { anime_id, id } = req.params;
 
   Episode
@@ -73,7 +70,7 @@ const deleteEpisode = (req, res) => {
         .send({
           status: 'OK',
           message: 'OK',
-        })
+        });
     });
 };
 
