@@ -27,11 +27,11 @@ const videoStorage = cloudinaryStorage({
   // TODO: setup transformation
 });
 
-const thumbParser = multer({
+let thumbParser = multer({
   storage: thumbStorage,
 });
 
-const videoParser = multer({
+let videoParser = multer({
   storage: videoStorage,
 });
 
