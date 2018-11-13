@@ -28,7 +28,7 @@ const jwtDecode = (token) => {
   return Promise.resolve(decoded);
 };
 
-const encryptPassword = password => new Promise((resolve, reject) => {
+const hashPassword = password => new Promise((resolve, reject) => {
   bcrypt.genSalt(10, (err, salt) => {
     if (err) {
       reject(err);
@@ -48,5 +48,5 @@ module.exports = {
   getRequestAuthToken,
   jwtSign,
   jwtDecode,
-  encryptPassword,
+  hashPassword,
 };

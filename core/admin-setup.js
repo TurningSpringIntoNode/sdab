@@ -17,5 +17,7 @@ module.exports = async () => {
 
   adminUser.roles.Admin = admin._id;
 
+  await adminUser.hashPassword();
+
   await adminUser.save();
 };

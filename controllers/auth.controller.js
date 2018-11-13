@@ -17,18 +17,22 @@ const signupSocial = (req, res) => {
         await user.setupRole(role);
 
         user
-          .save()
-          .then((dbUser) => {
-            const token = dbUser
-              .generateAuthToken();
-            res
-              .send({
-                status: 'OK',
-                message: 'OK',
-                content: {
-                  role: dbUser.getRole(),
-                  token,
-                },
+          .hashPassword()
+          .then(user => {
+            user
+              .save()
+              .then((dbUser) => {
+                const token = dbUser
+                  .generateAuthToken();
+                res
+                  .send({
+                    status: 'OK',
+                    message: 'OK',
+                    content: {
+                      role: dbUser.getRole(),
+                      token,
+                    },
+                  });
               });
           });
       }
