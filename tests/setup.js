@@ -1,7 +1,7 @@
 
 
 beforeAll((done) => {
-  done();
+  setTimeout(done, 2000);
 });
 
 beforeEach( async (done) => {
@@ -9,6 +9,7 @@ beforeEach( async (done) => {
   // for(const model in mongoose.connection.models) {
   //   await mongoose.connection.models[model].deleteMany({})
   // }
+  // await require('../core/admin-setup')();
   done();
 });
 

@@ -17,18 +17,22 @@ const signupSocial = (req, res) => {
         await user.setupRole(role);
 
         user
-          .save()
-          .then((dbUser) => {
-            const token = dbUser
-              .generateAuthToken();
-            res
-              .send({
-                status: 'OK',
-                message: 'OK',
-                content: {
-                  role: dbUser.getRole(),
-                  token,
-                },
+          .hashPassword()
+          .then(() => {
+            user
+              .save()
+              .then((ndbUser) => {
+                const token = ndbUser
+                  .generateAuthToken();
+                res
+                  .send({
+                    status: 'OK',
+                    message: 'OK',
+                    content: {
+                      role: ndbUser.getRole(),
+                      token,
+                    },
+                  });
               });
           });
       }
@@ -55,7 +59,7 @@ const loginSocial = (req, res) => {
           .then((same) => {
             if (same) {
               const token = dbUser.generateAuthToken();
-              res
+              return res
                 .send({
                   status: 'OK',
                   message: 'OK',
@@ -64,9 +68,8 @@ const loginSocial = (req, res) => {
                     token,
                   },
                 });
-            } else {
-              return Promise.reject();
             }
+            return Promise.reject();
           })
           .catch(() => {
             res

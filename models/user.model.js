@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 
-const { jwtSign, jwtDecode, encryptPassword } = require('../utils/auth');
+const { jwtSign, jwtDecode, hashPassword } = require('../utils/auth');
 
 module.exports = (db, mongoose) => {
   const { Schema } = mongoose;
@@ -47,14 +47,14 @@ module.exports = (db, mongoose) => {
     },
   });
 
-  UserSchema.pre('save', function (next) {
+  UserSchema.methods.hashPassword = function () {
     const user = this;
-    encryptPassword(user.password)
-      .then((encPassword) => {
-        user.password = encPassword;
-        next();
+    return hashPassword(user.password)
+      .then((hsPassword) => {
+        user.password = hsPassword;
+        return user;
       });
-  });
+  };
 
   UserSchema.methods.getRole = function () {
     const user = this;
@@ -140,15 +140,15 @@ module.exports = (db, mongoose) => {
             // TODO
             reject();
           } else if (user) {
-            const deleteUserCb = (err) => {
-              if (err) {
-                reject(err);
+            const deleteUserCb = (derr) => {
+              if (derr) {
+                reject(derr);
               } else {
                 User
                   .deleteOne({ _id: id })
-                  .exec((err) => {
-                    if (err) {
-                      reject(err);
+                  .exec((eerr) => {
+                    if (eerr) {
+                      reject(eerr);
                     } else {
                       resolve();
                     }

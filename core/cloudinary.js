@@ -35,8 +35,44 @@ const videoParser = multer({
   storage: videoStorage,
 });
 
-module.exports = {
+const thumbParserMock = {
+  single: () => (req, res, next) => {
+    req.file = {
+      url: req.body.thumb,
+      public_id: req.body.thumb_id,
+    };
+    next();
+  },
+};
+
+const videoParserMock = {
+  single: () => (req, res, next) => {
+    req.file = {
+      url: req.body.video,
+      public_id: req.body.video_id,
+    };
+    next();
+  },
+};
+
+const cloudinaryMock = {
+  uploader: {
+    destroy: (_, cb) => {
+      cb(null);
+    },
+  },
+};
+
+const MockExports = {
+  cloudinary: cloudinaryMock,
+  thumbParser: thumbParserMock,
+  videoParser: videoParserMock,
+};
+
+const Exports = {
   cloudinary,
   thumbParser,
   videoParser,
 };
+
+module.exports = process.env.NODE_ENV === 'test' ? MockExports : Exports;

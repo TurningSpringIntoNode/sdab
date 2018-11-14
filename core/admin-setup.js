@@ -1,11 +1,11 @@
-const { User } = require('./mongodb').mongoose.models;
-const { Admin } = require('./mongodb').mongoose.models;
 const config = require('../app.config');
 
-module.exports = async () => {
+module.exports = async (mongoose) => {
+  const { Admin, User } = mongoose.models;
+
   const admin = new Admin();
 
-  await admin.save();
+  await admin.save().catch();
 
   const adminUser = new User({
     name: config.admin.name,
@@ -17,5 +17,7 @@ module.exports = async () => {
 
   adminUser.roles.Admin = admin._id;
 
-  await adminUser.save();
+  await adminUser.hashPassword();
+
+  await adminUser.save().catch();
 };

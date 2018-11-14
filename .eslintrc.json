@@ -3,6 +3,7 @@
     "rules": {
         "no-param-reassign": "off",
         "no-underscore-dangle": "off",
-        "func-names": "off"
+        "func-names": "off",
+        "camelcase": "off"
     }
 }

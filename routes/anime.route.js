@@ -8,8 +8,10 @@ const { thumbParser } = require('../core/cloudinary');
 
 const router = express.Router();
 
-
+router.get('/animes', animeCtrl.getAnimes);
+router.get('/animes/:id', animeCtrl.getAnimeById);
 router.post('/animes', authMiddleware.authenticate, authMiddleware.hasRole(['Admin']), thumbParser.single('thumb'), animeCtrl.createAnime);
+router.put('/animes/:id', authMiddleware.authenticate, authMiddleware.hasRole(['Admin']), thumbParser.single('thumb'), animeCtrl.updateAnime);
 router.delete('/animes/:id', authMiddleware.authenticate, authMiddleware.hasRole(['Admin']), animeCtrl.deleteAnime);
 
 module.exports = router;
