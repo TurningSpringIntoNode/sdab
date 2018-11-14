@@ -72,7 +72,7 @@ const MockExports = {
 const Exports = {
   cloudinary,
   thumbParser,
-  videoParser
+  videoParser,
 };
 
 module.exports = process.env.NODE_ENV === 'test' ? MockExports : Exports;
