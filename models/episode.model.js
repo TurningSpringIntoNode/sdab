@@ -41,17 +41,11 @@ module.exports = (db, mongoose) => {
       .then((episodes) => {
         const destroyEpisodePromises = episodes
           .map(episode => new Promise((resolve, reject) => {
-            cloudinary.uploader.destroy(episode.thumb.id, (err) => {
+            cloudinary.uploader.destroy(episode.video.id, (err) => {
               if (err) {
                 reject(err);
               } else {
-                cloudinary.uploader.destroy(episode.video.id, (uerr) => {
-                  if (uerr) {
-                    reject(uerr);
-                  } else {
-                    resolve();
-                  }
-                });
+                resolve();
               }
             });
           }));
@@ -60,7 +54,7 @@ module.exports = (db, mongoose) => {
           .then(() => Episode
             .deleteMany({ anime: id }))
           .catch(() => {
-
+            // TODO:
           });
       });
   };

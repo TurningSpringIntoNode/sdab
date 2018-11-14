@@ -9,6 +9,8 @@ const app = require('../app');
 
 const { User, Account } = require('../core/mongodb').mongoose.models;
 
+const authUtil = require('./utils/auth');
+
 const user = {
   name: 'Felipe',
   email: 'ff@ff.com',
@@ -109,6 +111,27 @@ describe('Auth', () => {
             expect(res.status).to.deep.equal('OK');
             expect(res.content).to.have.property('token');
             expect(res.content.role).to.deep.equal('Admin');
+            done();
+          });
+      });
+  });
+
+  test('delete admin', async (done) => {
+
+    const adminDbUser = await User.findOne({ email: admin.email });
+
+    authUtil
+      .getAdminToken()
+      .then(token => {
+        request(app)
+          .delete(`/admin/users/${adminDbUser._id}`)
+          .set('authorization', `Bearer ${token}`)
+          .send()
+          .expect(200)
+          .then(res => res.body)
+          .then(res => {
+            expect(res.status).to.equal('OK');
+            expect(res.message).to.equal('OK');
             done();
           });
       });

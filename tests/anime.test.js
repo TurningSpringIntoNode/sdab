@@ -57,6 +57,49 @@ describe('Create anime', () => {
       });
   });
 
+  test('Search for inexistent anime', async (done) => {
+
+    const animes = await Anime.find({});
+
+    await Anime.deleteOne({ _id : animes[0]._id.toHexString() });
+
+    request(app)
+      .get(`/animes/${animes[0]._id.toHexString()}`)
+      .expect(404)
+      .then(res => res.body)
+      .then(res => {
+        expect(res.status).to.eql('ERROR');
+        expect(res.message).to.eql('Anime not found');
+        done();
+      });
+  });
+
+  test('Update anime', async (done) => {
+    const animes = await Anime.find({});
+
+    authUtils
+      .getAdminToken()
+      .then(token => {
+        request(app)
+          .put(`/animes/${animes[0]._id.toHexString()}`)
+          .set('authorization', `Bearer ${token}`)
+          .send({
+            name: 'test4',
+            genre: 'waba',
+            thumb_id: '4',
+            thumb: 'animes.com/4',
+            resume: 'Test for anime number 4'
+          })
+          .expect(200)
+          .then(res => res.body)
+          .then(res => {
+            expect(res.status).to.eql('OK');
+            expect(res.message).to.eql('OK');
+            done();
+          });
+      })
+  });
+
   test('Delete anime', async (done) => {
 
     const animes = await Anime.find({});
@@ -76,23 +119,6 @@ describe('Create anime', () => {
             expect(n_animes.length + 1).to.eql(animes.length);
             done();
           });
-      });
-  });
-
-  test('Search for inexistent anime', async (done) => {
-
-    const animes = await Anime.find({});
-
-    await Anime.deleteOne({ _id : animes[0]._id.toHexString() });
-
-    request(app)
-      .get(`/animes/${animes[0]._id.toHexString()}`)
-      .expect(404)
-      .then(res => res.body)
-      .then(res => {
-        expect(res.status).to.eql('ERROR');
-        expect(res.message).to.eql('Anime not found');
-        done();
       });
   });
 

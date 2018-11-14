@@ -58,7 +58,7 @@ const videoParserMock = {
 const cloudinaryMock = {
   uploader: {
     destroy: (_, cb) => {
-      cb();
+      cb(null);
     },
   },
 };
