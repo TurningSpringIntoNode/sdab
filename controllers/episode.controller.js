@@ -26,17 +26,17 @@ const getEpisodeById = (req, res) => {
   Episode
     .find({
       anime: anime_id,
-      _id: id
+      _id: id,
     })
-    .then(episode => {
+    .then((episode) => {
       if (episode) {
         res
           .send({
             status: 'OK',
             message: 'OK',
             content: {
-              episode
-            }
+              episode,
+            },
           });
       } else {
         res
@@ -52,7 +52,7 @@ const getEpisodeById = (req, res) => {
         .status(500)
         .send({
           status: 'ERROR',
-          message: 'Internal server error'
+          message: 'Internal server error',
         });
     });
 };
@@ -100,23 +100,23 @@ const updateEpisode = (req, res) => {
   Episode
     .find({
       anime: anime_id,
-      _id: id
+      _id: id,
     })
-    .then(episode => {
+    .then((episode) => {
       if (episode) {
         res
           .send({
             status: 'OK',
             message: 'OK',
             content: {
-              episode
-            }
+              episode,
+            },
           });
       } else {
         res
           .send({
             status: 'ERROR',
-            message: 'Episode not found'
+            message: 'Episode not found',
           });
       }
     })
