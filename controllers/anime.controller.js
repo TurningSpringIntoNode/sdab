@@ -105,7 +105,7 @@ const updateAnime = (req, res) => {
             message: 'Anime not found',
           });
       }
-    })
+    });
 };
 
 const deleteAnime = (req, res) => {
