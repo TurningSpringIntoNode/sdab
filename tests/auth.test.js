@@ -267,4 +267,31 @@ describe('Auth', () => {
           })
       });
   });
+
+  test('Empty authorization', (done) => {
+    request(app)
+      .post('/animes')
+      .send()
+      .expect(401)
+      .then(res => res.body)
+      .then(res => {
+        expect(res.status).to.eql('ERROR');
+        expect(res.message).to.eql('Unauthorized user');
+        done();
+      });
+  });
+
+  test('Invalid authorization', (done) => {
+    request(app)
+      .post('/animes')
+      .set('authorization', '1111111111')
+      .send()
+      .expect(401)
+      .then(res => res.body)
+      .then(res => {
+        expect(res.status).to.eql('ERROR');
+        expect(res.message).to.eql('Unauthorized user');
+        done();
+      });
+  });
 });

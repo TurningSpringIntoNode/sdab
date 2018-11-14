@@ -10,6 +10,11 @@ const app = require('../app');
 const { Anime, User } = require('../core/mongodb').mongoose.models;
 
 const authUtils = require('./utils/auth');
+const populators = require('./utils/populators');
+
+beforeEach(async () => {
+  await populators.populateAnime();
+});
 
 describe('Create anime', () => {
 
@@ -33,6 +38,21 @@ describe('Create anime', () => {
 
             done();
           })
+      });
+  });
+
+  test('Get animes', async (done) => {
+
+    const animes = await Anime.find({});
+    request(app)
+      .get('/animes')
+      .expect(200)
+      .then(res => res.body)
+      .then(res => {
+        expect(res.status).to.eql('OK');
+        expect(res.message).to.eql('OK');
+        expect(res.content.animes.length).to.eql(animes.length);
+        done();
       });
   });
 

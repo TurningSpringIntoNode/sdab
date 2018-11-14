@@ -20,6 +20,43 @@ const getEpisodes = (req, res) => {
     });
 };
 
+const getEpisodeById = (req, res) => {
+  const { anime_id, id } = req.params;
+
+  Episode
+    .find({
+      anime: anime_id,
+      _id: id
+    })
+    .then(episode => {
+      if (episode) {
+        res
+          .send({
+            status: 'OK',
+            message: 'OK',
+            content: {
+              episode
+            }
+          });
+      } else {
+        res
+          .status(404)
+          .send({
+            status: 'ERROR',
+            message: 'Episode not found',
+          });
+      }
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'Internal server error'
+        });
+    });
+};
+
 
 const createEpisode = (req, res) => {
   const video = {
@@ -57,6 +94,41 @@ const createEpisode = (req, res) => {
     });
 };
 
+const updateEpisode = (req, res) => {
+  const { anime_id, id } = req.params;
+
+  Episode
+    .find({
+      anime: anime_id,
+      _id: id
+    })
+    .then(episode => {
+      if (episode) {
+        res
+          .send({
+            status: 'OK',
+            message: 'OK',
+            content: {
+              episode
+            }
+          });
+      } else {
+        res
+          .send({
+            status: 'ERROR',
+            message: 'Episode not found'
+          });
+      }
+    })
+    .catch(() => {
+      res
+        .send({
+          status: 'ERROR',
+          message: 'Internal server error',
+        });
+    });
+};
+
 const deleteEpisode = (req, res) => {
   const { anime_id, id } = req.params;
 
@@ -76,6 +148,8 @@ const deleteEpisode = (req, res) => {
 
 module.exports = {
   getEpisodes,
+  getEpisodeById,
   createEpisode,
+  updateEpisode,
   deleteEpisode,
 };
