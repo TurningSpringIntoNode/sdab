@@ -17,6 +17,31 @@ const getAnimes = (req, res) => {
     });
 };
 
+const getAnimeById = (req, res) => {
+  const { id } = req.params;
+
+  Anime
+    .find({ _id: id })
+    .then(anime => {
+      if (anime) {
+        res
+          .send({
+            status: 'OK',
+            message: 'OK',
+            content: {
+              anime,
+            },
+          });
+      } else {
+        res
+          .send({
+            status: 'ERROR',
+            message: 'Anime not found',
+          });
+      }
+    });
+}
+
 const createAnime = (req, res) => {
   const { name, genre, resume } = req.body;
   const { public_id, url } = req.file;
@@ -41,6 +66,54 @@ const createAnime = (req, res) => {
           url,
         },
       });
+    });
+};
+
+const updateAnime = (req, res) => {
+
+  const { id } = req.params;
+
+  const { name, genre, resume } = req.body;
+  const { public_id, url } = req.file;
+
+  Anime
+    .find({ _id: id })
+    .then(anime => {
+
+      if (anime) {
+        anime.name = name;
+        anime.gender = genre;
+        anime.resume = resume;
+        anime.thumb.url = url;
+        anime.thumb.id = public_id;
+        anime
+          .save()
+          .then((animeDb) => {
+            res
+              .send({
+                status: 'OK',
+                message: 'OK',
+                content: {
+                  anime: animeDb
+                }
+              });
+          });
+      } else {
+        res
+          .status(404)
+          .send({
+            status: 'ERROR',
+            message: 'Anime not found',
+          });
+      }
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'Internal server error'
+        });
     });
 };
 
@@ -70,6 +143,8 @@ const deleteAnime = (req, res) => {
 
 module.exports = {
   getAnimes,
+  getAnimeById,
   createAnime,
   deleteAnime,
+  updateAnime,
 };
