@@ -21,7 +21,7 @@ const getAnimeById = (req, res) => {
   const { id } = req.params;
 
   Anime
-    .find({ _id: id })
+    .findById(id)
     .then((anime) => {
       if (anime) {
         res
@@ -34,6 +34,7 @@ const getAnimeById = (req, res) => {
           });
       } else {
         res
+          .status(404)
           .send({
             status: 'ERROR',
             message: 'Anime not found',
@@ -76,7 +77,7 @@ const updateAnime = (req, res) => {
   const { public_id, url } = req.file;
 
   Anime
-    .find({ _id: id })
+    .findById(id)
     .then((anime) => {
       if (anime) {
         anime.name = name;

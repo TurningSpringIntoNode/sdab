@@ -55,8 +55,24 @@ const videoParserMock = {
   },
 };
 
-module.exports = {
-  cloudinary,
-  thumbParser: process.env.NODE_ENV === 'test' ? thumbParserMock : thumbParser,
-  videoParser: process.env.NODE_ENV === 'test' ? videoParserMock : videoParser,
+const cloudinaryMock = {
+  uploader: {
+    destroy: (_, cb) => {
+      cb();
+    },
+  },
 };
+
+const MockExports = {
+  cloudinary: cloudinaryMock,
+  thumbParser: thumbParserMock,
+  videoParser: videoParserMock,
+};
+
+const Exports = {
+  cloudinary,
+  thumbParser,
+  videoParser
+};
+
+module.exports = process.env.NODE_ENV === 'test' ? MockExports : Exports;

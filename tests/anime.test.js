@@ -12,7 +12,7 @@ const { Anime, User } = require('../core/mongodb').mongoose.models;
 const authUtils = require('./utils/auth');
 const populators = require('./utils/populators');
 
-beforeEach(async () => {
+beforeAll(async () => {
   await populators.populateAnime();
 });
 
@@ -52,6 +52,46 @@ describe('Create anime', () => {
         expect(res.status).to.eql('OK');
         expect(res.message).to.eql('OK');
         expect(res.content.animes.length).to.eql(animes.length);
+        done();
+      });
+  });
+
+  test('Delete anime', async (done) => {
+
+    const animes = await Anime.find({});
+
+    authUtils
+      .getAdminToken()
+      .then(token => {
+        request(app)
+          .delete(`/animes/${animes[0]._id.toHexString()}`)
+          .set('authorization', `Bearer ${token}`)
+          .expect(200)
+          .then(res => res.body)
+          .then(async res => {
+            expect(res.status).to.eql('OK');
+            expect(res.message).to.eql('OK');
+            const n_animes = await Anime.find({});
+            expect(n_animes.length + 1).to.eql(animes.length);
+            done();
+          });
+      });
+  });
+
+  test('Search for inexistent anime', async (done) => {
+
+    const animes = await Anime.find({});
+
+    await Anime.deleteOne({ _id : animes[0]._id.toHexString() });
+
+    request(app)
+      .get(`/animes/${animes[0]._id.toHexString()}`)
+      .expect(404)
+      .then(res => res.body)
+      .then(res => {
+        // expect(res.status).to.eql('ERROR');
+        // expect(res.message).to.eql('Anime not found');
+        console.log(res);
         done();
       });
   });

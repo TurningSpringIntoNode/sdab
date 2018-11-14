@@ -24,7 +24,7 @@ const getEpisodeById = (req, res) => {
   const { anime_id, id } = req.params;
 
   Episode
-    .find({
+    .findOne({
       anime: anime_id,
       _id: id,
     })
@@ -98,7 +98,7 @@ const updateEpisode = (req, res) => {
   const { anime_id, id } = req.params;
 
   Episode
-    .find({
+    .findOne({
       anime: anime_id,
       _id: id,
     })
