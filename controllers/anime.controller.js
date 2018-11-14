@@ -106,14 +106,6 @@ const updateAnime = (req, res) => {
           });
       }
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'Internal server error',
-        });
-    });
 };
 
 const deleteAnime = (req, res) => {

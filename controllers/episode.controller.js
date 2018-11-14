@@ -46,14 +46,6 @@ const getEpisodeById = (req, res) => {
             message: 'Episode not found',
           });
       }
-    })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'Internal server error',
-        });
     });
 };
 
@@ -119,13 +111,6 @@ const updateEpisode = (req, res) => {
             message: 'Episode not found',
           });
       }
-    })
-    .catch(() => {
-      res
-        .send({
-          status: 'ERROR',
-          message: 'Internal server error',
-        });
     });
 };
 

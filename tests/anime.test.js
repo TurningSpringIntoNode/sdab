@@ -14,6 +14,7 @@ const populators = require('./utils/populators');
 
 beforeAll(async () => {
   await populators.populateAnime();
+  await populators.populateEpisode();
 });
 
 describe('Create anime', () => {

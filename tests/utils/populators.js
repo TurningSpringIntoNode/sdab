@@ -74,8 +74,8 @@ const populateAnime = () => Promise.all(animes.map(x => new Anime(x).save()));
 
 const populateEpisode = async () => {
   const animes = await Anime.find({});
-  Promise.all(episodes.map(episode => {
-    const index = Math.floor(Math.random() * animes.length);
+  Promise.all(episodes.map((episode, ind) => {
+    const index = Math.floor(ind % animes.length);
     const anime_id = animes[index]._id;
     return new Episode({
       name: episode.name,
