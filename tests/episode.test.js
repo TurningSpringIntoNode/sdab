@@ -7,13 +7,14 @@ const config = require('../app.config');
 
 const app = require('../app');
 
-const { Anime, User } = require('../core/mongodb').mongoose.models;
+const { Anime, User, Episode } = require('../core/mongodb').mongoose.models;
 
 const authUtils = require('./utils/auth');
 const populators = require('./utils/populators');
 
 beforeEach(async () => {
   await populators.populateAnime();
+  await populators.populateEpisode();
 });
 
 describe('create episode', () => {
@@ -36,6 +37,23 @@ describe('create episode', () => {
       .expect(200)
       .then(res => res.body)
       .then(res => {
+        done();
+      });
+  });
+
+  test('Get episodes', async (done) => {
+    const animes = await Anime.find({});
+
+    const episodes = await Episode.find({ anime: animes[0]._id.toHexString()});
+
+    request(app)
+      .get(`/animes/${animes[0]._id.toHexString()}/episodes/`)
+      .expect(200)
+      .then(res => res.body)
+      .then(res => {
+        expect(res.status).to.eql('OK');
+        expect(res.message).to.eql('OK');
+        expect(res.content.episodes.length).to.deep.equal(episodes.length);
         done();
       });
   });

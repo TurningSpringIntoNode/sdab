@@ -31,8 +31,63 @@ const animes = [
   }
 ];
 
+const episodes = [
+  {
+    name: 'test_ep_1',
+    chapter: 'x1',
+    description: 'test episode 1',
+    video: {
+      id: '1',
+      url: 'episodes.com/1',
+    },
+  },
+  {
+    name: 'test_ep_2',
+    chapter: 'x2',
+    description: 'test episode 2',
+    video: {
+      id: '2',
+      url: 'episodes.com/2',
+    },
+  },
+  {
+    name: 'test_ep_3',
+    chapter: 'x3',
+    description: 'test episode 3',
+    video: {
+      id: '3',
+      url: 'episodes.com/3',
+    },
+  },
+  {
+    name: 'test_ep_4',
+    chapter: 'x4',
+    description: 'test episode 4',
+    video: {
+      id: '4',
+      url: 'episodes.com/4',
+    },
+  },
+];
+
 const populateAnime = () => Promise.all(animes.map(x => new Anime(x).save()));
 
+const populateEpisode = async () => {
+  const animes = await Anime.find({});
+  Promise.all(episodes.map(episode => {
+    const index = Math.floor(Math.random() * animes.length);
+    const anime_id = animes[index]._id;
+    return new Episode({
+      name: episode.name,
+      chapter: episode.chapter,
+      description: episode.description,
+      video: episode.video,
+      anime: anime_id,
+    }).save();
+  }))
+};
+
 module.exports = {
-  populateAnime
+  populateAnime,
+  populateEpisode,
 }

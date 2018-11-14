@@ -89,9 +89,8 @@ describe('Create anime', () => {
       .expect(404)
       .then(res => res.body)
       .then(res => {
-        // expect(res.status).to.eql('ERROR');
-        // expect(res.message).to.eql('Anime not found');
-        console.log(res);
+        expect(res.status).to.eql('ERROR');
+        expect(res.message).to.eql('Anime not found');
         done();
       });
   });
