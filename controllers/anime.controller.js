@@ -22,7 +22,7 @@ const getAnimeById = (req, res) => {
 
   Anime
     .find({ _id: id })
-    .then(anime => {
+    .then((anime) => {
       if (anime) {
         res
           .send({
@@ -40,7 +40,7 @@ const getAnimeById = (req, res) => {
           });
       }
     });
-}
+};
 
 const createAnime = (req, res) => {
   const { name, genre, resume } = req.body;
@@ -70,7 +70,6 @@ const createAnime = (req, res) => {
 };
 
 const updateAnime = (req, res) => {
-
   const { id } = req.params;
 
   const { name, genre, resume } = req.body;
@@ -78,8 +77,7 @@ const updateAnime = (req, res) => {
 
   Anime
     .find({ _id: id })
-    .then(anime => {
-
+    .then((anime) => {
       if (anime) {
         anime.name = name;
         anime.gender = genre;
@@ -94,8 +92,8 @@ const updateAnime = (req, res) => {
                 status: 'OK',
                 message: 'OK',
                 content: {
-                  anime: animeDb
-                }
+                  anime: animeDb,
+                },
               });
           });
       } else {
@@ -112,7 +110,7 @@ const updateAnime = (req, res) => {
         .status(500)
         .send({
           status: 'ERROR',
-          message: 'Internal server error'
+          message: 'Internal server error',
         });
     });
 };
