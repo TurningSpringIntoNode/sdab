@@ -4,7 +4,10 @@ const indexRouter = require('../routes/index.route');
 const animeRouter = require('../routes/anime.route');
 const episodeRouter = require('../routes/episode.route');
 
+const logMiddleware = require('../middlewares/log.middleware');
+
 const routes = (app) => {
+  app.use('/*', logMiddleware.logIp);
   app.use(authRouter);
   app.use(adminRouter);
   app.use(indexRouter);
