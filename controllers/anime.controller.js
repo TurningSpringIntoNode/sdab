@@ -1,4 +1,4 @@
-const { Anime, Episode } = require('../core/mongodb').mongoose.models;
+const { Anime, Episode, Comment } = require('../core/mongodb').mongoose.models;
 
 const { cloudinary } = require('../core/cloudinary');
 
@@ -132,10 +132,70 @@ const deleteAnime = (req, res) => {
     });
 };
 
+const getComments = (req, res) => {
+  const { id } = req.params;
+
+  Anime
+    .findById(id)
+    .populate('comments')
+    .then(animeDb => {
+      res
+        .send({
+          status: 'OK',
+          message: 'OK',
+          content: {
+            comments: animeDb.comments,
+          },
+        });
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'Internval server error',
+        });
+    });
+};
+
+
+const addComment = async (req, res) => {
+  const { id } = req.params;
+
+  const { message } = req.body;
+
+  if (message) {
+    const comment = new Comment({
+      user: req.user._id,
+      message,
+      sentAt: new Date(),
+    });
+    await comment.save();
+    await Anime.findOneAndUpdate({ _id : id}, { $push: { comments: comment._id } });
+    res
+      .send({
+        status: 'OK',
+        message: 'OK',
+        content: {
+          comment
+        },
+      });
+  } else {
+    res
+      .status(400)
+      .send({
+        status: 'ERROR',
+        message: `Comment can't be empty`,
+      });
+  }
+};
+
 module.exports = {
   getAnimes,
   getAnimeById,
   createAnime,
   deleteAnime,
   updateAnime,
+  getComments,
+  addComment,
 };

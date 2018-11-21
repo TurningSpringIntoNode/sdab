@@ -19,5 +19,9 @@ module.exports = async (mongoose) => {
 
   await adminUser.hashPassword();
 
-  await adminUser.save().catch();
+  try {
+    await adminUser.save().catch();
+  } catch (e) {
+
+  }
 };
