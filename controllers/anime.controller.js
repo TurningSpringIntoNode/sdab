@@ -59,12 +59,12 @@ const createAnime = (req, res) => {
 
   anime
     .save()
-    .then(() => {
+    .then((animeDb) => {
       res.send({
         status: 'OK',
         message: 'OK',
         content: {
-          url,
+          anime: animeDb,
         },
       });
     });
