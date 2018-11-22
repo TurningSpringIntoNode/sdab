@@ -6,6 +6,7 @@ const logMiddleware = require('../middlewares/log.middleware');
 const authMiddleware = require('../middlewares/auth.middleware');
 const userMiddleware = require('../middlewares/user.middleware');
 const commentMiddleware = require('../middlewares/comment.middleware');
+const evaluationMiddleware = require('../middlewares/evaluation.middleware');
 
 const authCtrl = require('../controllers/auth.controller');
 const adminCtrl = require('../controllers/admin.controller');
@@ -13,6 +14,7 @@ const userCtrl = require('../controllers/user.controller');
 const animeCtrl = require('../controllers/anime.controller');
 const episodeCtrl = require('../controllers/episode.controller');
 const commentCtrl = require('../controllers/comment.controller');
+const evaluationCtrl = require('../controllers/evaluation.controller');
 
 const { thumbParser, videoParser } = require('./cloudinary');
 
@@ -70,13 +72,21 @@ const routes = (app) => {
     authMiddleware.hasRole(['Admin']),
     animeCtrl.deleteAnime);
   router.get('/animes/:animeId/comments',
-    commentMiddleware.parseCommentedAt('animeId'),
+    commentMiddleware.parseCommentedObject('animeId'),
     commentCtrl.getComments)
   router.post('/animes/:animeId/comments',
     authMiddleware.authenticate,
     commentMiddleware.parseCommentData,
-    commentMiddleware.parseCommentedAt('animeId'),
+    commentMiddleware.parseCommentedObject('animeId'),
     commentCtrl.createComment);
+  router.get('/animes/:animeId/evaluations',
+    evaluationMiddleware.parseEvaluatedObject('animeId'),
+    evaluationCtrl.getEvaluations);
+  router.post('/animes/:animeId/evaluations',
+    authMiddleware.authenticate,
+    evaluationMiddleware.parseEvaluationData,
+    evaluationMiddleware.parseEvaluatedObject('animeId'),
+    evaluationCtrl.createEvaluation);
 
 
   router.get('/animes/:animeId/episodes',
@@ -98,12 +108,12 @@ const routes = (app) => {
     authMiddleware.hasRole(['Admin']),
     episodeCtrl.deleteEpisode);
   router.get('/animes/:animeId/episodes/:episodeId/comments',
-    commentMiddleware.parseCommentedAt('episodeId'),
+    commentMiddleware.parseCommentedObject('episodeId'),
     commentCtrl.getComments);
   router.post('/animes/:animeId/episodes/:episodeId/comments',
     authMiddleware.authenticate,
     commentMiddleware.parseCommentData,
-    commentMiddleware.parseCommentedAt('episodeId'),
+    commentMiddleware.parseCommentedObject('episodeId'),
     commentCtrl.createComment);
 
   router.put('/comments/:commentId',

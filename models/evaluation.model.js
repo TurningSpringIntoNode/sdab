@@ -3,7 +3,7 @@ module.exports = (db, mongoose) => {
   const { Schema } = mongoose;
 
   const EvaluationSchema = new Schema({
-    evaluation: {
+    score: {
       type: Number,
       required: true,
     },

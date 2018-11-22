@@ -16,7 +16,7 @@ const parseCommentData = (req, res, next) => {
 
 };
 
-const parseCommentedAt = (field) => {
+const parseCommentedObject = (field) => {
   return (req, res, next) => {
     req.commentedObject = req.params[field];
     next();
@@ -25,5 +25,5 @@ const parseCommentedAt = (field) => {
 
 module.exports = {
   parseCommentData,
-  parseCommentedAt,
+  parseCommentedObject,
 };
