@@ -7,6 +7,7 @@ const getUser = (req, res) => {
     content: req.user,
   });
 };
+
 const deleteOwnUser = (req, res) => {
   User
     .recDeleteById(req.user._id)

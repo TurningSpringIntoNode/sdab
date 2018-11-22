@@ -10,7 +10,7 @@ const Roles = {
 
 const parseUserData = (req, res, next) => {
   const {
-    name, gender, email, password, checkPassword,
+    name, email, password, checkPassword,
   } = req.body;
 
   if (password !== checkPassword) {
@@ -23,7 +23,6 @@ const parseUserData = (req, res, next) => {
   } else {
     const user = new User({
       name,
-      gender,
       email,
       password,
     });
