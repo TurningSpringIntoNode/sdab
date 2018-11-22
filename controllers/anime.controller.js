@@ -18,10 +18,10 @@ const getAnimes = (req, res) => {
 };
 
 const getAnimeById = (req, res) => {
-  const { id } = req.params;
+  const { animeId } = req.params;
 
   Anime
-    .findById(id)
+    .findById(animeId)
     .then((anime) => {
       if (anime) {
         res
@@ -71,13 +71,13 @@ const createAnime = (req, res) => {
 };
 
 const updateAnime = (req, res) => {
-  const { id } = req.params;
+  const { animeId } = req.params;
 
   const { name, genre, resume } = req.body;
   const { public_id, url } = req.file;
 
   Anime
-    .findById(id)
+    .findById(animeId)
     .then((anime) => {
       if (anime) {
         anime.name = name;
@@ -109,17 +109,17 @@ const updateAnime = (req, res) => {
 };
 
 const deleteAnime = (req, res) => {
-  const { id } = req.params;
+  const { animeId } = req.params;
 
   Anime
-    .findById(id)
+    .findById(animeId)
     .then((animeDb) => {
       cloudinary.uploader.destroy(animeDb.thumb.id, () => {
         Anime
-          .deleteOne({ _id: id })
+          .deleteOne({ _id: animeId })
           .then(() => {
             Episode
-              .deleteManyByAnimeId(id)
+              .deleteManyByAnimeId(animeId)
               .then(() => {
                 res
                   .send({
@@ -133,10 +133,10 @@ const deleteAnime = (req, res) => {
 };
 
 const getComments = (req, res) => {
-  const { id } = req.params;
+  const { animeId } = req.params;
 
   Anime
-    .findById(id)
+    .findById(animeId)
     .populate('comments')
     .then(animeDb => {
       res
@@ -160,7 +160,7 @@ const getComments = (req, res) => {
 
 
 const addComment = async (req, res) => {
-  const { id } = req.params;
+  const { animeId } = req.params;
 
   const { message } = req.body;
 
@@ -171,7 +171,7 @@ const addComment = async (req, res) => {
       sentAt: new Date(),
     });
     await comment.save();
-    await Anime.findOneAndUpdate({ _id : id}, { $push: { comments: comment._id } });
+    await Anime.findOneAndUpdate({ _id : animeId}, { $push: { comments: comment._id } });
     res
       .send({
         status: 'OK',
@@ -189,6 +189,10 @@ const addComment = async (req, res) => {
       });
   }
 };
+
+const updateComment = async (req, res) => {
+
+}
 
 module.exports = {
   getAnimes,

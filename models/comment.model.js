@@ -17,6 +17,14 @@ module.exports = (db, mongoose) => {
       type: Date,
       required: true,
     },
+    anime: {
+      type: Schema.Types.ObjectId,
+      ref: 'Anime',
+    },
+    episode: {
+      type: Schema.Types.ObjectId,
+      ref: 'Episode',
+    },
   });
 
   db.model('Comment', CommentSchema);
