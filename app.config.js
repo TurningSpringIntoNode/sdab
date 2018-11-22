@@ -10,7 +10,6 @@ module.exports = {
     name: process.env.ADMIN_NAME || 'Admin',
     email: process.env.ADMIN_EMAIL || 'admin@admin.com',
     password: process.env.ADMIN_PASSWORD || 'admin',
-    birth: process.env.ADMIN_BIRTH || '01/01/1901',
     gender: process.env.ADMIN_GENDER || 'MALE',
   },
   cloudinary: {

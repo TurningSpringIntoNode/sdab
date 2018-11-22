@@ -5,6 +5,7 @@ module.exports = (db, mongoose) => {
   const AnimeSchema = new Schema({
     name: {
       type: String,
+      unique: true,
       required: true,
     },
     genre: {

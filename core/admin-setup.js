@@ -11,7 +11,6 @@ module.exports = async (mongoose) => {
     name: config.admin.name,
     email: config.admin.email,
     password: config.admin.password,
-    birth: config.admin.birth,
     gender: config.admin.gender,
   });
 
@@ -22,6 +21,6 @@ module.exports = async (mongoose) => {
   try {
     await adminUser.save().catch();
   } catch (e) {
-    
+
   }
 };

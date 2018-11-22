@@ -3,8 +3,17 @@ const { Anime, Episode } = require('../core/mongodb').mongoose.models;
 const { cloudinary } = require('../core/cloudinary');
 
 const getAnimes = (req, res) => {
+
+  const { search } = req.query;
+
+  const query = {};
+
+  if (search) {
+    query['name'] = new RegExp(search)
+  }
+
   Anime
-    .find({})
+    .find(query)
     .then((animes) => {
       res
         .send({
