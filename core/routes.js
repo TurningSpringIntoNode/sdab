@@ -110,7 +110,7 @@ const routes = (app) => {
     authMiddleware.authenticate,
     commentCtrl.updateComment);
   router.delete('/comments/:commentId',
-    authMiddleware.authenticate
+    authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
     commentCtrl.deleteComment);
 

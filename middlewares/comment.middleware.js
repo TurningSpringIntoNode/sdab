@@ -18,7 +18,7 @@ const parseCommentData = (req, res, next) => {
 
 const parseCommentedAt = (field) => {
   return (req, res, next) => {
-    req.commentedAt = req.params[field];
+    req.commentedObject = req.params[field];
     next();
   };
 };

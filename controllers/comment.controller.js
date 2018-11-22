@@ -3,11 +3,11 @@ const { Comment } = require('../core/mongodb').mongoose.models;
 const createComment = (req, res) => {
 
   const { message } = req.body;
-  const { commentedAt } = req;
+  const { commentedObject } = req;
 
   const comment = new Comment({
     user: req.user._id,
-    commentedAt,
+    commentedObject,
     message,
   });
 
@@ -35,12 +35,12 @@ const createComment = (req, res) => {
 
 const getComments = (req, res) => {
 
-  const { commentedAt } = req;
+  const { commentedObject } = req;
 
   const query = {};
 
-  if (commentedAt) {
-    query.commentedAt = commentedAt;
+  if (commentedObject) {
+    query.commentedObject = commentedObject;
   }
 
   Comment

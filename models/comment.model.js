@@ -14,7 +14,7 @@ module.exports = (db, mongoose) => {
       required: true,
       ref: 'User',
     },
-    commentedAt: {
+    commentedObject: {
       type: Schema.Types.ObjectId,
       required: true,
     },
