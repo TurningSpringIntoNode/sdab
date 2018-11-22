@@ -21,12 +21,12 @@ const getEpisodes = (req, res) => {
 };
 
 const getEpisodeById = (req, res) => {
-  const { animeId, id } = req.params;
+  const { animeId, episodeId } = req.params;
 
   Episode
     .findOne({
       anime: animeId,
-      _id: id,
+      _id: episodeId,
     })
     .then((episode) => {
       if (episode) {
@@ -87,12 +87,12 @@ const createEpisode = (req, res) => {
 };
 
 const updateEpisode = (req, res) => {
-  const { animeId, id } = req.params;
+  const { animeId, episodeId } = req.params;
 
   Episode
     .findOne({
       anime: animeId,
-      _id: id,
+      _id: episodeId,
     })
     .then((episode) => {
       if (episode) {
@@ -115,11 +115,11 @@ const updateEpisode = (req, res) => {
 };
 
 const deleteEpisode = (req, res) => {
-  const { animeId, id } = req.params;
+  const { animeId, episodeId } = req.params;
 
   Episode
     .deleteOne({
-      _id: id,
+      _id: episodeId,
       anime: animeId,
     })
     .then(() => {

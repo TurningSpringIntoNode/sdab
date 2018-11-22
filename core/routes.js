@@ -81,22 +81,38 @@ const routes = (app) => {
 
   router.get('/animes/:animeId/episodes',
     episodeCtrl.getEpisodes);
-  router.get('/animes/:animeId/episodes/:id',
+  router.get('/animes/:animeId/episodes/:episodeId',
     episodeCtrl.getEpisodeById);
   router.post('/animes/:animeId/episodes',
     authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
     videoParser.single('video'),
     episodeCtrl.createEpisode);
-  router.put('/animes/:animeId/episodes/:id',
+  router.put('/animes/:animeId/episodes/:episodeId',
     authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
     videoParser.single('video'),
     episodeCtrl.updateEpisode);
-  router.delete('/animes/:animeId/episodes/:id',
+  router.delete('/animes/:animeId/episodes/:episodeId',
     authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
     episodeCtrl.deleteEpisode);
+  router.get('/animes/:animeId/episodes/:episodeId/comments',
+    commentMiddleware.parseCommentedAt('episodeId'),
+    commentCtrl.getComments);
+  router.post('/animes/:animeId/episodes/:episodeId/comments',
+    authMiddleware.authenticate,
+    commentMiddleware.parseCommentData,
+    commentMiddleware.parseCommentedAt('episodeId'),
+    commentCtrl.createComment);
+
+  router.put('/comments/:commentId',
+    authMiddleware.authenticate,
+    commentCtrl.updateComment);
+  router.delete('/comments/:commentId',
+    authMiddleware.authenticate
+    authMiddleware.hasRole(['Admin']),
+    commentCtrl.deleteComment);
 
   app.use(router);
 };

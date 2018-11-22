@@ -97,9 +97,33 @@ const updateComment = (req, res) => {
     });
 };
 
+const deleteComment = (req, res) => {
+
+  const { commentId } = req.params;
+
+  Comment
+    .findByIdAndDelete(commentId)
+    .then(() => {
+      res
+        .send({
+          status: 'OK',
+          message: 'OK',
+        });
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'OK',
+          message: 'Internal server error',
+        });
+    });
+};
+
 
 module.exports = {
   createComment,
   getComments,
   updateComment,
+  deleteComment,
 };
