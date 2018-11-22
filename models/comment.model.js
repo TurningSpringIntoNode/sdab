@@ -1,7 +1,6 @@
 
 
 module.exports = (db, mongoose) => {
-
   const { Schema } = mongoose;
 
   const CommentSchema = new Schema({
@@ -19,7 +18,7 @@ module.exports = (db, mongoose) => {
       required: true,
     },
   }, {
-    timestamps: true
+    timestamps: true,
   });
 
   CommentSchema.statics.create = (userId, commentedAt, message) => {

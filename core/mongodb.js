@@ -10,6 +10,14 @@ const connection = mongoose.createConnection(mongoURI, {
   useCreateIndex: true,
 });
 
+connection.on('error', error => {
+  console.log('Failed to connect to db', error)
+});
+
+connection.once('open', () => {
+  console.log('Connected to db');
+});
+
 if (process.env.NODE_ENV === 'test') {
   connection.dropDatabase();
 }

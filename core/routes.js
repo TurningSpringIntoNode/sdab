@@ -20,7 +20,6 @@ const { thumbParser, videoParser } = require('./cloudinary');
 
 
 const routes = (app) => {
-
   const router = express.Router();
 
   router.all('/*',
@@ -73,7 +72,7 @@ const routes = (app) => {
     animeCtrl.deleteAnime);
   router.get('/animes/:animeId/comments',
     commentMiddleware.parseCommentedObject('animeId'),
-    commentCtrl.getComments)
+    commentCtrl.getComments);
   router.post('/animes/:animeId/comments',
     authMiddleware.authenticate,
     commentMiddleware.parseCommentData,

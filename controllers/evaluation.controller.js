@@ -1,7 +1,6 @@
 const { Evaluation } = require('../core/mongodb').mongoose.models;
 
 const createEvaluation = (req, res) => {
-
   const { score } = req.body;
   const { evaluatedObject } = req;
 
@@ -13,13 +12,13 @@ const createEvaluation = (req, res) => {
 
   evaluation
     .save()
-    .then(evaluation => {
+    .then((evaluationDb) => {
       res
         .send({
           status: 'OK',
           message: 'OK',
           content: {
-            evaluation,
+            evaluationDb,
           },
         });
     })
@@ -43,7 +42,7 @@ const getEvaluations = (req, res) => {
 
   Evaluation
     .find(query)
-    .then(evaluations => {
+    .then((evaluations) => {
       res
         .send({
           status: 'OK',

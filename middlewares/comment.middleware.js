@@ -10,17 +10,14 @@ const parseCommentData = (req, res, next) => {
       .status(400)
       .send({
         status: 'ERROR',
-        message: `Comment can't be empty`,
+        message: 'Comment can\'t be empty',
       });
   }
-
 };
 
-const parseCommentedObject = (field) => {
-  return (req, res, next) => {
-    req.commentedObject = req.params[field];
-    next();
-  };
+const parseCommentedObject = field => (req, res, next) => {
+  req.commentedObject = req.params[field];
+  next();
 };
 
 module.exports = {

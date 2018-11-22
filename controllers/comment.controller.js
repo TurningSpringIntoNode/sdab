@@ -1,7 +1,6 @@
 const { Comment } = require('../core/mongodb').mongoose.models;
 
 const createComment = (req, res) => {
-
   const { message } = req.body;
   const { commentedObject } = req;
 
@@ -13,13 +12,13 @@ const createComment = (req, res) => {
 
   comment
     .save()
-    .then(comment => {
+    .then((commentDb) => {
       res
         .send({
           status: 'OK',
           message: 'OK',
           content: {
-            comment,
+            commentDb,
           },
         });
     })
@@ -34,7 +33,6 @@ const createComment = (req, res) => {
 };
 
 const getComments = (req, res) => {
-
   const { commentedObject } = req;
 
   const query = {};
@@ -45,7 +43,7 @@ const getComments = (req, res) => {
 
   Comment
     .find(query)
-    .then(comments => {
+    .then((comments) => {
       res
         .send({
           status: 'OK',
@@ -66,7 +64,6 @@ const getComments = (req, res) => {
 };
 
 const updateComment = (req, res) => {
-
   const { commentId } = req.params;
 
   const { message } = req.body;
@@ -77,7 +74,7 @@ const updateComment = (req, res) => {
         message,
       },
     })
-    .then(comment => {
+    .then((comment) => {
       res
         .send({
           status: 'OK',
@@ -98,7 +95,6 @@ const updateComment = (req, res) => {
 };
 
 const deleteComment = (req, res) => {
-
   const { commentId } = req.params;
 
   Comment

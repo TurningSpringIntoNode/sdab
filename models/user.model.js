@@ -22,10 +22,6 @@ module.exports = (db, mongoose) => {
       type: String,
       enum: ['MALE', 'FEMALE'],
     },
-    birth: {
-      type: Date,
-      required: true,
-    },
     email: {
       type: String,
       required: true,
@@ -90,7 +86,6 @@ module.exports = (db, mongoose) => {
     return {
       name: user.name,
       email: user.email,
-      birth: user.birth,
       gender: user.gender,
       role: user.getRole(),
     };

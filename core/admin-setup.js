@@ -22,6 +22,6 @@ module.exports = async (mongoose) => {
   try {
     await adminUser.save().catch();
   } catch (e) {
-
+    
   }
 };
