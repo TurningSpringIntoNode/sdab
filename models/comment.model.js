@@ -11,21 +11,28 @@ module.exports = (db, mongoose) => {
     },
     user: {
       type: Schema.Types.ObjectId,
+      required: true,
       ref: 'User',
     },
-    sentAt: {
-      type: Date,
+    commentedAt: {
+      type: Schema.Types.ObjectId,
       required: true,
     },
-    anime: {
-      type: Schema.Types.ObjectId,
-      ref: 'Anime',
-    },
-    episode: {
-      type: Schema.Types.ObjectId,
-      ref: 'Episode',
-    },
+  }, {
+    timestamps: true
   });
+
+  CommentSchema.statics.create = (userId, commentedAt, message) => {
+    const Comment = this;
+
+    const comment = new Comment({
+      user: userId,
+      message,
+      commentedAt,
+    });
+
+    return comment.save();
+  };
 
   db.model('Comment', CommentSchema);
 };

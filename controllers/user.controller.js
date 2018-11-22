@@ -1,5 +1,12 @@
 const { User } = require('../core/mongodb').mongoose.models;
 
+const getUser = (req, res) => {
+  res.send({
+    status: 'OK',
+    message: 'OK',
+    content: req.user,
+  });
+};
 const deleteOwnUser = (req, res) => {
   User
     .recDeleteById(req.user._id)
@@ -13,5 +20,6 @@ const deleteOwnUser = (req, res) => {
 };
 
 module.exports = {
+  getUser,
   deleteOwnUser,
 };

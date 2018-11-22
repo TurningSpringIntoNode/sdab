@@ -31,10 +31,6 @@ module.exports = (db, mongoose) => {
       required: true,
       ref: 'Anime',
     },
-    comments: {
-      type: [Schema.Types.ObjectId],
-      ref: 'Comment',
-    },
   });
 
   EpisodeSchema.statics.deleteManyByAnimeId = function (id) {

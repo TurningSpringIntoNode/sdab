@@ -164,35 +164,31 @@ const addComment = async (req, res) => {
 
   const { message } = req.body;
 
-  if (message) {
-    const comment = new Comment({
-      user: req.user._id,
-      message,
-      sentAt: new Date(),
+  const comment = await Comment.create(req.user._id, message);
+  await Anime.findOneAndUpdate({ _id : animeId}, { $push: { comments: comment._id } });
+  res
+    .send({
+      status: 'OK',
+      message: 'OK',
+      content: {
+        comment
+      },
     });
-    await comment.save();
-    await Anime.findOneAndUpdate({ _id : animeId}, { $push: { comments: comment._id } });
-    res
-      .send({
-        status: 'OK',
-        message: 'OK',
-        content: {
-          comment
-        },
-      });
-  } else {
-    res
-      .status(400)
-      .send({
-        status: 'ERROR',
-        message: `Comment can't be empty`,
-      });
-  }
 };
 
 const updateComment = async (req, res) => {
+  const { commentId } = req.params;
 
-}
+  const { message } = req.body;
+
+  const comment = await Comment.findById(commentId);
+
+  if (comment) {
+
+  } else {
+
+  }
+};
 
 module.exports = {
   getAnimes,

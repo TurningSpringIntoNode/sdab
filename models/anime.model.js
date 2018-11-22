@@ -25,10 +25,6 @@ module.exports = (db, mongoose) => {
       type: String,
       required: true,
     },
-    comments: [{
-      type: Schema.Types.ObjectId,
-      ref: 'Comment',
-    }],
   });
 
   db.model('Anime', AnimeSchema);
