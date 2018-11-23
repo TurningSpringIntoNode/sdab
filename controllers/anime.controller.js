@@ -4,28 +4,16 @@ const { cloudinary } = require('../core/cloudinary');
 
 const getAnimes = (req, res) => {
 
-  const { search, page, pageSize } = req.query;
+  const { search } = req.query;
 
   const query = {};
-  const pagination = {
-    skip: 0,
-    limit: 20,
-  };
 
   if (search) {
     query['name'] = new RegExp(search)
   }
 
-  if (pageSize) {
-    pagination.limit = 1 * pageSize;
-  }
-
-  if (page) {
-    pagination.skip = (page - 1) * pagination.limit;
-  }
-
   Anime
-    .find(query, {}, pagination)
+    .find(query, {}, req.pagination)
     .then((animes) => {
       res
         .send({

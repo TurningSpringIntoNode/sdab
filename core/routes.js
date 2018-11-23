@@ -7,6 +7,7 @@ const authMiddleware = require('../middlewares/auth.middleware');
 const userMiddleware = require('../middlewares/user.middleware');
 const commentMiddleware = require('../middlewares/comment.middleware');
 const evaluationMiddleware = require('../middlewares/evaluation.middleware');
+const paginationMiddleware = require('../middlewares/pagination.middleware');
 
 const authCtrl = require('../controllers/auth.controller');
 const adminCtrl = require('../controllers/admin.controller');
@@ -17,7 +18,6 @@ const commentCtrl = require('../controllers/comment.controller');
 const evaluationCtrl = require('../controllers/evaluation.controller');
 
 const { thumbParser, videoParser } = require('./cloudinary');
-
 
 const routes = (app) => {
   const router = express.Router();
@@ -53,6 +53,7 @@ const routes = (app) => {
     authMiddleware.authenticate, userCtrl.deleteOwnUser);
 
   router.get('/animes',
+    paginationMiddleware.addPagination,
     animeCtrl.getAnimes);
   router.get('/animes/:animeId',
     animeCtrl.getAnimeById);
@@ -71,6 +72,7 @@ const routes = (app) => {
     authMiddleware.hasRole(['Admin']),
     animeCtrl.deleteAnime);
   router.get('/animes/:animeId/comments',
+    paginationMiddleware.addPagination,
     commentMiddleware.parseCommentedObject('animeId'),
     commentCtrl.getComments);
   router.post('/animes/:animeId/comments',
@@ -89,6 +91,7 @@ const routes = (app) => {
 
 
   router.get('/animes/:animeId/episodes',
+    paginationMiddleware.addPagination,
     episodeCtrl.getEpisodes);
   router.get('/animes/:animeId/episodes/:episodeId',
     episodeCtrl.getEpisodeById);
@@ -107,6 +110,7 @@ const routes = (app) => {
     authMiddleware.hasRole(['Admin']),
     episodeCtrl.deleteEpisode);
   router.get('/animes/:animeId/episodes/:episodeId/comments',
+    paginationMiddleware.addPagination,
     commentMiddleware.parseCommentedObject('episodeId'),
     commentCtrl.getComments);
   router.post('/animes/:animeId/episodes/:episodeId/comments',
