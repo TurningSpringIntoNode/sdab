@@ -13,14 +13,19 @@ const getAnimes = (req, res) => {
 
   Anime
     .find(query, {}, req.pagination)
+    .sort([['updatedAt', 'descending']])
     .then((animes) => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-          content: {
-            animes,
-          },
+      Promise
+        .all(animes.map(anime => anime.toJSONAsync()))
+        .then(animesDb => {
+          res
+            .send({
+              status: 'OK',
+              message: 'OK',
+              content: {
+                animesDb,
+              },
+            });
         });
     });
 };
