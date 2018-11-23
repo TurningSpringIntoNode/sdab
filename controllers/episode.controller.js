@@ -7,7 +7,7 @@ const getEpisodes = (req, res) => {
   Episode
     .find({
       anime: animeId,
-    })
+    }, {}, req.pagination)
     .then((episodes) => {
       res
         .send({

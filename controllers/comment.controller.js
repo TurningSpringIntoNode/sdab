@@ -42,7 +42,7 @@ const getComments = (req, res) => {
   }
 
   Comment
-    .find(query)
+    .find(query, {}, req.pagination)
     .then((comments) => {
       res
         .send({
