@@ -12,10 +12,11 @@ const { Anime, User, Episode } = require('../core/mongodb').mongoose.models;
 const authUtils = require('./utils/auth');
 const populators = require('./utils/populators');
 
-beforeEach(async () => {
+beforeAll(async () => {
   await populators.populateAnime();
   await populators.populateEpisode();
 });
+
 
 describe('create episode', () => {
 

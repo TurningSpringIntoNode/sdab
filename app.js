@@ -1,4 +1,5 @@
 const dotenv = require('dotenv');
+const cors = require('cors');
 
 if (process.env.NODE_ENV !== 'test') {
   dotenv.config();
@@ -19,7 +20,7 @@ require('./core/admin-setup')(connection);
 const app = express();
 
 app.use(compression());
-
+app.use(cors());
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

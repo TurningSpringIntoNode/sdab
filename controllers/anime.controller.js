@@ -3,8 +3,16 @@ const { Anime, Episode } = require('../core/mongodb').mongoose.models;
 const { cloudinary } = require('../core/cloudinary');
 
 const getAnimes = (req, res) => {
+  const { search } = req.query;
+
+  const query = {};
+
+  if (search) {
+    query.name = new RegExp(search);
+  }
+
   Anime
-    .find({})
+    .find(query, {}, req.pagination)
     .then((animes) => {
       res
         .send({
@@ -18,10 +26,10 @@ const getAnimes = (req, res) => {
 };
 
 const getAnimeById = (req, res) => {
-  const { id } = req.params;
+  const { animeId } = req.params;
 
   Anime
-    .findById(id)
+    .findById(animeId)
     .then((anime) => {
       if (anime) {
         res
@@ -59,25 +67,25 @@ const createAnime = (req, res) => {
 
   anime
     .save()
-    .then(() => {
+    .then((animeDb) => {
       res.send({
         status: 'OK',
         message: 'OK',
         content: {
-          url,
+          anime: animeDb,
         },
       });
     });
 };
 
 const updateAnime = (req, res) => {
-  const { id } = req.params;
+  const { animeId } = req.params;
 
   const { name, genre, resume } = req.body;
   const { public_id, url } = req.file;
 
   Anime
-    .findById(id)
+    .findById(animeId)
     .then((anime) => {
       if (anime) {
         anime.name = name;
@@ -109,17 +117,17 @@ const updateAnime = (req, res) => {
 };
 
 const deleteAnime = (req, res) => {
-  const { id } = req.params;
+  const { animeId } = req.params;
 
   Anime
-    .findById(id)
+    .findById(animeId)
     .then((animeDb) => {
       cloudinary.uploader.destroy(animeDb.thumb.id, () => {
         Anime
-          .deleteOne({ _id: id })
+          .deleteOne({ _id: animeId })
           .then(() => {
             Episode
-              .deleteManyByAnimeId(id)
+              .deleteManyByAnimeId(animeId)
               .then(() => {
                 res
                   .send({

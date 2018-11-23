@@ -15,7 +15,7 @@ const getRequestAuthToken = (req) => {
 };
 
 const jwtSign = obj => jwt.sign(obj, config.jwt.secret, {
-  expiresIn: '2h',
+  expiresIn: '12h',
 });
 
 const jwtDecode = (token) => {

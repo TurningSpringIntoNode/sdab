@@ -14,8 +14,6 @@ const authUtil = require('./utils/auth');
 const user = {
   name: 'Felipe',
   email: 'ff@ff.com',
-  gender: 'MALE',
-  birth: '01/01/1901',
   password: 'lolo',
   checkPassword: 'lolo'
 };
@@ -23,8 +21,6 @@ const user = {
 const admin = {
   name: 'Admin2',
   email: 'ad2@ff.com',
-  gender: 'MALE',
-  birth: '01/01/1901',
   password: 'lolo',
   checkPassword: 'lolo'
 };
@@ -201,13 +197,11 @@ describe('Auth', () => {
           .expect(200)
           .then(res => res.body)
           .then(res => {
-            const { name, email, gender, birth } = user;
+            const { name, email} = user;
             expect(res.status).to.deep.equal('OK');
             expect(res.content).to.deep.equal({
               name,
               email,
-              birth: new Date(birth).toISOString(),
-              gender,
               role: 'Account',
             });
             done();
@@ -252,8 +246,8 @@ describe('Auth', () => {
     const account = new Account({});
     await account.save();
 
-    const {name, email, gender, birth, password} = user;
-    const dbUser = new User({ name, email, gender, birth, password });
+    const {name, email, password} = user;
+    const dbUser = new User({ name, email, password });
     dbUser.roles.Account = account._id;
 
     await dbUser.save();

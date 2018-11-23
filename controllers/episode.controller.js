@@ -2,12 +2,12 @@ const { Episode } = require('../core/mongodb').mongoose.models;
 
 
 const getEpisodes = (req, res) => {
-  const { anime_id } = req.params;
+  const { animeId } = req.params;
 
   Episode
     .find({
-      anime: anime_id,
-    })
+      anime: animeId,
+    }, {}, req.pagination)
     .then((episodes) => {
       res
         .send({
@@ -21,12 +21,12 @@ const getEpisodes = (req, res) => {
 };
 
 const getEpisodeById = (req, res) => {
-  const { anime_id, id } = req.params;
+  const { animeId, episodeId } = req.params;
 
   Episode
     .findOne({
-      anime: anime_id,
-      _id: id,
+      anime: animeId,
+      _id: episodeId,
     })
     .then((episode) => {
       if (episode) {
@@ -61,14 +61,14 @@ const createEpisode = (req, res) => {
   } = req.body;
 
   const {
-    anime_id,
+    animeId,
   } = req.params;
 
   const episode = new Episode({
     name,
     chapter,
     description,
-    anime: anime_id,
+    anime: animeId,
     video,
   });
 
@@ -87,12 +87,12 @@ const createEpisode = (req, res) => {
 };
 
 const updateEpisode = (req, res) => {
-  const { anime_id, id } = req.params;
+  const { animeId, episodeId } = req.params;
 
   Episode
     .findOne({
-      anime: anime_id,
-      _id: id,
+      anime: animeId,
+      _id: episodeId,
     })
     .then((episode) => {
       if (episode) {
@@ -115,12 +115,12 @@ const updateEpisode = (req, res) => {
 };
 
 const deleteEpisode = (req, res) => {
-  const { anime_id, id } = req.params;
+  const { animeId, episodeId } = req.params;
 
   Episode
     .deleteOne({
-      _id: id,
-      anime: anime_id,
+      _id: episodeId,
+      anime: animeId,
     })
     .then(() => {
       res
