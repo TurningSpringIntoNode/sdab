@@ -1,12 +1,11 @@
 
 const addPagination = (req, res, next) => {
-
   const pagination = {
     skip: 0,
     limit: 20,
   };
 
-  let { page, pageSize } = req.query;
+  const { page, pageSize } = req.query;
 
   if (page && isNaN(page)) {
     res
@@ -32,9 +31,8 @@ const addPagination = (req, res, next) => {
     req.pagination = pagination;
     next();
   }
-
 };
 
 module.exports = {
-  addPagination
+  addPagination,
 };

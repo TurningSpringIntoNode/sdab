@@ -10,8 +10,8 @@ const connection = mongoose.createConnection(mongoURI, {
   useCreateIndex: true,
 });
 
-connection.on('error', error => {
-  console.log('Failed to connect to db', error)
+connection.on('error', (error) => {
+  console.log('Failed to connect to db', error);
 });
 
 connection.once('open', () => {
