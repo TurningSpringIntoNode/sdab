@@ -29,7 +29,9 @@ const signupSocial = (req, res) => {
                     status: 'OK',
                     message: 'OK',
                     content: {
-                      role: ndbUser.getRole(),
+                      user: {
+                        role: ndbUser.getRole(),
+                      },
                       token,
                     },
                   });
@@ -64,7 +66,9 @@ const loginSocial = (req, res) => {
                   status: 'OK',
                   message: 'OK',
                   content: {
-                    role: dbUser.getRole(),
+                    user: {
+                      role: dbUser.getRole(),
+                    },
                     token,
                   },
                 });
