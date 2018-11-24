@@ -34,7 +34,7 @@ const animes = [
 const episodes = [
   {
     name: 'test_ep_1',
-    chapter: 'x1',
+    chapter: 1,
     description: 'test episode 1',
     video: {
       id: '1',
@@ -43,7 +43,7 @@ const episodes = [
   },
   {
     name: 'test_ep_2',
-    chapter: 'x2',
+    chapter: 2,
     description: 'test episode 2',
     video: {
       id: '2',
@@ -52,7 +52,7 @@ const episodes = [
   },
   {
     name: 'test_ep_3',
-    chapter: 'x3',
+    chapter: 3,
     description: 'test episode 3',
     video: {
       id: '3',
@@ -61,7 +61,7 @@ const episodes = [
   },
   {
     name: 'test_ep_4',
-    chapter: 'x4',
+    chapter: 4,
     description: 'test episode 4',
     video: {
       id: '4',

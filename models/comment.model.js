@@ -21,6 +21,17 @@ module.exports = (db, mongoose) => {
     timestamps: true,
   });
 
+  CommentSchema.methods.toJSON = function () {
+    const comment = this;
+
+    return {
+      id: comment._id,
+      message: comment.message,
+      createdAt: comment.createdAt,
+      updatedAt: comment.updatedAt,
+    };
+  };
+
   CommentSchema.statics.create = (userId, commentedAt, message) => {
     const Comment = this;
 

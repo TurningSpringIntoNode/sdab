@@ -47,7 +47,9 @@ describe('Auth', () => {
           .then(res => {
             expect(res.status).to.deep.equal('OK');
             expect(res.content).to.have.property('token');
-            expect(res.content.role).to.deep.equal('Account');
+            expect(res.content).to.have.property('user');
+            expect(res.content.user).to.have.property('role');
+            expect(res.content.user.role).to.deep.equal('Account');
             done();
           });
       });
@@ -65,7 +67,9 @@ describe('Auth', () => {
       .then(res => {
         expect(res.status).to.deep.equal('OK');
         expect(res.content).to.have.property('token');
-        expect(res.content.role).to.deep.equal('Admin');
+        expect(res.content).to.have.property('user');
+        expect(res.content.user).to.have.property('role');
+        expect(res.content.user.role).to.deep.equal('Admin');
         done();
       });
   });
@@ -106,7 +110,9 @@ describe('Auth', () => {
           .then(res => {
             expect(res.status).to.deep.equal('OK');
             expect(res.content).to.have.property('token');
-            expect(res.content.role).to.deep.equal('Admin');
+            expect(res.content).to.have.property('user');
+            expect(res.content.user).to.have.property('role');
+            expect(res.content.user.role).to.deep.equal('Admin');
             done();
           });
       });
@@ -186,7 +192,9 @@ describe('Auth', () => {
       .then(res => res.body)
       .then(res => {
         expect(res.status).to.deep.equal('OK');
-        expect(res.content.role).to.deep.equal('Account');
+        expect(res.content).to.have.property('user');
+        expect(res.content.user).to.have.property('role');
+        expect(res.content.user.role).to.deep.equal('Account');
         expect(res.content).to.have.property('token');
         return res.content.token;
       })
@@ -200,9 +208,11 @@ describe('Auth', () => {
             const { name, email} = user;
             expect(res.status).to.deep.equal('OK');
             expect(res.content).to.deep.equal({
-              name,
-              email,
-              role: 'Account',
+              user: {
+                name,
+                email,
+                role: 'Account',
+              },
             });
             done();
           })
@@ -219,7 +229,9 @@ describe('Auth', () => {
       .then(res => res.body)
       .then(res => {
         expect(res.status).to.deep.equal('OK');
-        expect(res.content.role).to.deep.equal('Account');
+        expect(res.content).to.have.property('user');
+        expect(res.content.user).to.have.property('role');
+        expect(res.content.user.role).to.deep.equal('Account');
         expect(res.content).to.have.property('token');
         return res.content.token;
       })
@@ -262,7 +274,9 @@ describe('Auth', () => {
       .then(res => res.body)
       .then(res => {
         expect(res.status).to.deep.equal('OK');
-        expect(res.content.role).to.deep.equal('Admin');
+        expect(res.content).to.have.property('user');
+        expect(res.content.user).to.have.property('role');
+        expect(res.content.user.role).to.deep.equal('Admin');
         expect(res.content).to.have.property('token');
         return res.content.token;
       })

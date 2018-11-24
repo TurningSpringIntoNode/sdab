@@ -8,19 +8,24 @@ const getAnimes = (req, res) => {
   const query = {};
 
   if (search) {
-    query.name = new RegExp(search);
+    query.name = new RegExp(search, 'i');
   }
 
   Anime
     .find(query, {}, req.pagination)
+    .sort([['updatedAt', 'descending']])
     .then((animes) => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-          content: {
-            animes,
-          },
+      Promise
+        .all(animes.map(anime => anime.toJSONAsync()))
+        .then((animesJson) => {
+          res
+            .send({
+              status: 'OK',
+              message: 'OK',
+              content: {
+                animes: animesJson,
+              },
+            });
         });
     });
 };
@@ -32,13 +37,17 @@ const getAnimeById = (req, res) => {
     .findById(animeId)
     .then((anime) => {
       if (anime) {
-        res
-          .send({
-            status: 'OK',
-            message: 'OK',
-            content: {
-              anime,
-            },
+        anime
+          .toJSONAsync()
+          .then((animeJson) => {
+            res
+              .send({
+                status: 'OK',
+                message: 'OK',
+                content: {
+                  anime: animeJson,
+                },
+              });
           });
       } else {
         res
@@ -68,13 +77,17 @@ const createAnime = (req, res) => {
   anime
     .save()
     .then((animeDb) => {
-      res.send({
-        status: 'OK',
-        message: 'OK',
-        content: {
-          anime: animeDb,
-        },
-      });
+      animeDb
+        .toJSONAsync()
+        .then((animeJson) => {
+          res.send({
+            status: 'OK',
+            message: 'OK',
+            content: {
+              anime: animeJson,
+            },
+          });
+        });
     });
 };
 
@@ -96,13 +109,17 @@ const updateAnime = (req, res) => {
         anime
           .save()
           .then((animeDb) => {
-            res
-              .send({
-                status: 'OK',
-                message: 'OK',
-                content: {
-                  anime: animeDb,
-                },
+            animeDb
+              .toJSONAsync()
+              .then((animeJson) => {
+                res
+                  .send({
+                    status: 'OK',
+                    message: 'OK',
+                    content: {
+                      anime: animeJson,
+                    },
+                  });
               });
           });
       } else {

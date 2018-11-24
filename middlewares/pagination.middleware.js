@@ -7,14 +7,14 @@ const addPagination = (req, res, next) => {
 
   const { page, pageSize } = req.query;
 
-  if (page && isNaN(page)) {
+  if (page && Number.isNaN(page)) {
     res
       .status(400)
       .send({
         status: 'ERROR',
         message: 'Page is not a number',
       });
-  } else if (pageSize && isNaN(pageSize)) {
+  } else if (pageSize && Number.isNaN(pageSize)) {
     res
       .status(400)
       .send({
