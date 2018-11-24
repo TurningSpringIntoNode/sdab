@@ -20,6 +20,15 @@ module.exports = (db, mongoose) => {
     },
   });
 
+  EvaluationSchema.methods.toJSON = function() {
+    const evaluation = this;
+
+    return {
+      id: evaluation._id,
+      score: evaluation.score,
+    };
+  };
+
   EvaluationSchema.statics.getRateOfEvaluations = function (id) {
 
     const Evaluation = this;
