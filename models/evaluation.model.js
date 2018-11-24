@@ -11,10 +11,12 @@ module.exports = (db, mongoose) => {
       type: Schema.Types.ObjectId,
       ref: 'User',
       required: true,
+      index: true,
     },
     evaluatedObject: {
       type: Schema.Types.ObjectId,
       required: true,
+      index: true,
     },
   });
 
@@ -50,6 +52,13 @@ module.exports = (db, mongoose) => {
         });
     });
   };
+
+  EvaluationSchema.index({
+    evaluatedObject: 1,
+    user: 1
+  }, {
+    unique: true
+  });
 
   db.model('Evaluation', EvaluationSchema);
 };
