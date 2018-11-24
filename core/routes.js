@@ -118,6 +118,14 @@ const routes = (app) => {
     commentMiddleware.parseCommentData,
     commentMiddleware.parseCommentedObject('episodeId'),
     commentCtrl.createComment);
+  router.get('/animes/:animeId/episodes/:episodeId/evaluations',
+    evaluationMiddleware.parseEvaluatedObject('episodeId'),
+    evaluationCtrl.getEvaluations);
+  router.post('/animes/:animesId/episodes/:episodeId/evaluations',
+    authMiddleware.authenticate,
+    evaluationMiddleware.parseEvaluationData,
+    evaluationMiddleware.parseEvaluatedObject('episodeId'),
+    evaluationCtrl.createEvaluation);
 
   router.put('/comments/:commentId',
     authMiddleware.authenticate,
