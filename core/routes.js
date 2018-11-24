@@ -157,13 +157,21 @@ const routes = (app) => {
 
   router.put('/comments/:commentId',
     authMiddleware.authenticate,
+    commentMiddleware.parseCommentData,
     commentCtrl.updateComment);
   router.delete('/comments/:commentId',
     authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
     commentCtrl.deleteComment);
 
-
+  router.put('/evaluations/:evaluationId',
+    authMiddleware.authenticate,
+    evaluationMiddleware.parseEvaluationData,
+    evaluationCtrl.updateEvaluation);
+  router.delete('/evaluations/:evaluationId',
+    authMiddleware.authenticate,
+    authMiddleware.hasRole(['Admin']),
+    evaluationCtrl.deleteEvaluation);
 
   app.use(router);
 };

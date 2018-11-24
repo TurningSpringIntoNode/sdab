@@ -97,10 +97,65 @@ const getEvaluationsOfUser = (req, res) => {
 
 const updateEvaluation = (req, res) => {
 
+  const { evaluationId } = req;
+  const { score } = req.body;
+
+  Evaluation
+    .findOneAndUpdate({
+      _id: evaluationId,
+      user: req.user._id,
+    }, {
+      $set: {
+        score,
+      }
+    })
+    .then(evaluation => {
+      res
+        .send({
+          status: 'OK',
+          message: 'OK',
+          content: {
+            evaluation,
+          },
+        });
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'Intervnal server error',
+        });
+    });
+};
+
+const deleteEvaluation = (req, res) => {
+
+  const { evaluationId } = req;
+
+  Evaluation
+    .findByIdAndDelete(evaluationId)
+    .then(() => {
+      res
+        .send({
+          status: 'OK',
+          message: 'OK',
+        });
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'Intervnal server error',
+        });
+    });
 };
 
 module.exports = {
   createEvaluation,
   getEvaluations,
   getEvaluationsOfUser,
+  updateEvaluation,
+  deleteEvaluation,
 };
