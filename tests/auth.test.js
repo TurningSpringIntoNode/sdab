@@ -200,9 +200,11 @@ describe('Auth', () => {
             const { name, email} = user;
             expect(res.status).to.deep.equal('OK');
             expect(res.content).to.deep.equal({
-              name,
-              email,
-              role: 'Account',
+              user: {
+                name,
+                email,
+                role: 'Account',
+              },
             });
             done();
           })
