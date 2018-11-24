@@ -11,7 +11,7 @@ const getEpisodes = (req, res) => {
     .then((episodes) => {
       Promise
         .all(episodes.map(episode => episode.toJSONAsync()))
-        .then(episodesJson => {
+        .then((episodesJson) => {
           res
             .send({
               status: 'OK',
@@ -36,7 +36,7 @@ const getEpisodeById = (req, res) => {
       if (episode) {
         episode
           .toJSONAsync()
-          .then(episodeJson => {
+          .then((episodeJson) => {
             res
               .send({
                 status: 'OK',
@@ -85,7 +85,7 @@ const createEpisode = (req, res) => {
     .then((episodeDb) => {
       episodeDb
         .toJSONAsync()
-        .then(episodeJson => {
+        .then((episodeJson) => {
           res
             .send({
               status: 'OK',
@@ -110,7 +110,7 @@ const updateEpisode = (req, res) => {
       if (episode) {
         episode
           .toJSONAsync()
-          .then(episodeJson => {
+          .then((episodeJson) => {
             res
               .send({
                 status: 'OK',

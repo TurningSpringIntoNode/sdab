@@ -20,7 +20,7 @@ module.exports = (db, mongoose) => {
     },
   });
 
-  EvaluationSchema.methods.toJSON = function() {
+  EvaluationSchema.methods.toJSON = function () {
     const evaluation = this;
 
     return {
@@ -30,7 +30,6 @@ module.exports = (db, mongoose) => {
   };
 
   EvaluationSchema.statics.getRateOfEvaluations = function (id) {
-
     const Evaluation = this;
 
     return new Promise((resolve, reject) => {
@@ -51,22 +50,21 @@ module.exports = (db, mongoose) => {
                 $sum: 1,
               },
             },
-          }
+          },
         ], (err, result) => {
           if (result.length === 0) {
             return resolve(0);
-          } else {
-            return resolve(1.0 * result[0].sum / result[0].count);
           }
+            return resolve(1.0 * result[0].sum / result[0].count);
         });
     });
   };
 
   EvaluationSchema.index({
     evaluatedObject: 1,
-    user: 1
+    user: 1,
   }, {
-    unique: true
+    unique: true,
   });
 
   db.model('Evaluation', EvaluationSchema);

@@ -64,7 +64,6 @@ const getComments = (req, res) => {
 };
 
 const getCommentsOfUser = (req, res) => {
-
   const query = {
     user: req.user._id,
   };

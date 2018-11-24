@@ -17,7 +17,7 @@ const getAnimes = (req, res) => {
     .then((animes) => {
       Promise
         .all(animes.map(anime => anime.toJSONAsync()))
-        .then(animesJson => {
+        .then((animesJson) => {
           res
             .send({
               status: 'OK',
@@ -39,7 +39,7 @@ const getAnimeById = (req, res) => {
       if (anime) {
         anime
           .toJSONAsync()
-          .then(animeJson => {
+          .then((animeJson) => {
             res
               .send({
                 status: 'OK',
@@ -79,7 +79,7 @@ const createAnime = (req, res) => {
     .then((animeDb) => {
       animeDb
         .toJSONAsync()
-        .then(animeJson => {
+        .then((animeJson) => {
           res.send({
             status: 'OK',
             message: 'OK',
@@ -111,7 +111,7 @@ const updateAnime = (req, res) => {
           .then((animeDb) => {
             animeDb
               .toJSONAsync()
-              .then(animeJson => {
+              .then((animeJson) => {
                 res
                   .send({
                     status: 'OK',

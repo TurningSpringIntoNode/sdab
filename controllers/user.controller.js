@@ -5,7 +5,7 @@ const getUser = (req, res) => {
     status: 'OK',
     message: 'OK',
     content: {
-      user: req.user
+      user: req.user,
     },
   });
 };

@@ -96,7 +96,6 @@ const getEvaluationsOfUser = (req, res) => {
 };
 
 const updateEvaluation = (req, res) => {
-
   const { evaluationId } = req;
   const { score } = req.body;
 
@@ -107,9 +106,9 @@ const updateEvaluation = (req, res) => {
     }, {
       $set: {
         score,
-      }
+      },
     })
-    .then(evaluation => {
+    .then((evaluation) => {
       res
         .send({
           status: 'OK',
@@ -130,7 +129,6 @@ const updateEvaluation = (req, res) => {
 };
 
 const deleteEvaluation = (req, res) => {
-
   const { evaluationId } = req;
 
   Evaluation
