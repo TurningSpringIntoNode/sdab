@@ -9,13 +9,17 @@ const getEpisodes = (req, res) => {
       anime: animeId,
     }, {}, req.pagination)
     .then((episodes) => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-          content: {
-            episodes,
-          },
+      Promise
+        .all(episodes.map(episode => episode.toJSONAsync()))
+        .then(episodesJson => {
+          res
+            .send({
+              status: 'OK',
+              message: 'OK',
+              content: {
+                episodes: episodesJson,
+              },
+            });
         });
     });
 };
@@ -30,13 +34,17 @@ const getEpisodeById = (req, res) => {
     })
     .then((episode) => {
       if (episode) {
-        res
-          .send({
-            status: 'OK',
-            message: 'OK',
-            content: {
-              episode,
-            },
+        episode
+          .toJSONAsync()
+          .then(episodeJson => {
+            res
+              .send({
+                status: 'OK',
+                message: 'OK',
+                content: {
+                  episode: episodeJson,
+                },
+              });
           });
       } else {
         res
@@ -75,13 +83,17 @@ const createEpisode = (req, res) => {
   episode
     .save()
     .then((episodeDb) => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-          content: {
-            episode: episodeDb,
-          },
+      episodeDb
+        .toJSONAsync()
+        .then(episodeJson => {
+          res
+            .send({
+              status: 'OK',
+              message: 'OK',
+              content: {
+                episode: episodeJson,
+              },
+            });
         });
     });
 };
@@ -96,13 +108,17 @@ const updateEpisode = (req, res) => {
     })
     .then((episode) => {
       if (episode) {
-        res
-          .send({
-            status: 'OK',
-            message: 'OK',
-            content: {
-              episode,
-            },
+        episode
+          .toJSONAsync()
+          .then(episodeJson => {
+            res
+              .send({
+                status: 'OK',
+                message: 'OK',
+                content: {
+                  episode: episodeJson,
+                },
+              });
           });
       } else {
         res

@@ -17,13 +17,13 @@ const getAnimes = (req, res) => {
     .then((animes) => {
       Promise
         .all(animes.map(anime => anime.toJSONAsync()))
-        .then(animesDb => {
+        .then(animesJson => {
           res
             .send({
               status: 'OK',
               message: 'OK',
               content: {
-                animesDb,
+                animes: animesJson,
               },
             });
         });
@@ -37,13 +37,17 @@ const getAnimeById = (req, res) => {
     .findById(animeId)
     .then((anime) => {
       if (anime) {
-        res
-          .send({
-            status: 'OK',
-            message: 'OK',
-            content: {
-              anime,
-            },
+        anime
+          .toJSONAsync()
+          .then(animeJson => {
+            res
+              .send({
+                status: 'OK',
+                message: 'OK',
+                content: {
+                  anime: animeJson,
+                },
+              });
           });
       } else {
         res
@@ -73,13 +77,17 @@ const createAnime = (req, res) => {
   anime
     .save()
     .then((animeDb) => {
-      res.send({
-        status: 'OK',
-        message: 'OK',
-        content: {
-          anime: animeDb,
-        },
-      });
+      animeDb
+        .toJSONAsync()
+        .then(animeJson => {
+          res.send({
+            status: 'OK',
+            message: 'OK',
+            content: {
+              anime: animeJson,
+            },
+          });
+        });
     });
 };
 
@@ -101,13 +109,17 @@ const updateAnime = (req, res) => {
         anime
           .save()
           .then((animeDb) => {
-            res
-              .send({
-                status: 'OK',
-                message: 'OK',
-                content: {
-                  anime: animeDb,
-                },
+            animeDb
+              .toJSONAsync()
+              .then(animeJson => {
+                res
+                  .send({
+                    status: 'OK',
+                    message: 'OK',
+                    content: {
+                      anime: animeJson,
+                    },
+                  });
               });
           });
       } else {
