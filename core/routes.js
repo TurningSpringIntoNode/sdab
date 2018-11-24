@@ -48,9 +48,37 @@ const routes = (app) => {
   router.get('/me',
     authMiddleware.authenticate,
     userCtrl.getUser);
-
+  router.get('/me/comments',
+    authMiddleware.authenticate,
+    paginationMiddleware.addPagination,
+    commentCtrl.getCommentsOfUser);
+  router.get('/me/animes/:animeId/comments',
+    authMiddleware.authenticate,
+    paginationMiddleware.addPagination,
+    commentMiddleware.parseCommentedObject('animeId'),
+    commentCtrl.getCommentsOfUser);
+  router.get('/me/animes/:animeId/episodes/:episodeId/comments',
+    authMiddleware.authenticate,
+    paginationMiddleware.addPagination,
+    commentMiddleware.parseCommentedObject('episodeId'),
+    commentCtrl.getCommentsOfUser);
+  router.get('/me/evaluations',
+    authMiddleware.authenticate,
+    paginationMiddleware.addPagination,
+    evaluationCtrl.getEvaluationsOfUser);
+  router.get('/me/animes/:animeId/evaluations',
+    authMiddleware.authenticate,
+    paginationMiddleware.addPagination,
+    evaluationMiddleware.parseEvaluatedObject('animeId'),
+    evaluationCtrl.getEvaluationsOfUser);
+  router.get('/me/animes/:animeId/episodes/:episodeId/comments',
+    authMiddleware.authenticate,
+    paginationMiddleware.addPagination,
+    evaluationMiddleware.parseEvaluatedObject('episodeId'),
+    evaluationCtrl.getEvaluationsOfUser);
   router.delete('/me',
-    authMiddleware.authenticate, userCtrl.deleteOwnUser);
+    authMiddleware.authenticate,
+    userCtrl.deleteOwnUser);
 
   router.get('/animes',
     paginationMiddleware.addPagination,
@@ -134,6 +162,8 @@ const routes = (app) => {
     authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
     commentCtrl.deleteComment);
+
+
 
   app.use(router);
 };

@@ -41,7 +41,7 @@ const getEvaluations = (req, res) => {
   }
 
   Evaluation
-    .find(query)
+    .find(query, {}, req.pagination)
     .then((evaluations) => {
       res
         .send({
@@ -62,7 +62,45 @@ const getEvaluations = (req, res) => {
     });
 };
 
+const getEvaluationsOfUser = (req, res) => {
+  const query = {
+    user: req.user._id,
+  };
+
+  const { evaluatedObject } = req;
+
+  if (evaluatedObject) {
+    query.evaluatedObject = evaluatedObject;
+  }
+
+  Evaluation
+    .find(query, {}, req.pagination)
+    .then((evaluations) => {
+      res
+        .send({
+          status: 'OK',
+          message: 'OK',
+          content: {
+            evaluations,
+          },
+        });
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'Intervnal server error',
+        });
+    });
+};
+
+const updateEvaluation = (req, res) => {
+
+};
+
 module.exports = {
   createEvaluation,
   getEvaluations,
+  getEvaluationsOfUser,
 };

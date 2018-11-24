@@ -18,7 +18,7 @@ const createComment = (req, res) => {
           status: 'OK',
           message: 'OK',
           content: {
-            commentDb,
+            comment: commentDb,
           },
         });
     })
@@ -63,13 +63,50 @@ const getComments = (req, res) => {
     });
 };
 
+const getCommentsOfUser = (req, res) => {
+
+  const query = {
+    user: req.user._id,
+  };
+
+  const { commentedObject } = req;
+
+  if (commentedObject) {
+    query.commentedObject = commentedObject;
+  }
+
+  Comment
+    .find(query, {}, req.pagination)
+    .then((comments) => {
+      res
+        .send({
+          status: 'OK',
+          message: 'OK',
+          content: {
+            comments,
+          },
+        });
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'OK',
+          message: 'Internal server error',
+        });
+    });
+};
+
 const updateComment = (req, res) => {
   const { commentId } = req.params;
 
   const { message } = req.body;
 
   Comment
-    .findByIdAndUpdate(commentId, {
+    .findOneAndUpdate({
+      _id: commentId,
+      user: req.user._id,
+    }, {
       $set: {
         message,
       },
@@ -122,4 +159,5 @@ module.exports = {
   getComments,
   updateComment,
   deleteComment,
+  getCommentsOfUser,
 };
