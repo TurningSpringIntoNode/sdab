@@ -21,6 +21,6 @@ module.exports = async (mongoose) => {
   try {
     await adminUser.save().catch();
   } catch (e) {
-    console.log('Unable to save admin, maybe already exists');
+
   }
 };

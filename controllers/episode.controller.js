@@ -9,17 +9,13 @@ const getEpisodes = (req, res) => {
       anime: animeId,
     }, {}, req.pagination)
     .then((episodes) => {
-      Promise
-        .all(episodes.map(episode => episode.toJSONAsync()))
-        .then((episodesJson) => {
-          res
-            .send({
-              status: 'OK',
-              message: 'OK',
-              content: {
-                episodes: episodesJson,
-              },
-            });
+      res
+        .send({
+          status: 'OK',
+          message: 'OK',
+          content: {
+            episodes,
+          },
         });
     });
 };
@@ -34,17 +30,13 @@ const getEpisodeById = (req, res) => {
     })
     .then((episode) => {
       if (episode) {
-        episode
-          .toJSONAsync()
-          .then((episodeJson) => {
-            res
-              .send({
-                status: 'OK',
-                message: 'OK',
-                content: {
-                  episode: episodeJson,
-                },
-              });
+        res
+          .send({
+            status: 'OK',
+            message: 'OK',
+            content: {
+              episode,
+            },
           });
       } else {
         res
@@ -83,17 +75,13 @@ const createEpisode = (req, res) => {
   episode
     .save()
     .then((episodeDb) => {
-      episodeDb
-        .toJSONAsync()
-        .then((episodeJson) => {
-          res
-            .send({
-              status: 'OK',
-              message: 'OK',
-              content: {
-                episode: episodeJson,
-              },
-            });
+      res
+        .send({
+          status: 'OK',
+          message: 'OK',
+          content: {
+            episode: episodeDb,
+          },
         });
     });
 };
@@ -108,17 +96,13 @@ const updateEpisode = (req, res) => {
     })
     .then((episode) => {
       if (episode) {
-        episode
-          .toJSONAsync()
-          .then((episodeJson) => {
-            res
-              .send({
-                status: 'OK',
-                message: 'OK',
-                content: {
-                  episode: episodeJson,
-                },
-              });
+        res
+          .send({
+            status: 'OK',
+            message: 'OK',
+            content: {
+              episode,
+            },
           });
       } else {
         res

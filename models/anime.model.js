@@ -2,8 +2,6 @@
 module.exports = (db, mongoose) => {
   const { Schema } = mongoose;
 
-  const { Evaluation } = db.models;
-
   const AnimeSchema = new Schema({
     name: {
       type: String,
@@ -28,25 +26,7 @@ module.exports = (db, mongoose) => {
       type: String,
       required: true,
     },
-  }, {
-    timestamps: true,
   });
-
-  AnimeSchema.methods.toJSONAsync = async function () {
-    const anime = this;
-    const score = await Evaluation
-      .getRateOfEvaluations(anime._id);
-    return {
-      id: anime.id,
-      name: anime.name,
-      genre: anime.genre,
-      thumb_url: anime.thumb.url,
-      score,
-      resume: anime.resume,
-      updatedAt: anime.updateAt,
-      createdAt: anime.createdAt,
-    };
-  };
 
   db.model('Anime', AnimeSchema);
 };

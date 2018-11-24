@@ -2,7 +2,7 @@
 const parseEvaluationData = (req, res, next) => {
   const { score } = req.body;
 
-  if (score && !Number.isNaN(score) && score >= 1 && score <= 5) {
+  if (score && !isNaN(score) && score >= 1 && score <= 5) {
     next();
   } else {
     res

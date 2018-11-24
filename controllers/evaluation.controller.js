@@ -18,7 +18,7 @@ const createEvaluation = (req, res) => {
           status: 'OK',
           message: 'OK',
           content: {
-            evaluation: evaluationDb,
+            evaluationDb,
           },
         });
     })
@@ -41,7 +41,7 @@ const getEvaluations = (req, res) => {
   }
 
   Evaluation
-    .find(query, {}, req.pagination)
+    .find(query)
     .then((evaluations) => {
       res
         .send({
@@ -50,94 +50,6 @@ const getEvaluations = (req, res) => {
           content: {
             evaluations,
           },
-        });
-    })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'Intervnal server error',
-        });
-    });
-};
-
-const getEvaluationsOfUser = (req, res) => {
-  const query = {
-    user: req.user._id,
-  };
-
-  const { evaluatedObject } = req;
-
-  if (evaluatedObject) {
-    query.evaluatedObject = evaluatedObject;
-  }
-
-  Evaluation
-    .find(query, {}, req.pagination)
-    .then((evaluations) => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-          content: {
-            evaluations,
-          },
-        });
-    })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'Intervnal server error',
-        });
-    });
-};
-
-const updateEvaluation = (req, res) => {
-  const { evaluationId } = req;
-  const { score } = req.body;
-
-  Evaluation
-    .findOneAndUpdate({
-      _id: evaluationId,
-      user: req.user._id,
-    }, {
-      $set: {
-        score,
-      },
-    })
-    .then((evaluation) => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-          content: {
-            evaluation,
-          },
-        });
-    })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'Intervnal server error',
-        });
-    });
-};
-
-const deleteEvaluation = (req, res) => {
-  const { evaluationId } = req;
-
-  Evaluation
-    .findByIdAndDelete(evaluationId)
-    .then(() => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
         });
     })
     .catch(() => {
@@ -153,7 +65,4 @@ const deleteEvaluation = (req, res) => {
 module.exports = {
   createEvaluation,
   getEvaluations,
-  getEvaluationsOfUser,
-  updateEvaluation,
-  deleteEvaluation,
 };

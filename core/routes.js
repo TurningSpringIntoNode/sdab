@@ -48,37 +48,9 @@ const routes = (app) => {
   router.get('/me',
     authMiddleware.authenticate,
     userCtrl.getUser);
-  router.get('/me/comments',
-    authMiddleware.authenticate,
-    paginationMiddleware.addPagination,
-    commentCtrl.getCommentsOfUser);
-  router.get('/me/animes/:animeId/comments',
-    authMiddleware.authenticate,
-    paginationMiddleware.addPagination,
-    commentMiddleware.parseCommentedObject('animeId'),
-    commentCtrl.getCommentsOfUser);
-  router.get('/me/animes/:animeId/episodes/:episodeId/comments',
-    authMiddleware.authenticate,
-    paginationMiddleware.addPagination,
-    commentMiddleware.parseCommentedObject('episodeId'),
-    commentCtrl.getCommentsOfUser);
-  router.get('/me/evaluations',
-    authMiddleware.authenticate,
-    paginationMiddleware.addPagination,
-    evaluationCtrl.getEvaluationsOfUser);
-  router.get('/me/animes/:animeId/evaluations',
-    authMiddleware.authenticate,
-    paginationMiddleware.addPagination,
-    evaluationMiddleware.parseEvaluatedObject('animeId'),
-    evaluationCtrl.getEvaluationsOfUser);
-  router.get('/me/animes/:animeId/episodes/:episodeId/comments',
-    authMiddleware.authenticate,
-    paginationMiddleware.addPagination,
-    evaluationMiddleware.parseEvaluatedObject('episodeId'),
-    evaluationCtrl.getEvaluationsOfUser);
+
   router.delete('/me',
-    authMiddleware.authenticate,
-    userCtrl.deleteOwnUser);
+    authMiddleware.authenticate, userCtrl.deleteOwnUser);
 
   router.get('/animes',
     paginationMiddleware.addPagination,
@@ -146,32 +118,14 @@ const routes = (app) => {
     commentMiddleware.parseCommentData,
     commentMiddleware.parseCommentedObject('episodeId'),
     commentCtrl.createComment);
-  router.get('/animes/:animeId/episodes/:episodeId/evaluations',
-    evaluationMiddleware.parseEvaluatedObject('episodeId'),
-    evaluationCtrl.getEvaluations);
-  router.post('/animes/:animesId/episodes/:episodeId/evaluations',
-    authMiddleware.authenticate,
-    evaluationMiddleware.parseEvaluationData,
-    evaluationMiddleware.parseEvaluatedObject('episodeId'),
-    evaluationCtrl.createEvaluation);
 
   router.put('/comments/:commentId',
     authMiddleware.authenticate,
-    commentMiddleware.parseCommentData,
     commentCtrl.updateComment);
   router.delete('/comments/:commentId',
     authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
     commentCtrl.deleteComment);
-
-  router.put('/evaluations/:evaluationId',
-    authMiddleware.authenticate,
-    evaluationMiddleware.parseEvaluationData,
-    evaluationCtrl.updateEvaluation);
-  router.delete('/evaluations/:evaluationId',
-    authMiddleware.authenticate,
-    authMiddleware.hasRole(['Admin']),
-    evaluationCtrl.deleteEvaluation);
 
   app.use(router);
 };

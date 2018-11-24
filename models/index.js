@@ -8,8 +8,8 @@ const EvaluationModel = require('./evaluation.model');
 module.exports = (db, mongoose) => {
   RolesModel(db, mongoose);
   UserModel(db, mongoose);
-  EvaluationModel(db, mongoose);
-  CommentModel(db, mongoose);
   AnimeModel(db, mongoose);
   EpisodeModel(db, mongoose);
+  CommentModel(db, mongoose);
+  EvaluationModel(db, mongoose);
 };

@@ -3,15 +3,13 @@ const { cloudinary } = require('../core/cloudinary');
 module.exports = (db, mongoose) => {
   const { Schema } = mongoose;
 
-  const { Evaluation } = db.models;
-
   const EpisodeSchema = new Schema({
     name: {
       type: String,
       required: true,
     },
     chapter: {
-      type: Number,
+      type: String,
       required: true,
     },
     video: {
@@ -34,20 +32,6 @@ module.exports = (db, mongoose) => {
       ref: 'Anime',
     },
   });
-
-  EpisodeSchema.methods.toJSONAsync = async function () {
-    const episode = this;
-    const score = await Evaluation
-      .getRateOfEvaluations(episode._id);
-    return {
-      id: episode._id,
-      name: episode.name,
-      chapter: episode.chapter,
-      video_url: episode.video.url,
-      description: episode.description,
-      score,
-    };
-  };
 
   EpisodeSchema.statics.deleteManyByAnimeId = function (id) {
     const Episode = this;

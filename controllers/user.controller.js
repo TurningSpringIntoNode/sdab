@@ -4,9 +4,7 @@ const getUser = (req, res) => {
   res.send({
     status: 'OK',
     message: 'OK',
-    content: {
-      user: req.user,
-    },
+    content: req.user,
   });
 };
 
