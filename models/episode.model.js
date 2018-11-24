@@ -35,7 +35,7 @@ module.exports = (db, mongoose) => {
     },
   });
 
-  EpisodeSchema.methods.toJSONAsync = async function (id) {
+  EpisodeSchema.methods.toJSONAsync = async function () {
     const episode = this;
     const score = await Evaluation
       .getRateOfEvaluations(episode._id);

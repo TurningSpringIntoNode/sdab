@@ -8,7 +8,7 @@ const getAnimes = (req, res) => {
   const query = {};
 
   if (search) {
-    query.name = new RegExp(search, "i");
+    query.name = new RegExp(search, 'i');
   }
 
   Anime

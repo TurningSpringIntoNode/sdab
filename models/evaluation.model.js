@@ -44,7 +44,7 @@ module.exports = (db, mongoose) => {
             $group: {
               _id: null,
               sum: {
-                $sum: "$score",
+                $sum: '$score',
               },
               count: {
                 $sum: 1,
@@ -52,10 +52,13 @@ module.exports = (db, mongoose) => {
             },
           },
         ], (err, result) => {
+          if (err) {
+            return reject(err);
+          }
           if (result.length === 0) {
             return resolve(0);
           }
-            return resolve(1.0 * result[0].sum / result[0].count);
+          return resolve(1.0 * result[0].sum / result[0].count);
         });
     });
   };
