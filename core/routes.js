@@ -266,6 +266,7 @@ const routes = (app) => {
     userMiddleware.parseUserData,
     userMiddleware.setupRole('Admin'),
     authCtrl.signupSocial);
+
   /**
    * @api {delete} /admin/users/:id Deletes a user
    * @apiName DeleteUser
@@ -320,6 +321,7 @@ const routes = (app) => {
     authMiddleware.authenticate,
     paginationMiddleware.addPagination,
     commentCtrl.getCommentsOfUser);
+
   /**
    * @api {get} /me/animes/:animeId/comments Get comments of the logged in user in specific anime
    * @apiName GetOwnCommentsInAnime
@@ -363,6 +365,7 @@ const routes = (app) => {
     paginationMiddleware.addPagination,
     commentMiddleware.parseCommentedObject('episodeId'),
     commentCtrl.getCommentsOfUser);
+
   /**
    * @api {get} /me/evaluations Get evaluations of logged in user
    * @apiName GetOwnEvaluations
@@ -381,6 +384,7 @@ const routes = (app) => {
     authMiddleware.authenticate,
     paginationMiddleware.addPagination,
     evaluationCtrl.getEvaluationsOfUser);
+
   /**
    * @api {get} /me/animes/:animeId/evaluations Get evaluations of logged in user in specific anime
    * @apiName GetOwnEvaluationsInAnime
@@ -402,6 +406,7 @@ const routes = (app) => {
     paginationMiddleware.addPagination,
     evaluationMiddleware.parseEvaluatedObject('animeId'),
     evaluationCtrl.getEvaluationsOfUser);
+
   /**
    * @api {get} /me/animes/:animeId/episodes/:episodeId/evaluations Get evaluations of logged in user in specific anime episode
    * @apiName GetOwnEvaluationsInAnimeEpisode
@@ -424,6 +429,7 @@ const routes = (app) => {
     paginationMiddleware.addPagination,
     evaluationMiddleware.parseEvaluatedObject('episodeId'),
     evaluationCtrl.getEvaluationsOfUser);
+
   /**
    * @api {delete} /me Deletes all information of logged in user
    * @apiName DeleteOwnUser
@@ -547,6 +553,7 @@ const routes = (app) => {
     authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
     animeCtrl.deleteAnime);
+
   /**
    * @api {get} /animes/:animeId/comments Get all comments in a specific anime
    * @apiName GetAnimeComments
@@ -567,6 +574,7 @@ const routes = (app) => {
     paginationMiddleware.addPagination,
     commentMiddleware.parseCommentedObject('animeId'),
     commentCtrl.getComments);
+
   /**
    * @api {post} /animes/:animeId/comments Create comment for specific anime
    * @apiName CreateAnimeComment
@@ -586,6 +594,7 @@ const routes = (app) => {
     commentMiddleware.parseCommentData,
     commentMiddleware.parseCommentedObject('animeId'),
     commentCtrl.createComment);
+
   /**
    * @api {get} /animes/:animeId/evaluations Get evaluations of specific anime
    * @apiName GetAnimeEvaluations
@@ -604,6 +613,7 @@ const routes = (app) => {
     paginationMiddleware.addPagination,
     evaluationMiddleware.parseEvaluatedObject('animeId'),
     evaluationCtrl.getEvaluations);
+
   /**
    * @api {post} /animes/:animeId/evaluation Create evaluation for specific anime
    * @apiName CreateAnimeEvaluation
@@ -708,6 +718,21 @@ const routes = (app) => {
     authMiddleware.hasRole(['Admin']),
     videoParser.single('video'),
     episodeCtrl.updateEpisode);
+
+  /**
+   * @api {delete} /animes/:animeId/episodes/:episodeId Deletes episode of anime
+   * @apiName DeleteEpisode
+   * @apiGroup Episode
+   *
+   * @apiUse AnimeUniqueIdParam
+   * @apiUse EpisodeUniqueIdParam
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiPermission admin
+   *
+   * @apiUse ResponseBasicFormat
+   */
   router.delete('/animes/:animeId/episodes/:episodeId',
     authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
@@ -734,11 +759,28 @@ const routes = (app) => {
     paginationMiddleware.addPagination,
     commentMiddleware.parseCommentedObject('episodeId'),
     commentCtrl.getComments);
+
+  /**
+   * @api {post} /animes/:animeId/episodes/:episodeId/comments Creates new comment for episode
+   * @apiName CreateAnimeComment
+   * @apiGroup Episode
+   *
+   * @apiUse AnimeUniqueIdParam
+   * @apiUse EpisodeUniqueIdParam
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiPermission user
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse CommentResponse
+   */
   router.post('/animes/:animeId/episodes/:episodeId/comments',
     authMiddleware.authenticate,
     commentMiddleware.parseCommentData,
     commentMiddleware.parseCommentedObject('episodeId'),
     commentCtrl.createComment);
+
   /**
    * @api {get} /animes/:animeId/episodes/:episodeId/evaluations Get evaluations of specific anime episode
    * @apiName GetEpisodeEvaluations
@@ -758,16 +800,47 @@ const routes = (app) => {
     paginationMiddleware.addPagination,
     evaluationMiddleware.parseEvaluatedObject('episodeId'),
     evaluationCtrl.getEvaluations);
+
+  /**
+   * @api {post} /animes/:animesId/episodes/:episodeId/evaluations
+   * @apiName CreateEpisodeEvaluation
+   * @apiGroup Episode
+   *
+   * @apiUse AnimeUniqueIdParam
+   * @apiUse EpisodeUniqueIdParam
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiPermission user
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse EvaluationResponse
+   */
   router.post('/animes/:animesId/episodes/:episodeId/evaluations',
     authMiddleware.authenticate,
     evaluationMiddleware.parseEvaluationData,
     evaluationMiddleware.parseEvaluatedObject('episodeId'),
     evaluationCtrl.createEvaluation);
 
+  /**
+   * @api {put} /comments/:commentId Updates a comment
+   * @apiName UpdateComment
+   * @apiGroup Comment
+   *
+   * @apiUse CommentUniqueIdParam
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiPermission user
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse CommentResponse
+   */
   router.put('/comments/:commentId',
     authMiddleware.authenticate,
     commentMiddleware.parseCommentData,
     commentCtrl.updateComment);
+
   /**
    * @api {delete} /comments/:commentId Deletes a comment
    * @apiName DeleteComment
@@ -786,6 +859,20 @@ const routes = (app) => {
     authMiddleware.hasRole(['Admin']),
     commentCtrl.deleteComment);
 
+  /**
+   * @api {put} /evaluations/:evaluationId Update evaluation
+   * @apiName UpdateEvaluation
+   * @apiGroup Evaluation
+   *
+   * @apiUse EvaluationUniqueIdParam
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiPermission user
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse EvaluationResponse
+   */
   router.put('/evaluations/:evaluationId',
     authMiddleware.authenticate,
     evaluationMiddleware.parseEvaluationData,
