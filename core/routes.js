@@ -288,6 +288,8 @@ const routes = (app) => {
    * @apiName GetAnimeComments
    * @apiGroup Anime
    *
+   * @apiParam animeId Anime unique id
+   *
    * @apiUse RequiresAuth
    *
    * @apiUse Pagination
@@ -339,6 +341,24 @@ const routes = (app) => {
     authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
     episodeCtrl.deleteEpisode);
+
+  /**
+   * @api {get} /animes/:animeId/episodes/:episodeId/comments Get all comments in a specific anime episode
+   * @apiName GetEpisodeComments
+   * @apiGroup Episode
+   *
+   * @apiParam animeId Anime unique id
+   * @apiParam episodeId Episode unique id
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiUse Pagination
+   *
+   * @apiPermission none
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse ArrayOfCommentsResponse
+   */
   router.get('/animes/:animeId/episodes/:episodeId/comments',
     paginationMiddleware.addPagination,
     commentMiddleware.parseCommentedObject('episodeId'),
