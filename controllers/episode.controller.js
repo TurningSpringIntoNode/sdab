@@ -3,11 +3,13 @@ const { Episode } = require('../core/mongodb').mongoose.models;
 
 const getEpisodes = (req, res) => {
   const { animeId } = req.params;
+  const { sorting } = req;
 
   Episode
     .find({
       anime: animeId,
     }, {}, req.pagination)
+    .sort([[sorting.sortBy, sorting.order]])
     .then((episodes) => {
       Promise
         .all(episodes.map(episode => episode.toJSONAsync()))

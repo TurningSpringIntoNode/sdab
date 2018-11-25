@@ -8,6 +8,7 @@ const userMiddleware = require('../middlewares/user.middleware');
 const commentMiddleware = require('../middlewares/comment.middleware');
 const evaluationMiddleware = require('../middlewares/evaluation.middleware');
 const paginationMiddleware = require('../middlewares/pagination.middleware');
+const sortingMiddleware = require('../middlewares/sorting.middleware');
 
 const authCtrl = require('../controllers/auth.controller');
 const adminCtrl = require('../controllers/admin.controller');
@@ -82,7 +83,15 @@ const routes = (app) => {
 
   router.get('/animes',
     paginationMiddleware.addPagination,
+    sortingMiddleware.addSorting(['createdAt', 'name'], ['asc', 'desc'], {
+      sortBy: 'createdAt',
+      order: 'desc',
+    }),
     animeCtrl.getAnimes);
+
+  router.get('/animes/genres',
+    paginationMiddleware.addPagination,
+    animeCtrl.getGenres);
   router.get('/animes/:animeId',
     animeCtrl.getAnimeById);
   router.post('/animes',
@@ -120,6 +129,10 @@ const routes = (app) => {
 
   router.get('/animes/:animeId/episodes',
     paginationMiddleware.addPagination,
+    sortingMiddleware.addSorting(['chapter'], ['asc', 'desc'], {
+      sortBy: 'chapter',
+      order: 'asc',
+    }),
     episodeCtrl.getEpisodes);
   router.get('/animes/:animeId/episodes/:episodeId',
     episodeCtrl.getEpisodeById);

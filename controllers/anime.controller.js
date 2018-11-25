@@ -3,7 +3,8 @@ const { Anime, Episode } = require('../core/mongodb').mongoose.models;
 const { cloudinary } = require('../core/cloudinary');
 
 const getAnimes = (req, res) => {
-  const { search } = req.query;
+  const { search, genre } = req.query;
+  const { sorting } = req;
 
   const query = {};
 
@@ -11,9 +12,13 @@ const getAnimes = (req, res) => {
     query.name = new RegExp(search, 'i');
   }
 
+  if (genre) {
+    query.genre = genre;
+  }
+
   Anime
     .find(query, {}, req.pagination)
-    .sort([['updatedAt', 'descending']])
+    .sort([[sorting.sortBy, sorting.order]])
     .then((animes) => {
       Promise
         .all(animes.map(anime => anime.toJSONAsync()))
@@ -157,10 +162,61 @@ const deleteAnime = (req, res) => {
     });
 };
 
+const getGenres = (req, res) => {
+  let { search } = req.query;
+
+  if (!search) {
+    search = '';
+  }
+
+  Anime
+    .aggregate([
+      {
+        $match: {
+          genre: new RegExp(search, 'i'),
+        },
+      },
+      {
+        $sort: {
+          genre: 1,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          genres: {
+            $addToSet: '$genre',
+          },
+        },
+      },
+    ], (err, result) => {
+      const { genres } = result[0];
+      if (err) {
+        res
+          .status(500)
+          .send({
+            status: 'ERROR',
+            message: 'ERROR',
+          });
+      } else {
+        res
+          .send({
+            status: 'OK',
+            message: 'OK',
+            content: {
+              genres: genres.sort().slice(req.pagination.skip,
+                req.pagination.skip + req.pagination.limit),
+            },
+          });
+      }
+    });
+};
+
 module.exports = {
   getAnimes,
   getAnimeById,
   createAnime,
   deleteAnime,
   updateAnime,
+  getGenres,
 };
