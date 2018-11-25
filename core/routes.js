@@ -86,7 +86,7 @@ const routes = (app) => {
 
   /**
    * @apiDefine AnimeResponse
-   * @apiSuccess {Anime[]} content.anime Anime
+   * @apiSuccess {Anime} content.anime Anime
    * @apiSuccess {String} content.anime.id Anime unique id
    * @apiSuccess {String} content.anime.name Anime name
    * @apiSuccess {String} content.anime.genre Anime genre
@@ -123,7 +123,7 @@ const routes = (app) => {
    */
 
   /**
-   * @apiDefine AnimeBody
+   * @apiDefine AnimeRequestBody
    * @apiParam (Request Body) {String} name
    * @apiParam (Request Body) {String} genre
    * @apiParam (Request Body) {String} resume
@@ -418,7 +418,7 @@ const routes = (app) => {
 
   /**
    * @api {get} /animes/:animeId Get specific anime
-   * @api GetAnime
+   * @apiName GetAnime
    * @apiGroup Anime
    *
    * @apiUse AnimeUniqueIdParam
@@ -430,16 +430,58 @@ const routes = (app) => {
    */
   router.get('/animes/:animeId',
     animeCtrl.getAnimeById);
+
+  /**
+   * @api {post} /animes Creates new anime
+   * @apiName CreateAnime
+   * @apiGroup Anime
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiPermission admin
+   *
+   * @apiUse AnimeRequestBody
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse AnimeResponse
+   */
   router.post('/animes',
     authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
     thumbParser.single('thumb'),
     animeCtrl.createAnime);
+
+  /**
+   * @api {put} /animes/:animdId Updates anime information
+   * @apiName UpdateAnime
+   * @apiGroup Anime
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiPermission admin
+   *
+   * @apiuse AnimeRequestBody
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse AnimeResponse
+   */
   router.put('/animes/:animeId',
     authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
     thumbParser.single('thumb'),
     animeCtrl.updateAnime);
+
+  /**
+   * @api {delete} /animes/:animeId Deletes information of specific anime
+   * @apiName DeleteAnime
+   * @apiGroup Anime
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiPermission admin
+   *
+   * @apiUse ResponseBasicFormat
+   */
   router.delete('/animes/:animeId',
     authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
@@ -469,7 +511,22 @@ const routes = (app) => {
     commentMiddleware.parseCommentData,
     commentMiddleware.parseCommentedObject('animeId'),
     commentCtrl.createComment);
+  /**
+   * @api {get} /animes/:animeId/evaluations Get evaluations of specific anime
+   * @apiName GetAnimeEvaluations
+   * @apiGroup Anime
+   *
+   * @apiUse AnimeUniqueIdParam
+   *
+   * @apiUse Pagination
+   *
+   * @apiPermission none
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse ArrayOfEvaluationsResponse
+   */
   router.get('/animes/:animeId/evaluations',
+    paginationMiddleware.addPagination,
     evaluationMiddleware.parseEvaluatedObject('animeId'),
     evaluationCtrl.getEvaluations);
   router.post('/animes/:animeId/evaluations',
@@ -529,7 +586,23 @@ const routes = (app) => {
     commentMiddleware.parseCommentData,
     commentMiddleware.parseCommentedObject('episodeId'),
     commentCtrl.createComment);
+  /**
+   * @api {get} /animes/:animeId/episodes/:episodeId/evaluations Get evaluations of specific anime episode
+   * @apiName GetEpisodeEvaluations
+   * @apiGroup Episode
+   *
+   * @apiUse AnimeUniqueIdParam
+   * @apiUse EpisodeUniqueIdParam
+   *
+   * @apiUse Pagination
+   *
+   * @apiPermission none
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse ArrayOfEvaluationsResponse
+   */
   router.get('/animes/:animeId/episodes/:episodeId/evaluations',
+    paginationMiddleware.addPagination,
     evaluationMiddleware.parseEvaluatedObject('episodeId'),
     evaluationCtrl.getEvaluations);
   router.post('/animes/:animesId/episodes/:episodeId/evaluations',
@@ -542,6 +615,12 @@ const routes = (app) => {
     authMiddleware.authenticate,
     commentMiddleware.parseCommentData,
     commentCtrl.updateComment);
+  /**
+   * @api {delete} /comments/:commentId Deletes a comment
+   * @apiName DeleteComment
+   * @apiGroup Comment
+   *
+   */
   router.delete('/comments/:commentId',
     authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
