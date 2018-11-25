@@ -82,10 +82,18 @@ const routes = (app) => {
   /**
    * @apiDefine RequiresAuth
    * @apiHeader {String} authorization Token of access
-   * @apiHeaderExample {json} Header-Example:
+   * @apiHeaderExample {json} AuthorizationExample:
    *     {
    *       "authorization": "Bearer aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-aaaaaaaaaaaa "
    *     }
+   */
+
+  /**
+   * @apiDefine RequiresMultipart
+   * @apiHeaderExample {json} MultipartExample:
+   *    {
+   *      "Content-Type": "multipart/form-data"
+   *    }
    */
 
   /**
@@ -454,6 +462,8 @@ const routes = (app) => {
    * @apiUse Sorting
    * @apiUse Search
    *
+   * @apiParam (Query Param) {String} [genre] Specify to filter by genre
+   *
    * @apiPermission none
    *
    * @apiUse ResponseBasicFormat
@@ -499,11 +509,12 @@ const routes = (app) => {
     animeCtrl.getAnimeById);
 
   /**
-   * @api {post} /animes Creates new anime
+   * @api {post} /animes Create new anime
    * @apiName CreateAnime
    * @apiGroup Anime
    *
    * @apiUse RequiresAuth
+   * @apiUse RequiresMultipart
    *
    * @apiPermission admin
    *
@@ -519,11 +530,12 @@ const routes = (app) => {
     animeCtrl.createAnime);
 
   /**
-   * @api {put} /animes/:animdId Updates anime information
+   * @api {put} /animes/:animdId Update anime information
    * @apiName UpdateAnime
    * @apiGroup Anime
    *
    * @apiUse RequiresAuth
+   * @apiUse RequiresMultipart
    *
    * @apiPermission admin
    *
@@ -539,7 +551,7 @@ const routes = (app) => {
     animeCtrl.updateAnime);
 
   /**
-   * @api {delete} /animes/:animeId Deletes information of specific anime
+   * @api {delete} /animes/:animeId Delete information of specific anime
    * @apiName DeleteAnime
    * @apiGroup Anime
    *
@@ -560,8 +572,6 @@ const routes = (app) => {
    * @apiGroup Anime
    *
    * @apiUse AnimeUniqueIdParam
-   *
-   * @apiUse RequiresAuth
    *
    * @apiUse Pagination
    *
@@ -625,6 +635,8 @@ const routes = (app) => {
    *
    * @apiUse EvaluationRequestBody
    *
+   * @apiPermission user
+   *
    * @apiUse ResponseBasicFormat
    * @apiUse EvaluationResponse
    */
@@ -682,6 +694,7 @@ const routes = (app) => {
    * @apiUse AnimeUniqueIdParam
    *
    * @apiUse RequiresAuth
+   * @apiUse RequiresMultipart
    *
    * @apiPermission admin
    *
@@ -698,13 +711,14 @@ const routes = (app) => {
 
   /**
    * @api {put} /animes/:animeId/episodes/:episodeId Update anime episode
-   * @apiName CreateEpisode
+   * @apiName UpdateEpisode
    * @apiGroup Episode
    *
    * @apiUse AnimeUniqueIdParam
    * @apiUse EpisodeUniqueIdParam
    *
    * @apiUse RequiresAuth
+   * @apiUse RequiresMultipart
    *
    * @apiPermission admin
    *
@@ -720,7 +734,7 @@ const routes = (app) => {
     episodeCtrl.updateEpisode);
 
   /**
-   * @api {delete} /animes/:animeId/episodes/:episodeId Deletes episode of anime
+   * @api {delete} /animes/:animeId/episodes/:episodeId Delete episode of anime
    * @apiName DeleteEpisode
    * @apiGroup Episode
    *
@@ -761,12 +775,14 @@ const routes = (app) => {
     commentCtrl.getComments);
 
   /**
-   * @api {post} /animes/:animeId/episodes/:episodeId/comments Creates new comment for episode
+   * @api {post} /animes/:animeId/episodes/:episodeId/comments Create new comment for episode
    * @apiName CreateAnimeComment
    * @apiGroup Episode
    *
    * @apiUse AnimeUniqueIdParam
    * @apiUse EpisodeUniqueIdParam
+   *
+   * @apiUse CommentRequestBody
    *
    * @apiUse RequiresAuth
    *
@@ -802,12 +818,14 @@ const routes = (app) => {
     evaluationCtrl.getEvaluations);
 
   /**
-   * @api {post} /animes/:animesId/episodes/:episodeId/evaluations
+   * @api {post} /animes/:animesId/episodes/:episodeId/evaluations Create episode evaluation
    * @apiName CreateEpisodeEvaluation
    * @apiGroup Episode
    *
    * @apiUse AnimeUniqueIdParam
    * @apiUse EpisodeUniqueIdParam
+   *
+   * @apiUse EvaluationRequestBody
    *
    * @apiUse RequiresAuth
    *
@@ -823,11 +841,13 @@ const routes = (app) => {
     evaluationCtrl.createEvaluation);
 
   /**
-   * @api {put} /comments/:commentId Updates a comment
+   * @api {put} /comments/:commentId Update a comment
    * @apiName UpdateComment
    * @apiGroup Comment
    *
    * @apiUse CommentUniqueIdParam
+   *
+   * @apiUse CommentRequestBody
    *
    * @apiUse RequiresAuth
    *
@@ -842,7 +862,7 @@ const routes = (app) => {
     commentCtrl.updateComment);
 
   /**
-   * @api {delete} /comments/:commentId Deletes a comment
+   * @api {delete} /comments/:commentId Delete a comment
    * @apiName DeleteComment
    * @apiGroup Comment
    *
@@ -866,6 +886,8 @@ const routes = (app) => {
    *
    * @apiUse EvaluationUniqueIdParam
    *
+   * @apiUse EvaluationRequestBody
+   *
    * @apiUse RequiresAuth
    *
    * @apiPermission user
@@ -879,7 +901,7 @@ const routes = (app) => {
     evaluationCtrl.updateEvaluation);
 
   /**
-   * @api {delete} /evaluations/:evaluationId Deletes a evaluation
+   * @api {delete} /evaluations/:evaluationId Delete a evaluation
    * @apiName DeleteEvaluation
    * @apiGroup Evaluation
    *
