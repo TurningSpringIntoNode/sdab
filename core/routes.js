@@ -44,6 +44,21 @@ const routes = (app) => {
    */
 
   /**
+   * @apiDefine AnimeUniqueIdParam
+   * @apiParam {String} animeId Anime unique id
+   */
+
+  /**
+   * @apiDefine EpisodeUniqueIdParam
+   * @apiParam {String} episodeId Episode unique id
+   */
+
+  /**
+   * @apiDefine CommentUniqueIdParam
+   * @apiParam {String} commentId Comment unique id
+   */
+
+  /**
    * @api {post} /signup/social Creates new user using email and password
    * @apiName SignupSocial
    * @apiGroup Auth
@@ -145,8 +160,8 @@ const routes = (app) => {
 
   /**
    * @apiDefine Pagination
-   * @apiParam (Query Param) {Number} [page=1] Number of the page being requested 1-indexed
-   * @apiParam (Query Param) {Number} [pageSize=20] Size of each page
+   * @apiParam (Query Param) {Number{1..}} [page=1] Number of the page being requested 1-indexed
+   * @apiParam (Query Param) {Number{1..30}} [pageSize=20] Size of each page
    */
 
   /**
@@ -178,6 +193,13 @@ const routes = (app) => {
    */
 
   /**
+   * @apiDefine ArrayOfEvaluationsResponse
+   * @apiSuccess {Evaluation[]} content.evaluations List of evaluations
+   * @apiSuccess {String} content.evaluations.id Evaluation unique id
+   * @apiSuccess {Number} content.evaluations.score Score given in the evaluation
+   */
+
+  /**
    * @api {get} /me/comments Get comments of the logged in user
    * @apiName GetOwnComments
    * @apiGroup User
@@ -200,7 +222,7 @@ const routes = (app) => {
    * @apiName GetOwnCommentsInAnime
    * @apiGroup User
    *
-   * @apiParam animeId Anime unique id
+   * @apiUse AnimeUniqueIdParam
    *
    * @apiUse RequiresAuth
    *
@@ -219,11 +241,11 @@ const routes = (app) => {
 
   /**
    * @api {get} /me/animes/:animeId/episodes/:episodeId/comments Get comments of the logged in user in specific anime episode
-   * @apiName GetOwnCommentsInAnime
+   * @apiName GetOwnCommentsInEpisode
    * @apiGroup User
    *
-   * @apiParam animeId Anime unique id
-   * @apiParam episodeId Episode unique id
+   * @apiUse AnimeUniqueIdParam
+   * @apiUse EpisodeUniqueIdParam
    *
    * @apiUse RequiresAuth
    *
@@ -238,16 +260,63 @@ const routes = (app) => {
     paginationMiddleware.addPagination,
     commentMiddleware.parseCommentedObject('episodeId'),
     commentCtrl.getCommentsOfUser);
+  /**
+   * @api {get} /me/evaluations Get evaluations of logged in user
+   * @apiName GetOwnEvaluations
+   * @apiGroup User
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiUse Pagination
+   *
+   * @apiPermission user
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse ArrayOfEvaluationsResponse
+   */
   router.get('/me/evaluations',
     authMiddleware.authenticate,
     paginationMiddleware.addPagination,
     evaluationCtrl.getEvaluationsOfUser);
+  /**
+   * @api {get} /me/animes/:animeId/evaluations Get evaluations of logged in user in specific anime
+   * @apiName GetOwnEvaluationsInAnime
+   * @apiGroup User
+   *
+   * @apiUse AnimeUniqueIdParam
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiUse Pagination
+   *
+   * @apiPermission user
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse ArrayOfEvaluationsResponse
+   */
   router.get('/me/animes/:animeId/evaluations',
     authMiddleware.authenticate,
     paginationMiddleware.addPagination,
     evaluationMiddleware.parseEvaluatedObject('animeId'),
     evaluationCtrl.getEvaluationsOfUser);
-  router.get('/me/animes/:animeId/episodes/:episodeId/comments',
+  /**
+   * @api {get} /me/animes/:animeId/episodes/:episodeId/evaluations Get evaluations of logged in user in specific anime episode
+   * @apiName GetOwnEvaluationsInAnimeEpisode
+   * @apiGroup User
+   *
+   * @apiUse AnimeUniqueIdParam
+   * @apiUse EpisodeUniqueIdParam
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiUse Pagination
+   *
+   * @apiPermission user
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse ArrayOfEvaluationsResponse
+   */
+  router.get('/me/animes/:animeId/episodes/:episodeId/evaluations',
     authMiddleware.authenticate,
     paginationMiddleware.addPagination,
     evaluationMiddleware.parseEvaluatedObject('episodeId'),
@@ -288,7 +357,7 @@ const routes = (app) => {
    * @apiName GetAnimeComments
    * @apiGroup Anime
    *
-   * @apiParam animeId Anime unique id
+   * @apiUse AnimeUniqueIdParam
    *
    * @apiUse RequiresAuth
    *
@@ -347,8 +416,8 @@ const routes = (app) => {
    * @apiName GetEpisodeComments
    * @apiGroup Episode
    *
-   * @apiParam animeId Anime unique id
-   * @apiParam episodeId Episode unique id
+   * @apiUse AnimeUniqueIdParam
+   * @apiUse EpisodeUniqueIdParam
    *
    * @apiUse RequiresAuth
    *
