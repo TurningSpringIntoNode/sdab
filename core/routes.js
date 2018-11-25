@@ -59,6 +59,78 @@ const routes = (app) => {
    */
 
   /**
+   * @apiDefine Pagination
+   * @apiParam (Query Param) {Number{1..}} [page=1] Number of the page being requested 1-indexed
+   * @apiParam (Query Param) {Number{1..30}} [pageSize=20] Size of each page
+   */
+
+  /**
+   * @apiDefine Sorting
+   * @apiParam (Query Param) {String="asc","desc"} [order="desc"] Specify order to be sorted either ascending or descending
+   * @apiParam (Query Param) {String} [sortBy] Specify field of the model to be used to sort, some fields may be unvailablee
+   */
+
+  /**
+   * @apiDefine Search
+   * @apiParam (Query Param) {String} [search] Search in name field
+   */
+
+  /**
+   * @apiDefine RequiresAuth
+   * @apiHeader {String} authorization Token of access
+   * @apiHeaderExample {json} Header-Example:
+   *     {
+   *       "authorization": "Bearer aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-aaaaaaaaaaaa "
+   *     }
+   */
+
+  /**
+   * @apiDefine AnimeResponse
+   * @apiSuccess {Anime[]} content.anime Anime
+   * @apiSuccess {String} content.anime.id Anime unique id
+   * @apiSuccess {String} content.anime.name Anime name
+   * @apiSuccess {String} content.anime.genre Anime genre
+   * @apiSuccess {Number} content.anime.score Anime score, based in evaluations
+   * @apiSuccess {String} content.anime.resume Anime resume
+   * @apiSuccess {Date} content.anime.createdAt Anime creation date
+   */
+
+  /**
+   * @apiDefine ArrayOfCommentsResponse
+   * @apiSuccess {Comment[]} content.comments List of comments
+   * @apiSuccess {String} content.comments.id Comment unique id
+   * @apiSuccess {String} content.comments.message Comment messsage
+   * @apiSuccess {Date} content.comments.createdAt Date of creation of the comment
+   * @apiSuccess {Date} content.comments.updatedAt Date of the last update of the comment
+   */
+
+  /**
+   * @apiDefine ArrayOfEvaluationsResponse
+   * @apiSuccess {Evaluation[]} content.evaluations List of evaluations
+   * @apiSuccess {String} content.evaluations.id Evaluation unique id
+   * @apiSuccess {Number} content.evaluations.score Score given in the evaluation
+   */
+
+  /**
+   * @apiDefine ArrayOfAnimesResponse
+   * @apiSuccess {Anime[]} content.animes List of animes
+   * @apiSuccess {String} content.animes.id Anime unique id
+   * @apiSuccess {String} content.animes.name Anime name
+   * @apiSuccess {String} content.animes.genre Anime genre
+   * @apiSuccess {Number} content.animes.score Anime score, based in evaluations
+   * @apiSuccess {String} content.animes.resume Anime resume
+   * @apiSuccess {Date} content.animes.createdAt Anime creation date
+   */
+
+  /**
+   * @apiDefine AnimeBody
+   * @apiParam (Request Body) {String} name
+   * @apiParam (Request Body) {String} genre
+   * @apiParam (Request Body) {String} resume
+   * @apiParam (Request Body) {File} thumb
+   */
+
+  /**
    * @api {post} /signup/social Creates new user using email and password
    * @apiName SignupSocial
    * @apiGroup Auth
@@ -103,14 +175,6 @@ const routes = (app) => {
     passport.authenticate('Local', { session: false }),
     authCtrl.loginSocial);
 
-  /**
-   * @apiDefine RequiresAuth
-   * @apiHeader {String} authorization Token of access
-   * @apiHeaderExample {json} Header-Example:
-   *     {
-   *       "authorization": "Bearer aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-aaaaaaaaaaaa "
-   *     }
-   */
   router.all('/admin/*',
     authMiddleware.authenticate);
   router.all('/admin/*',
@@ -159,12 +223,6 @@ const routes = (app) => {
     adminCtrl.deleteUserById);
 
   /**
-   * @apiDefine Pagination
-   * @apiParam (Query Param) {Number{1..}} [page=1] Number of the page being requested 1-indexed
-   * @apiParam (Query Param) {Number{1..30}} [pageSize=20] Size of each page
-   */
-
-  /**
    * @api {get} /me Get logged in user information
    * @apiName GetOwnInformation
    * @apiGroup User
@@ -182,22 +240,6 @@ const routes = (app) => {
   router.get('/me',
     authMiddleware.authenticate,
     userCtrl.getUser);
-
-  /**
-   * @apiDefine ArrayOfCommentsResponse
-   * @apiSuccess {Comment[]} content.comments List of comments
-   * @apiSuccess {String} content.comments.id Comment unique id
-   * @apiSuccess {String} content.comments.message Comment messsage
-   * @apiSuccess {Date} content.comments.createdAt Date of creation of the comment
-   * @apiSuccess {Date} content.comments.updatedAt Date of the last update of the comment
-   */
-
-  /**
-   * @apiDefine ArrayOfEvaluationsResponse
-   * @apiSuccess {Evaluation[]} content.evaluations List of evaluations
-   * @apiSuccess {String} content.evaluations.id Evaluation unique id
-   * @apiSuccess {Number} content.evaluations.score Score given in the evaluation
-   */
 
   /**
    * @api {get} /me/comments Get comments of the logged in user
@@ -321,10 +363,35 @@ const routes = (app) => {
     paginationMiddleware.addPagination,
     evaluationMiddleware.parseEvaluatedObject('episodeId'),
     evaluationCtrl.getEvaluationsOfUser);
+  /**
+   * @api {delete} /me Deletes all information of logged in user
+   * @apiName DeleteOwnUser
+   * @apiGroup User
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiPermission user
+   *
+   * @apiUse ResponseBasicFormat
+   */
   router.delete('/me',
     authMiddleware.authenticate,
     userCtrl.deleteOwnUser);
 
+  /**
+   * @api {get} /animes Get all registered animes
+   * @apiName GetAnimes
+   * @apiGroup Anime
+   *
+   * @apiUse Pagination
+   * @apiUse Sorting
+   * @apiUse Search
+   *
+   * @apiPermission none
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse ArrayOfAnimesResponse
+   */
   router.get('/animes',
     paginationMiddleware.addPagination,
     sortingMiddleware.addSorting(['createdAt', 'name'], ['asc', 'desc'], {
@@ -333,9 +400,34 @@ const routes = (app) => {
     }),
     animeCtrl.getAnimes);
 
+  /**
+   * @api {get} /animes/genres Get all distinct genre of registered animes
+   * @apiName GetGenres
+   * @apiGroup Anime
+   *
+   * @apiUse Pagination
+   *
+   * @apiPermission none
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiSuccess {String[]} content.genres List of genres
+   */
   router.get('/animes/genres',
     paginationMiddleware.addPagination,
     animeCtrl.getGenres);
+
+  /**
+   * @api {get} /animes/:animeId Get specific anime
+   * @api GetAnime
+   * @apiGroup Anime
+   *
+   * @apiUse AnimeUniqueIdParam
+   *
+   * @apiPermission none
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse AnimeResponse
+   */
   router.get('/animes/:animeId',
     animeCtrl.getAnimeById);
   router.post('/animes',

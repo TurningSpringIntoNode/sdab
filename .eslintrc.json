@@ -5,6 +5,7 @@
         "no-underscore-dangle": "off",
         "func-names": "off",
         "camelcase": "off",
-        "no-console": "off"
+        "no-console": "off",
+        "max-len": [ "error", { "ignoreComments": true , "code": 130 }]
     }
 }
