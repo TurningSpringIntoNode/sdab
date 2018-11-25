@@ -4,6 +4,7 @@ const { cloudinary } = require('../core/cloudinary');
 
 const getAnimes = (req, res) => {
   const { search } = req.query;
+  const { sorting } = req;
 
   const query = {};
 
@@ -13,7 +14,7 @@ const getAnimes = (req, res) => {
 
   Anime
     .find(query, {}, req.pagination)
-    .sort([['updatedAt', 'descending']])
+    .sort([[sorting.sortBy, sorting.order]])
     .then((animes) => {
       Promise
         .all(animes.map(anime => anime.toJSONAsync()))
