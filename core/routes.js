@@ -30,23 +30,35 @@ const routes = (app) => {
    * @apiDefine UserNotFound
    *    User was not found in database
    */
+
   /**
    * @apiDefine AlreadyRegisteredUser
    *    User already has been registered
    */
+
   /**
-   * @api {post} /signup/social Request creation of new user using email and password
+   * @apiDefine ResponseBasicFormat
+   * @apiSuccess {String} status Api status to request
+   * @apiSuccess {String} message Message to explain result of the request
+   * @apiSuccess {Object} content Object that contains result of the request
+   */
+
+  /**
+   * @api {post} /signup/social Creates new user using email and password
    * @apiName SignupSocial
    * @apiGroup Auth
+   *
+   * @apiPermission none
    *
    * @apiParam (Request Body) {String} name User name
    * @apiParam (Request Body) {String} email User email
    * @apiParam (Request Body) {String} password User password
    * @apiParam (Request Body) {String} checkPassword User password confirmation
    *
-   * @apiSuccess {Object} user Basic information of user
-   * @apiSuccess {String} user.role Role of the user
-   * @apiSuccess {String} token Token to have access in future requests
+   * @apiUse ResponseBasicFormat
+   * @apiSuccess {Object} content.user Basic information of user
+   * @apiSuccess {String} content.user.role Role of the user
+   * @apiSuccess {String} content.token Token to have access in future requests
    *
    * @apiError AlreadyRegisteredUser User that wants to signup has alrealdy registered before
    */
@@ -56,16 +68,19 @@ const routes = (app) => {
     authCtrl.signupSocial);
 
   /**
-   * @api {post} /login/social Request token using social login
+   * @api {post} /login/social Login user using social login
    * @apiName LoginSocial
    * @apiGroup Auth
+   *
+   * @apiPermission none
    *
    * @apiParam (Request Body) {String} email User email
    * @apiParam (Request Body) {String} password User password
    *
-   * @apiSuccess {Object} user Basic information of user
-   * @apiSuccess {String} user.role Role of the user
-   * @apiSuccess {String} token Token to have access in future requests
+   * @apiUse ResponseBasicFormat
+   * @apiSuccess {Object} content.user Basic information of user
+   * @apiSuccess {String} content.user.role Role of the user
+   * @apiSuccess {String} content.token Token to have access in future requests
    *
    * @apiError UserNotFound User was not registered before trying login
    */
@@ -73,29 +88,151 @@ const routes = (app) => {
     passport.authenticate('Local', { session: false }),
     authCtrl.loginSocial);
 
+  /**
+   * @apiDefine RequiresAuth
+   * @apiHeader {String} authorization Token of access
+   * @apiHeaderExample {json} Header-Example:
+   *     {
+   *       "authorization": "Bearer aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa.aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa-aaaaaaaaaaaa "
+   *     }
+   */
   router.all('/admin/*',
     authMiddleware.authenticate);
   router.all('/admin/*',
     authMiddleware.hasRole(['Admin']));
+
+  /**
+   * @api {post} /admin/ Creates new admin using email and password
+   * @apiName PostAdmin
+   * @apiGroup Admin
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiPermission admin
+   *
+   * @apiParam (Request Body) {String} name User name
+   * @apiParam (Request Body) {String} email User email
+   * @apiParam (Request Body) {String} password User password
+   * @apiParam (Request Body) {String} checkPassword User password confirmation
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiSuccess {Object} content.user Basic information of user
+   * @apiSuccess {String} content.user.role Role of the user
+   * @apiSuccess {String} content.token Token to have access in future requests
+   *
+   * @apiError AlreadyRegisteredUser User that wants to signup has alrealdy registered before
+   */
   router.post('/admin/',
     userMiddleware.parseUserData,
     userMiddleware.setupRole('Admin'),
     authCtrl.signupSocial);
+  /**
+   * @api {delete} /admin/users/:id Deletes a user
+   * @apiName DeleteUser
+   * @apiGroup Admin
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiPermission admin
+   *
+   * @apiParam {String} id User unique id
+   *
+   * @apiUse ResponseBasicFormat
+   *
+   */
   router.delete('/admin/users/:id',
     adminCtrl.deleteUserById);
 
+  /**
+   * @apiDefine Pagination
+   * @apiParam (Query Param) {Number} [page=1] Number of the page being requested 1-indexed
+   * @apiParam (Query Param) {Number} [pageSize=20] Size of each page
+   */
+
+  /**
+   * @api {get} /me Get logged in user information
+   * @apiName GetOwnInformation
+   * @apiGroup User
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiPermission user
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiSuccess {Object} content.user User information
+   * @apiSuccess {String} content.user.name User name
+   * @apiSuccess {String} content.user.email User email
+   * @apiSuccess {String} content.user.role User role
+   */
   router.get('/me',
     authMiddleware.authenticate,
     userCtrl.getUser);
+
+  /**
+   * @apiDefine ArrayOfCommentsResponse
+   * @apiSuccess {Comment[]} content.comments List of comments
+   * @apiSuccess {String} content.comments.id Comment unique id
+   * @apiSuccess {String} content.comments.message Comment messsage
+   * @apiSuccess {Date} content.comments.createdAt Date of creation of the comment
+   * @apiSuccess {Date} content.comments.updatedAt Date of the last update of the comment
+   */
+
+  /**
+   * @api {get} /me/comments Get comments of the logged in user
+   * @apiName GetOwnComments
+   * @apiGroup User
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiUse Pagination
+   *
+   * @apiPermission user
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse ArrayOfCommentsResponse
+   */
   router.get('/me/comments',
     authMiddleware.authenticate,
     paginationMiddleware.addPagination,
     commentCtrl.getCommentsOfUser);
+  /**
+   * @api {get} /me/animes/:animeId/comments Get comments of the logged in user in specific anime
+   * @apiName GetOwnCommentsInAnime
+   * @apiGroup User
+   *
+   * @apiParam animeId Anime unique id
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiUse Pagination
+   *
+   * @apiPermission user
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse ArrayOfCommentsResponse
+   */
   router.get('/me/animes/:animeId/comments',
     authMiddleware.authenticate,
     paginationMiddleware.addPagination,
     commentMiddleware.parseCommentedObject('animeId'),
     commentCtrl.getCommentsOfUser);
+
+  /**
+   * @api {get} /me/animes/:animeId/episodes/:episodeId/comments Get comments of the logged in user in specific anime episode
+   * @apiName GetOwnCommentsInAnime
+   * @apiGroup User
+   *
+   * @apiParam animeId Anime unique id
+   * @apiParam episodeId Episode unique id
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiUse Pagination
+   *
+   * @apiPermission user
+   * @apiUse ResponseBasicFormat
+   * @apiUse ArrayOfCommentsResponse
+   */
   router.get('/me/animes/:animeId/episodes/:episodeId/comments',
     authMiddleware.authenticate,
     paginationMiddleware.addPagination,
@@ -146,6 +283,20 @@ const routes = (app) => {
     authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
     animeCtrl.deleteAnime);
+  /**
+   * @api {get} /animes/:animeId/comments Get all comments in a specific anime
+   * @apiName GetAnimeComments
+   * @apiGroup Anime
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiUse Pagination
+   *
+   * @apiPermission none
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse ArrayOfCommentsResponse
+   */
   router.get('/animes/:animeId/comments',
     paginationMiddleware.addPagination,
     commentMiddleware.parseCommentedObject('animeId'),
