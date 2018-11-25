@@ -26,11 +26,49 @@ const routes = (app) => {
   router.all('/*',
     logMiddleware.logIp);
 
+  /**
+   * @apiDefine UserNotFound
+   *    User was not found in database
+   */
+  /**
+   * @apiDefine AlreadyRegisteredUser
+   *    User already has been registered
+   */
+  /**
+   * @api {post} /signup/social Request creation of new user using email and password
+   * @apiName SignupSocial
+   * @apiGroup Auth
+   *
+   * @apiParam (Request Body) {String} name User name
+   * @apiParam (Request Body) {String} email User email
+   * @apiParam (Request Body) {String} password User password
+   * @apiParam (Request Body) {String} checkPassword User password confirmation
+   *
+   * @apiSuccess {Object} user Basic information of user
+   * @apiSuccess {String} user.role Role of the user
+   * @apiSuccess {String} token Token to have access in future requests
+   *
+   * @apiError AlreadyRegisteredUser User that wants to signup has alrealdy registered before
+   */
   router.post('/signup/social',
     userMiddleware.parseUserData,
     userMiddleware.setupRole('Account'),
     authCtrl.signupSocial);
 
+  /**
+   * @api {post} /login/social Request token using social login
+   * @apiName LoginSocial
+   * @apiGroup Auth
+   *
+   * @apiParam (Request Body) {String} email User email
+   * @apiParam (Request Body) {String} password User password
+   *
+   * @apiSuccess {Object} user Basic information of user
+   * @apiSuccess {String} user.role Role of the user
+   * @apiSuccess {String} token Token to have access in future requests
+   *
+   * @apiError UserNotFound User was not registered before trying login
+   */
   router.post('/login/social',
     passport.authenticate('Local', { session: false }),
     authCtrl.loginSocial);

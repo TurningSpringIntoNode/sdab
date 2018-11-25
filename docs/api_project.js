@@ -1,0 +1,1 @@
+define({  "name": "Sdab",  "version": "0.0.1",  "description": "Sdab API",  "url": "https://github.com/TurningSpringIntoNode/sdab",  "sampleUrl": false,  "defaultVersion": "0.0.0",  "apidoc": "0.3.0",  "generator": {    "name": "apidoc",    "time": "2018-11-25T02:20:33.755Z",    "url": "http://apidocjs.com",    "version": "0.17.7"  }});
