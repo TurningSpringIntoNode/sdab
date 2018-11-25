@@ -164,9 +164,34 @@ const deleteAnime = (req, res) => {
 
 const getGenres = (req, res) => {
 
+  let { search } = req.query;
+
+  if (!search) {
+    search = "";
+  }
+
   Anime
-    .distinct('genre')
-    .exec((err, genres) => {
+    .aggregate([
+      {
+        $match: {
+          genre: new RegExp(search, 'i'),
+        },
+      },
+      {
+        $sort: {
+          genre: 1,
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          genres: {
+            $addToSet: "$genre"
+          }
+        }
+      }
+    ], (err, result) => {
+      const { genres } = result[0];
       if (err) {
         res
           .status(500)
