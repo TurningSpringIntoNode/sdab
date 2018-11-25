@@ -59,6 +59,10 @@ const routes = (app) => {
    */
 
   /**
+   * @apiDefine EvaluationUniqueIdParam
+   * @apiParam {String} :evaluationId Evaluation unique id
+   */
+  /**
    * @apiDefine Pagination
    * @apiParam (Query Param) {Number{1..}} [page=1] Number of the page being requested 1-indexed
    * @apiParam (Query Param) {Number{1..30}} [pageSize=20] Size of each page
@@ -90,9 +94,21 @@ const routes = (app) => {
    * @apiSuccess {String} content.anime.id Anime unique id
    * @apiSuccess {String} content.anime.name Anime name
    * @apiSuccess {String} content.anime.genre Anime genre
+   * @apiSuccess {String} content.anime.thumb_url Anime thumb url
    * @apiSuccess {Number} content.anime.score Anime score, based in evaluations
    * @apiSuccess {String} content.anime.resume Anime resume
    * @apiSuccess {Date} content.anime.createdAt Anime creation date
+   */
+
+  /**
+   * @apiDefine EpisodeResponse
+   * @apiSuccess {Episode} content.episode Episode
+   * @apiSuccess {String} content.episode.id Episode unique id
+   * @apiSuccess {String} content.episode.name Episode name
+   * @apiSuccess {Number} content.episode.chapter Episode chapter
+   * @apiSuccess {String} content.episode.video_url Episode video url
+   * @apiSuccess {Number} content.episode.score Episode score, based in evaluations
+   * @apiSuccess {String} content.episode.description Episode description
    */
 
   /**
@@ -123,11 +139,30 @@ const routes = (app) => {
    */
 
   /**
+   * @apiDefine ArrayOfEpisodesResponse
+   * @apiSuccess {Episode[]} content.episodes List of episodes
+   * @apiSuccess {String} content.episodes.id Episode unique id
+   * @apiSuccess {String} content.episodes.name Episode name
+   * @apiSuccess {Number} content.episodes.chapter Episode chapter
+   * @apiSuccess {String} content.episodes.video_url Episode video url
+   * @apiSuccess {Number} content.episodes.score Episode score, based in evaluations
+   * @apiSuccess {String} content.episodes.description Episode description
+   */
+
+  /**
    * @apiDefine AnimeRequestBody
-   * @apiParam (Request Body) {String} name
-   * @apiParam (Request Body) {String} genre
-   * @apiParam (Request Body) {String} resume
-   * @apiParam (Request Body) {File} thumb
+   * @apiParam (Request Body) {String} name Anime name
+   * @apiParam (Request Body) {String} genre Anime genre
+   * @apiParam (Request Body) {String} resume Anime resume
+   * @apiParam (Request Body) {File=.jpg} thumb Anime thumb
+   */
+
+  /**
+   * @apiDefine EpisodeRequestBody
+   * @apiParam (Request Body) {String} name Episode name
+   * @apiParam (Request Body) {Number} chapter Episode chapter
+   * @apiParam (Request Body) {String} description Episode description
+   * @apiParam (Request Body) {File=.mp4} video Episode video
    */
 
   /**
@@ -536,6 +571,21 @@ const routes = (app) => {
     evaluationCtrl.createEvaluation);
 
 
+  /**
+   * @api {get} /animes/:animeId/episodes Get all registered episodes of specific anime
+   * @apiName GetEpisodesInAnime
+   * @apiGroup Episode
+   *
+   * @apiUse Pagination
+   * @apiUse Sorting
+   *
+   * @apiUse AnimeUniqueIdParam
+   *
+   * @apiPermission none
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse ArrayOfEpisodesResponse
+   */
   router.get('/animes/:animeId/episodes',
     paginationMiddleware.addPagination,
     sortingMiddleware.addSorting(['chapter'], ['asc', 'desc'], {
@@ -543,8 +593,23 @@ const routes = (app) => {
       order: 'asc',
     }),
     episodeCtrl.getEpisodes);
+
   router.get('/animes/:animeId/episodes/:episodeId',
     episodeCtrl.getEpisodeById);
+  /**
+   * @api {post} /animes/:animeId/episodes Creates new episode
+   * @apiName CreateEpisode
+   * @apiGroup Episode
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiPermission admin
+   *
+   * @apiUse EpisodeRequestBody
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse EpisodeResponse
+   */
   router.post('/animes/:animeId/episodes',
     authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
