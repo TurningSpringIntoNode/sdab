@@ -112,6 +112,22 @@ const routes = (app) => {
    */
 
   /**
+   * @apiDefine CommentResponse
+   * @apiSuccess {Comment} content.comment Commment
+   * @apiSuccess {String} content.comment.id Comment unique id
+   * @apiSuccess {String} content.comment.message Comment messsage
+   * @apiSuccess {Date} content.comment.createdAt Date of creation of the comment
+   * @apiSuccess {Date} content.comment.updatedAt Date of the last update of the comment
+   */
+
+  /**
+   * @apiDefine EvaluationResponse
+   * @apiSuccess {Evaluation} content.evaluation Evaluation
+   * @apiSuccess {String} content.evaluation.id Evaluation unique id
+   * @apiSuccess {Number} content.evaluation.score Score given in the evaluation
+   */
+
+  /**
    * @apiDefine ArrayOfCommentsResponse
    * @apiSuccess {Comment[]} content.comments List of comments
    * @apiSuccess {String} content.comments.id Comment unique id
@@ -163,6 +179,16 @@ const routes = (app) => {
    * @apiParam (Request Body) {Number} chapter Episode chapter
    * @apiParam (Request Body) {String} description Episode description
    * @apiParam (Request Body) {File=.mp4} video Episode video
+   */
+
+  /**
+   * @apiDefine CommentRequestBody
+   * @apiParam (Request Body) {String} message Message to be presented in comment
+   */
+
+  /**
+   * @apiDefine EvaluationRequestBody
+   * @apiParam (Request Body) {Number} score Score to give in evaluation
    */
 
   /**
@@ -541,6 +567,20 @@ const routes = (app) => {
     paginationMiddleware.addPagination,
     commentMiddleware.parseCommentedObject('animeId'),
     commentCtrl.getComments);
+  /**
+   * @api {post} /animes/:animeId/comments Create comment for specific anime
+   * @apiName CreateAnimeComment
+   * @apiGroup Anime
+   *
+   * @apiUse AnimeUniqueIdParam
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiUse CommentRequestBody
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse CommentResponse
+   */
   router.post('/animes/:animeId/comments',
     authMiddleware.authenticate,
     commentMiddleware.parseCommentData,
@@ -564,6 +604,20 @@ const routes = (app) => {
     paginationMiddleware.addPagination,
     evaluationMiddleware.parseEvaluatedObject('animeId'),
     evaluationCtrl.getEvaluations);
+  /**
+   * @api {post} /animes/:animeId/evaluation Create evaluation for specific anime
+   * @apiName CreateAnimeEvaluation
+   * @apiGroup Anime
+   *
+   * @apiUse AnimeUniqueIdParam
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiUse EvaluationRequestBody
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse EvaluationResponse
+   */
   router.post('/animes/:animeId/evaluations',
     authMiddleware.authenticate,
     evaluationMiddleware.parseEvaluationData,
@@ -594,12 +648,28 @@ const routes = (app) => {
     }),
     episodeCtrl.getEpisodes);
 
+  /**
+   * @api {get} /animes/:animeId/episodes/:episodeId Get specific episode of anime
+   * @apiName GetEpisodeInAnime
+   * @apiGroup Episode
+   *
+   * @apiUse AnimeUniqueIdParam
+   * @apiUse EpisodeUniqueIdParam
+   *
+   * @apiPermission none
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse EpisodeResponse
+   */
   router.get('/animes/:animeId/episodes/:episodeId',
     episodeCtrl.getEpisodeById);
+
   /**
    * @api {post} /animes/:animeId/episodes Creates new episode
    * @apiName CreateEpisode
    * @apiGroup Episode
+   *
+   * @apiUse AnimeUniqueIdParam
    *
    * @apiUse RequiresAuth
    *
@@ -615,6 +685,24 @@ const routes = (app) => {
     authMiddleware.hasRole(['Admin']),
     videoParser.single('video'),
     episodeCtrl.createEpisode);
+
+  /**
+   * @api {put} /animes/:animeId/episodes/:episodeId Update anime episode
+   * @apiName CreateEpisode
+   * @apiGroup Episode
+   *
+   * @apiUse AnimeUniqueIdParam
+   * @apiUse EpisodeUniqueIdParam
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiPermission admin
+   *
+   * @apiUse EpisodeRequestBody
+   *
+   * @apiUse ResponseBasicFormat
+   * @apiUse EpisodeResponse
+   */
   router.put('/animes/:animeId/episodes/:episodeId',
     authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
