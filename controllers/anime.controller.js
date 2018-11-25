@@ -3,13 +3,17 @@ const { Anime, Episode } = require('../core/mongodb').mongoose.models;
 const { cloudinary } = require('../core/cloudinary');
 
 const getAnimes = (req, res) => {
-  const { search } = req.query;
+  const { search, genre } = req.query;
   const { sorting } = req;
 
   const query = {};
 
   if (search) {
     query.name = new RegExp(search, 'i');
+  }
+
+  if (genre) {
+    query.genre = genre;
   }
 
   Anime
@@ -158,10 +162,36 @@ const deleteAnime = (req, res) => {
     });
 };
 
+const getGenres = (req, res) => {
+
+  Anime
+    .distinct('genre')
+    .exec((err, genres) => {
+      if (err) {
+        res
+          .status(500)
+          .send({
+            status: 'ERROR',
+            message: 'ERROR',
+          });
+      } else {
+        res
+          .send({
+            status: 'OK',
+            message: 'OK',
+            content: {
+              genres: genres.sort().slice(req.pagination.skip, req.pagination.skip + req.pagination.limit),
+            },
+          });
+      }
+    });
+};
+
 module.exports = {
   getAnimes,
   getAnimeById,
   createAnime,
   deleteAnime,
   updateAnime,
+  getGenres,
 };

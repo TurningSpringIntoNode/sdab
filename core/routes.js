@@ -88,6 +88,10 @@ const routes = (app) => {
       order: 'desc',
     }),
     animeCtrl.getAnimes);
+
+  router.get('/animes/genres',
+    paginationMiddleware.addPagination,
+    animeCtrl.getGenres);
   router.get('/animes/:animeId',
     animeCtrl.getAnimeById);
   router.post('/animes',
