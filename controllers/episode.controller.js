@@ -23,6 +23,14 @@ const getEpisodes = (req, res) => {
               },
             });
         });
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'ERROR',
+        });
     });
 };
 
@@ -56,6 +64,14 @@ const getEpisodeById = (req, res) => {
             message: 'Episode not found',
           });
       }
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'ERROR',
+        });
     });
 };
 
@@ -97,6 +113,14 @@ const createEpisode = (req, res) => {
               },
             });
         });
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'ERROR',
+        });
     });
 };
 
@@ -129,6 +153,14 @@ const updateEpisode = (req, res) => {
             message: 'Episode not found',
           });
       }
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'ERROR',
+        });
     });
 };
 
@@ -145,6 +177,14 @@ const deleteEpisode = (req, res) => {
         .send({
           status: 'OK',
           message: 'OK',
+        });
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'ERROR',
         });
     });
 };

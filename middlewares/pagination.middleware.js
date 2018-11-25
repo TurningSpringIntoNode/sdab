@@ -21,6 +21,13 @@ const addPagination = (req, res, next) => {
         status: 'ERROR',
         message: 'Page size is not a number',
       });
+  } else if (pageSize && (pageSize < 1 || pageSize > 30)) {
+    res
+      .status(400)
+      .send({
+        status: 'ERROR',
+        message: 'Page size is out of the range [1,30]',
+      });
   } else {
     if (pageSize) {
       pagination.limit = 1 * pageSize;
