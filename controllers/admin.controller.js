@@ -19,7 +19,7 @@ const deleteUserById = (req, res) => {
           status: 'ERROR',
           message: 'ERROR',
         });
-    });;
+    });
 };
 
 module.exports = {

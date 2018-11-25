@@ -167,7 +167,7 @@ const updateAnime = (req, res) => {
           status: 'ERROR',
           message: 'ERROR',
         });
-    });;
+    });
 };
 
 const deleteAnime = (req, res) => {
@@ -199,7 +199,7 @@ const deleteAnime = (req, res) => {
           status: 'ERROR',
           message: 'ERROR',
         });
-    });;
+    });
 };
 
 const getGenres = (req, res) => {

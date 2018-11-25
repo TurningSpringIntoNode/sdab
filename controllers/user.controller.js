@@ -27,7 +27,7 @@ const deleteOwnUser = (req, res) => {
           status: 'ERROR',
           message: 'ERROR',
         });
-    });;
+    });
 };
 
 module.exports = {

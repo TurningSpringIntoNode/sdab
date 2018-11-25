@@ -44,7 +44,7 @@ const signupSocial = (req, res) => {
                 status: 'ERROR',
                 message: 'ERROR',
               });
-          });;
+          });
       }
     })
     .catch(() => {
@@ -54,7 +54,7 @@ const signupSocial = (req, res) => {
           status: 'ERROR',
           message: 'ERROR',
         });
-    });;
+    });
 };
 
 
@@ -108,7 +108,7 @@ const loginSocial = (req, res) => {
           status: 'ERROR',
           message: 'ERROR',
         });
-    });;
+    });
 };
 
 module.exports = {

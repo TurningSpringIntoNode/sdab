@@ -31,7 +31,7 @@ const getEpisodes = (req, res) => {
           status: 'ERROR',
           message: 'ERROR',
         });
-    });;
+    });
 };
 
 const getEpisodeById = (req, res) => {
@@ -72,7 +72,7 @@ const getEpisodeById = (req, res) => {
           status: 'ERROR',
           message: 'ERROR',
         });
-    });;
+    });
 };
 
 
@@ -121,7 +121,7 @@ const createEpisode = (req, res) => {
           status: 'ERROR',
           message: 'ERROR',
         });
-    });;
+    });
 };
 
 const updateEpisode = (req, res) => {
@@ -161,7 +161,7 @@ const updateEpisode = (req, res) => {
           status: 'ERROR',
           message: 'ERROR',
         });
-    });;
+    });
 };
 
 const deleteEpisode = (req, res) => {
@@ -186,7 +186,7 @@ const deleteEpisode = (req, res) => {
           status: 'ERROR',
           message: 'ERROR',
         });
-    });;
+    });
 };
 
 module.exports = {
