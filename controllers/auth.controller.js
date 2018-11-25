@@ -36,9 +36,25 @@ const signupSocial = (req, res) => {
                     },
                   });
               });
-          });
+          })
+          .catch(() => {
+            res
+              .status(500)
+              .send({
+                status: 'ERROR',
+                message: 'ERROR',
+              });
+          });;
       }
-    });
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'ERROR',
+        });
+    });;
 };
 
 
@@ -84,7 +100,15 @@ const loginSocial = (req, res) => {
               });
           });
       }
-    });
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'ERROR',
+        });
+    });;
 };
 
 module.exports = {

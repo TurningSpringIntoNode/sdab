@@ -24,6 +24,7 @@ const createEvaluation = (req, res) => {
     })
     .catch(() => {
       res
+        .status(500)
         .send({
           status: 'ERROR',
           message: 'Internal server error',

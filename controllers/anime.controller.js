@@ -32,6 +32,14 @@ const getAnimes = (req, res) => {
               },
             });
         });
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'ERROR',
+        });
     });
 };
 
@@ -62,6 +70,14 @@ const getAnimeById = (req, res) => {
             message: 'Anime not found',
           });
       }
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'ERROR',
+        });
     });
 };
 
@@ -92,6 +108,14 @@ const createAnime = (req, res) => {
               anime: animeJson,
             },
           });
+        });
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'ERROR',
         });
     });
 };
@@ -135,7 +159,15 @@ const updateAnime = (req, res) => {
             message: 'Anime not found',
           });
       }
-    });
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'ERROR',
+        });
+    });;
 };
 
 const deleteAnime = (req, res) => {
@@ -159,7 +191,15 @@ const deleteAnime = (req, res) => {
               });
           });
       });
-    });
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'ERROR',
+        });
+    });;
 };
 
 const getGenres = (req, res) => {

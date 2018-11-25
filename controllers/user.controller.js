@@ -19,7 +19,15 @@ const deleteOwnUser = (req, res) => {
           status: 'OK',
           message: 'OK',
         });
-    });
+    })
+    .catch(() => {
+      res
+        .status(500)
+        .send({
+          status: 'ERROR',
+          message: 'ERROR',
+        });
+    });;
 };
 
 module.exports = {

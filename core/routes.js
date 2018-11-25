@@ -620,6 +620,13 @@ const routes = (app) => {
    * @apiName DeleteComment
    * @apiGroup Comment
    *
+   * @apiUse CommentUniqueIdParam
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiPermission admin
+   *
+   * @apiUse ResponseBasicFormat
    */
   router.delete('/comments/:commentId',
     authMiddleware.authenticate,
@@ -630,6 +637,20 @@ const routes = (app) => {
     authMiddleware.authenticate,
     evaluationMiddleware.parseEvaluationData,
     evaluationCtrl.updateEvaluation);
+
+  /**
+   * @api {delete} /evaluations/:evaluationId Deletes a evaluation
+   * @apiName DeleteEvaluation
+   * @apiGroup Evaluation
+   *
+   * @apiUse EvaluationUniqueIdParam
+   *
+   * @apiUse RequiresAuth
+   *
+   * @apiPermission admin
+   *
+   * @apiUse ResponseBasicFormat
+   */
   router.delete('/evaluations/:evaluationId',
     authMiddleware.authenticate,
     authMiddleware.hasRole(['Admin']),
