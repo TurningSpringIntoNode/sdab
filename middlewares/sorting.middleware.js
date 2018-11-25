@@ -22,7 +22,7 @@ const addSorting = (validFields, validOrders, defaultSort) => {
           .status(400)
           .send({
             status: 'ERROR',
-            message: `${sortBy} is not a valid field for sorting. ${validFields.join(' ')} is/are available.`,
+            message: `${sortBy} is not a valid field for sorting. ${validFields.join(', ')} is/are available.`,
           });
       }
     }
@@ -35,7 +35,7 @@ const addSorting = (validFields, validOrders, defaultSort) => {
           .status(400)
           .send({
             status: 'ERROR',
-            message: `${order} is not a valid option for sorting order. ${validOrders.join(' ')} is/are available`,
+            message: `${order} is not a valid option for sorting order. ${validOrders.join(', ')} is/are available`,
           });
       }
     }
