@@ -163,11 +163,10 @@ const deleteAnime = (req, res) => {
 };
 
 const getGenres = (req, res) => {
-
   let { search } = req.query;
 
   if (!search) {
-    search = "";
+    search = '';
   }
 
   Anime
@@ -186,10 +185,10 @@ const getGenres = (req, res) => {
         $group: {
           _id: null,
           genres: {
-            $addToSet: "$genre"
-          }
-        }
-      }
+            $addToSet: '$genre',
+          },
+        },
+      },
     ], (err, result) => {
       const { genres } = result[0];
       if (err) {
@@ -205,7 +204,8 @@ const getGenres = (req, res) => {
             status: 'OK',
             message: 'OK',
             content: {
-              genres: genres.sort().slice(req.pagination.skip, req.pagination.skip + req.pagination.limit),
+              genres: genres.sort().slice(req.pagination.skip,
+                req.pagination.skip + req.pagination.limit),
             },
           });
       }
