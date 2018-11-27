@@ -1,3 +1,5 @@
+const responseWriter = require('../utils/response-writer');
+const constants = require('../core/response-constants');
 
 const parseEvaluationData = (req, res, next) => {
   const { score } = req.body;
@@ -5,12 +7,7 @@ const parseEvaluationData = (req, res, next) => {
   if (score && !Number.isNaN(score) && score >= 1 && score <= 5) {
     next();
   } else {
-    res
-      .status(400)
-      .send({
-        status: 'ERROR',
-        message: 'Undefined score or score out of range [1,5]',
-      });
+    responseWriter.badResponse(res, 400, constants.BAD_SCORE_FOR_EVALUATION);
   }
 };
 
@@ -20,11 +17,7 @@ const parseEvaluatedObject = field => (req, res, next) => {
     req.evaluatedObject = evaluatedObject;
     next();
   } else {
-    res
-      .status(400)
-      .send({
-        status: 'ERROR',
-      });
+    responseWriter.badResponse(res, 400, constants.ERROR);
   }
 };
 

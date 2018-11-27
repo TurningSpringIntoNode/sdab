@@ -1,12 +1,10 @@
 const { User } = require('../core/mongodb').mongoose.models;
 
+const responseWriter = require('../utils/response-writer');
+
 const getUser = (req, res) => {
-  res.send({
-    status: 'OK',
-    message: 'OK',
-    content: {
-      user: req.user,
-    },
+  responseWriter.goodResponse(res, {
+    user: req.user,
   });
 };
 
@@ -14,20 +12,9 @@ const deleteOwnUser = (req, res) => {
   User
     .recDeleteById(req.user._id)
     .then(() => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-        });
+      responseWriter.goodResponse(res, {});
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'ERROR',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 module.exports = {

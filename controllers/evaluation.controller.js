@@ -1,5 +1,7 @@
 const { Evaluation } = require('../core/mongodb').mongoose.models;
 
+const responseWriter = require('../utils/response-writer');
+
 const createEvaluation = (req, res) => {
   const { score } = req.body;
   const { evaluatedObject } = req;
@@ -13,23 +15,11 @@ const createEvaluation = (req, res) => {
   evaluation
     .save()
     .then((evaluationDb) => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-          content: {
-            evaluation: evaluationDb,
-          },
-        });
+      responseWriter.goodResponse(res, {
+        evaluation: evaluationDb,
+      });
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'Internal server error',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const getEvaluations = (req, res) => {
@@ -44,23 +34,11 @@ const getEvaluations = (req, res) => {
   Evaluation
     .find(query, {}, req.pagination)
     .then((evaluations) => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-          content: {
-            evaluations,
-          },
-        });
+      responseWriter.goodResponse(res, {
+        evaluations,
+      });
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'Intervnal server error',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const getEvaluationsOfUser = (req, res) => {
@@ -77,23 +55,11 @@ const getEvaluationsOfUser = (req, res) => {
   Evaluation
     .find(query, {}, req.pagination)
     .then((evaluations) => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-          content: {
-            evaluations,
-          },
-        });
+      responseWriter.goodResponse(res, {
+        evaluations,
+      });
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'Intervnal server error',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const updateEvaluation = (req, res) => {
@@ -110,23 +76,11 @@ const updateEvaluation = (req, res) => {
       },
     })
     .then((evaluation) => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-          content: {
-            evaluation,
-          },
-        });
+      responseWriter.goodResponse(res, {
+        evaluation,
+      });
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'Intervnal server error',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const deleteEvaluation = (req, res) => {
@@ -135,20 +89,9 @@ const deleteEvaluation = (req, res) => {
   Evaluation
     .findByIdAndDelete(evaluationId)
     .then(() => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-        });
+      responseWriter.goodResponse(res, {});
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'Intervnal server error',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 module.exports = {

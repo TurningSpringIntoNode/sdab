@@ -1,6 +1,9 @@
 const { User } = require('../core/mongodb').mongoose.models;
 const { getRequestAuthToken } = require('../utils/auth');
 
+const responseWriter = require('../utils/response-writer');
+const constants = require('../core/response-constants');
+
 const authenticate = (req, res, next) => {
   const token = getRequestAuthToken(req);
   User
@@ -13,12 +16,7 @@ const authenticate = (req, res, next) => {
       return next();
     })
     .catch(() => {
-      res
-        .status(401)
-        .send({
-          status: 'ERROR',
-          message: 'Unauthorized user',
-        });
+      responseWriter.badResponse(res, 401, constants.UNAUTHORIZED_USER);
     });
 };
 
@@ -29,12 +27,7 @@ const hasRole = roles => (req, res, next) => {
   if (validRole) {
     next();
   } else {
-    res
-      .status(401)
-      .send({
-        status: 'ERROR',
-        message: 'Unauthorized user',
-      });
+    responseWriter.badResponse(res, 401, constants.UNAUTHORIZED_USER);
   }
 };
 

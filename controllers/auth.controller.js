@@ -1,5 +1,8 @@
 const { User } = require('../core/mongodb').mongoose.models;
 
+const responseWriter = require('../utils/response-writer');
+const constants = require('../core/response-constants');
+
 const signupSocial = (req, res) => {
   const { user, role } = req;
 
@@ -7,54 +10,28 @@ const signupSocial = (req, res) => {
     .findOne({ email: user.email })
     .then(async (dbUser) => {
       if (dbUser) {
-        res
-          .status(400)
-          .send({
-            status: 'ERROR',
-            message: 'User already exists',
-          });
-      } else {
-        await user.setupRole(role);
-
-        user
-          .hashPassword()
-          .then(() => {
-            user
-              .save()
-              .then((ndbUser) => {
-                const token = ndbUser
-                  .generateAuthToken();
-                res
-                  .send({
-                    status: 'OK',
-                    message: 'OK',
-                    content: {
-                      user: {
-                        role: ndbUser.getRole(),
-                      },
-                      token,
-                    },
-                  });
-              });
-          })
-          .catch(() => {
-            res
-              .status(500)
-              .send({
-                status: 'ERROR',
-                message: 'ERROR',
-              });
-          });
+        return responseWriter.badResponse(res, 400, constants.USER_ALREADY_EXISTS);
       }
-    })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'ERROR',
+      await user.setupRole(role);
+
+      return user
+        .hashPassword()
+        .then(() => {
+          user
+            .save()
+            .then((ndbUser) => {
+              const token = ndbUser
+                .generateAuthToken();
+              responseWriter.goodResponse(res, {
+                user: {
+                  role: ndbUser.getRole(),
+                },
+                token,
+              });
+            });
         });
-    });
+    })
+    .catch(responseWriter.failedToComplete(res));
 };
 
 
@@ -65,50 +42,27 @@ const loginSocial = (req, res) => {
     .findOne({ email })
     .then((dbUser) => {
       if (!dbUser) {
-        res
-          .status(400)
-          .send({
-            status: 'ERROR',
-            message: 'User not found',
-          });
-      } else {
-        User
-          .validatePassword(password, dbUser.password)
-          .then((same) => {
-            if (same) {
-              const token = dbUser.generateAuthToken();
-              return res
-                .send({
-                  status: 'OK',
-                  message: 'OK',
-                  content: {
-                    user: {
-                      role: dbUser.getRole(),
-                    },
-                    token,
-                  },
-                });
-            }
-            return Promise.reject();
-          })
-          .catch(() => {
-            res
-              .status(401)
-              .send({
-                status: 'ERROR',
-                message: 'Incorrect password',
-              });
-          });
+        return responseWriter.badResponse(res, 400, constants.USER_NOT_FOUND);
       }
-    })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'ERROR',
+      return User
+        .validatePassword(password, dbUser.password)
+        .then((same) => {
+          if (same) {
+            const token = dbUser.generateAuthToken();
+            return responseWriter.goodResponse(res, {
+              user: {
+                role: dbUser.getRole(),
+              },
+              token,
+            });
+          }
+          return Promise.reject();
+        })
+        .catch(() => {
+          responseWriter.badResponse(res, 401, constants.INCORRECT_PASSWORD);
         });
-    });
+    })
+    .catch(responseWriter.failedToComplete(res));
 };
 
 module.exports = {
