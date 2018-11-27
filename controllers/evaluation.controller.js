@@ -1,7 +1,6 @@
 const { Evaluation } = require('../core/mongodb').mongoose.models;
 
 const responseWriter = require('../utils/response-writer');
-const constants = require('../core/response-constants');
 
 const createEvaluation = (req, res) => {
   const { score } = req.body;

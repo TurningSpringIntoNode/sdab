@@ -1,7 +1,6 @@
 const { User } = require('../core/mongodb').mongoose.models;
 
 const responseWriter = require('../utils/response-writer');
-const constants = require('../core/response-constants');
 
 const getUser = (req, res) => {
   responseWriter.goodResponse(res, {
