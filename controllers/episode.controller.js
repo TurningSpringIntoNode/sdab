@@ -21,9 +21,7 @@ const getEpisodes = (req, res) => {
           });
         });
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const getEpisodeById = (req, res) => {
@@ -47,9 +45,7 @@ const getEpisodeById = (req, res) => {
         responseWriter.badResponse(res, 404, constants.EPISODE_NOT_FOUND);
       }
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 
@@ -86,9 +82,7 @@ const createEpisode = (req, res) => {
           });
         });
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const updateEpisode = (req, res) => {
@@ -112,9 +106,7 @@ const updateEpisode = (req, res) => {
         responseWriter.badResponse(res, 404, constants.EPISODE_NOT_FOUND);
       }
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const deleteEpisode = (req, res) => {
@@ -128,9 +120,7 @@ const deleteEpisode = (req, res) => {
     .then(() => {
       responseWriter.goodResponse(res, {});
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 module.exports = {

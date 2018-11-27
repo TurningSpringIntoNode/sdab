@@ -1,3 +1,5 @@
+const responseWriter = require('../utils/response-writer');
+const constants = require('../core/response-constants');
 
 const addPagination = (req, res, next) => {
   const pagination = {
@@ -8,26 +10,11 @@ const addPagination = (req, res, next) => {
   const { page, pageSize } = req.query;
 
   if (page && Number.isNaN(page)) {
-    res
-      .status(400)
-      .send({
-        status: 'ERROR',
-        message: 'Page is not a number',
-      });
+    responseWriter.badResponse(res, 400, constants.PAGE_NOT_NUMBER);
   } else if (pageSize && Number.isNaN(pageSize)) {
-    res
-      .status(400)
-      .send({
-        status: 'ERROR',
-        message: 'Page size is not a number',
-      });
+    responseWriter.badResponse(res, 400, constants.PAGE_SIZE_NOT_NUMBER);
   } else if (pageSize && (pageSize < 1 || pageSize > 30)) {
-    res
-      .status(400)
-      .send({
-        status: 'ERROR',
-        message: 'Page size is out of the range [1,30]',
-      });
+    responseWriter.badResponse(res, 400, constants.PAGE_SIZE_BAD_RANGE);
   } else {
     if (pageSize) {
       pagination.limit = 1 * pageSize;

@@ -31,9 +31,7 @@ const signupSocial = (req, res) => {
             });
         });
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 
@@ -64,9 +62,7 @@ const loginSocial = (req, res) => {
           responseWriter.badResponse(res, 401, constants.INCORRECT_PASSWORD);
         });
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 module.exports = {

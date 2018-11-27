@@ -15,9 +15,7 @@ const deleteOwnUser = (req, res) => {
     .then(() => {
       responseWriter.goodResponse(res, {});
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 module.exports = {

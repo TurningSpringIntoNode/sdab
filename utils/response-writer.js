@@ -1,4 +1,6 @@
 
+const constants = require('../core/response-constants');
+
 const goodResponse = (res, content) => {
   res
     .send({
@@ -17,7 +19,14 @@ const badResponse = (res, status, message) => {
     });
 };
 
+const failedToComplete = (res) => {
+  return () => {
+    badResponse(res, 500, constants.ERROR);
+  };
+};
+
 module.exports = {
   goodResponse,
   badResponse,
+  failedToComplete,
 };

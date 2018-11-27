@@ -1,7 +1,6 @@
 const { User } = require('../core/mongodb').mongoose.models;
 
 const responseWriter = require('../utils/response-writer');
-const constants = require('../core/response-constants');
 
 const deleteUserById = (req, res) => {
   const { id } = req.params;
@@ -11,9 +10,7 @@ const deleteUserById = (req, res) => {
     .then(() => {
       responseWriter.goodResponse(res, {});
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 module.exports = {

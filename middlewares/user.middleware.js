@@ -8,18 +8,16 @@ const Roles = {
   Admin,
 };
 
+const responseWriter = require('../utils/response-writer');
+const constants = require('../core/response-constants');
+
 const parseUserData = (req, res, next) => {
   const {
     name, email, password, checkPassword,
   } = req.body;
 
   if (password !== checkPassword) {
-    res
-      .status(400)
-      .send({
-        status: 'error',
-        message: 'Password and confirmation password differs',
-      });
+    responseWriter.badResponse(res, 400, constants.DIFF_PASSWORD_CONFIRM);
   } else {
     const user = new User({
       name,
@@ -30,7 +28,7 @@ const parseUserData = (req, res, next) => {
     const error = user.validateSync();
 
     if (error) {
-      // TODO
+      responseWriter.badResponse(res, 500, constants.ERROR);
     } else {
       req.user = user;
       next();

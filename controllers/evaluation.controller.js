@@ -20,9 +20,7 @@ const createEvaluation = (req, res) => {
         evaluation: evaluationDb,
       });
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const getEvaluations = (req, res) => {
@@ -41,9 +39,7 @@ const getEvaluations = (req, res) => {
         evaluations,
       });
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const getEvaluationsOfUser = (req, res) => {
@@ -64,9 +60,7 @@ const getEvaluationsOfUser = (req, res) => {
         evaluations,
       });
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const updateEvaluation = (req, res) => {
@@ -87,9 +81,7 @@ const updateEvaluation = (req, res) => {
         evaluation,
       });
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const deleteEvaluation = (req, res) => {
@@ -100,9 +92,7 @@ const deleteEvaluation = (req, res) => {
     .then(() => {
       responseWriter.goodResponse(res, {});
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 module.exports = {

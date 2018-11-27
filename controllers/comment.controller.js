@@ -1,7 +1,6 @@
 const { Comment } = require('../core/mongodb').mongoose.models;
 
 const responseWriter = require('../utils/response-writer');
-const constants = require('../core/response-constants');
 
 const createComment = (req, res) => {
   const { message } = req.body;
@@ -20,9 +19,7 @@ const createComment = (req, res) => {
         comment: commentDb,
       });
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const getComments = (req, res) => {
@@ -41,9 +38,7 @@ const getComments = (req, res) => {
         comments,
       });
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const getCommentsOfUser = (req, res) => {
@@ -64,9 +59,7 @@ const getCommentsOfUser = (req, res) => {
         comments,
       });
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const updateComment = (req, res) => {
@@ -88,9 +81,7 @@ const updateComment = (req, res) => {
         comment,
       });
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const deleteComment = (req, res) => {
@@ -101,9 +92,7 @@ const deleteComment = (req, res) => {
     .then(() => {
       responseWriter.goodResponse(res, {});
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 

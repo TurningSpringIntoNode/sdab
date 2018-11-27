@@ -32,9 +32,7 @@ const getAnimes = (req, res) => {
           });
         });
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const getAnimeById = (req, res) => {
@@ -55,9 +53,7 @@ const getAnimeById = (req, res) => {
         responseWriter.badResponse(res, 404, constants.ANIME_NOT_FOUND);
       }
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const createAnime = (req, res) => {
@@ -85,9 +81,7 @@ const createAnime = (req, res) => {
           });
         });
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const updateAnime = (req, res) => {
@@ -120,9 +114,7 @@ const updateAnime = (req, res) => {
         responseWriter.badResponse(res, 404, constants.ANIME_NOT_FOUND);
       }
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const deleteAnime = (req, res) => {
@@ -143,9 +135,7 @@ const deleteAnime = (req, res) => {
           });
       });
     })
-    .catch(() => {
-      responseWriter.badResponse(res, 500, constants.ERROR);
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const getGenres = (req, res) => {
@@ -178,7 +168,7 @@ const getGenres = (req, res) => {
     ], (err, result) => {
       const { genres } = result[0];
       if (err) {
-        responseWriter.badResponse(res, 500, constants.ERROR);
+        responseWriter.failedToComplete(res);
       } else {
         responseWriter.goodResponse(res, {
           genres: genres.sort().slice(req.pagination.skip, req.pagination.skip + req.pagination.limit),

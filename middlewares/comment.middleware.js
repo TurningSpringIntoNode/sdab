@@ -1,4 +1,5 @@
-
+const responseWriter = require('../utils/response-writer');
+const constants = require('../core/response-constants');
 
 const parseCommentData = (req, res, next) => {
   const { message } = req.body;
@@ -6,12 +7,7 @@ const parseCommentData = (req, res, next) => {
   if (message) {
     next();
   } else {
-    res
-      .status(400)
-      .send({
-        status: 'ERROR',
-        message: 'Comment can\'t be empty',
-      });
+    responseWriter.badResponse(res, 400, constants.COMMENT_NOT_EMPTY);
   }
 };
 

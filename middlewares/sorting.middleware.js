@@ -1,3 +1,5 @@
+const responseWriter = require('../utils/response-writer');
+const constants = require('../core/response-constants');
 
 const addSorting = (validFields, validOrders, defaultSort) => (req, res, next) => {
   const sorting = defaultSort;
@@ -7,12 +9,7 @@ const addSorting = (validFields, validOrders, defaultSort) => (req, res, next) =
     if (validFields.includes(sortBy)) {
       sorting.sortBy = sortBy;
     } else {
-      return res
-        .status(400)
-        .send({
-          status: 'ERROR',
-          message: `${sortBy} is not a valid field for sorting. ${validFields.join(', ')} is/are available.`,
-        });
+      return responseWriter.badResponse(res, 400, constants.INVALID_SORT_OPTIONS(sortBy, 'sorting field', validFields));
     }
   }
 
@@ -20,12 +17,7 @@ const addSorting = (validFields, validOrders, defaultSort) => (req, res, next) =
     if (validOrders.includes(order)) {
       sorting.order = order;
     } else {
-      return res
-        .status(400)
-        .send({
-          status: 'ERROR',
-          message: `${order} is not a valid option for sorting order. ${validOrders.join(', ')} is/are available`,
-        });
+      return responseWriter.badResponse(res, 400, constants.INVALID_SORT_OPTIONS(order, 'sorting order', validFields));
     }
   }
 
