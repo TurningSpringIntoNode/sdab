@@ -11,26 +11,25 @@ const signupSocial = (req, res) => {
     .then(async (dbUser) => {
       if (dbUser) {
         return responseWriter.badResponse(res, 400, constants.USER_ALREADY_EXISTS);
-      } else {
-        await user.setupRole(role);
-
-        return user
-          .hashPassword()
-          .then(() => {
-            user
-              .save()
-              .then((ndbUser) => {
-                const token = ndbUser
-                  .generateAuthToken();
-                responseWriter.goodResponse(res, {
-                  user: {
-                    role: ndbUser.getRole(),
-                  },
-                  token,
-                });
-              });
-          });
       }
+      await user.setupRole(role);
+
+      return user
+        .hashPassword()
+        .then(() => {
+          user
+            .save()
+            .then((ndbUser) => {
+              const token = ndbUser
+                .generateAuthToken();
+              responseWriter.goodResponse(res, {
+                user: {
+                  role: ndbUser.getRole(),
+                },
+                token,
+              });
+            });
+        });
     })
     .catch(() => {
       responseWriter.badResponse(res, 500, constants.ERROR);
@@ -46,25 +45,24 @@ const loginSocial = (req, res) => {
     .then((dbUser) => {
       if (!dbUser) {
         return responseWriter.badResponse(res, 400, constants.USER_NOT_FOUND);
-      } else {
-        return User
-          .validatePassword(password, dbUser.password)
-          .then((same) => {
-            if (same) {
-              const token = dbUser.generateAuthToken();
-              return responseWriter.goodResponse(res, {
-                user: {
-                  role: dbUser.getRole(),
-                },
-                token,
-              });
-            }
-            return Promise.reject();
-          })
-          .catch(() => {
-            responseWriter.badResponse(res, 401, constants.INCORRECT_PASSWORD);
-          });
       }
+      return User
+        .validatePassword(password, dbUser.password)
+        .then((same) => {
+          if (same) {
+            const token = dbUser.generateAuthToken();
+            return responseWriter.goodResponse(res, {
+              user: {
+                role: dbUser.getRole(),
+              },
+              token,
+            });
+          }
+          return Promise.reject();
+        })
+        .catch(() => {
+          responseWriter.badResponse(res, 401, constants.INCORRECT_PASSWORD);
+        });
     })
     .catch(() => {
       responseWriter.badResponse(res, 500, constants.ERROR);

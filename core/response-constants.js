@@ -4,6 +4,7 @@ const ANIME_NOT_FOUND = 'Anime not found';
 const USER_ALREADY_EXISTS = 'User already exists';
 const USER_NOT_FOUND = 'User not found';
 const INCORRECT_PASSWORD = 'Incorrect password';
+const EPISODE_NOT_FOUND = 'Episode not found';
 
 module.exports = {
   ANIME_NOT_FOUND,
@@ -11,4 +12,5 @@ module.exports = {
   USER_ALREADY_EXISTS,
   USER_NOT_FOUND,
   INCORRECT_PASSWORD,
+  EPISODE_NOT_FOUND,
 };
