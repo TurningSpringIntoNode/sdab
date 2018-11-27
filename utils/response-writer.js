@@ -19,11 +19,9 @@ const badResponse = (res, status, message) => {
     });
 };
 
-const failedToComplete = (res) => {
-  return () => {
+const failedToComplete = res => () => {
     badResponse(res, 500, constants.ERROR);
   };
-};
 
 module.exports = {
   goodResponse,
