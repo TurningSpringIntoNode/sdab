@@ -63,12 +63,12 @@ const getEvaluationsOfUser = (req, res) => {
 };
 
 const updateEvaluation = (req, res) => {
-  const { evaluationId } = req;
+  const { evaluatedObject } = req;
   const { score } = req.body;
 
   Evaluation
     .findOneAndUpdate({
-      _id: evaluationId,
+      _id: evaluatedObject,
       user: req.user._id,
     }, {
       $set: {
@@ -84,10 +84,10 @@ const updateEvaluation = (req, res) => {
 };
 
 const deleteEvaluation = (req, res) => {
-  const { evaluationId } = req;
+  const { evaluatedObject } = req;
 
   Evaluation
-    .findByIdAndDelete(evaluationId)
+    .findByIdAndDelete(evaluatedObject)
     .then(() => {
       responseWriter.goodResponse(res, {});
     })
