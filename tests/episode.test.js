@@ -106,12 +106,10 @@ describe('create episode', () => {
           .set('authorization', `Bearer ${token}`)
           .send({
             name: 'test_ep_5',
-            chapter: 'x5',
+            chapter: 5,
             description: 'test episode 5',
-            video: {
-              id: '5',
-              url: 'episodes.com/5',
-            },
+            video_id: '5',
+            video: 'episodes.com/5',
           })
           .expect(200)
           .then(res => res.body)
