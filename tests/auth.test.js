@@ -25,6 +25,13 @@ const admin = {
   checkPassword: 'lolo'
 };
 
+const userWrongCheck = {
+  name: 'Felipe',
+  email: 'ff@ff.com',
+  password: 'lolo',
+  checkPassword: 'lol'
+};
+
 describe('Auth', () => {
 
   test('Signup & login', (done) => {
@@ -53,6 +60,14 @@ describe('Auth', () => {
             done();
           });
       });
+  });
+
+  test('Signup with incorrect checkPasword', (done) => {
+    request(app)
+      .post('/signup/social')
+      .send(userWrongCheck)
+      .expect(400)
+      .end(done);
   });
 
   test('Login as default admin', (done) => {

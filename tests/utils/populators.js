@@ -1,4 +1,4 @@
-const { Anime, Episode }  = require('../../core/mongodb').mongoose.models;
+const { Anime, Episode, User }  = require('../../core/mongodb').mongoose.models;
 
 
 const animes = [
@@ -70,6 +70,33 @@ const episodes = [
   },
 ];
 
+const users = [
+  {
+    name: 'mota',
+    email: 'mota@g.com',
+    password: 'mota',
+  },
+  {
+    name: 'felipe',
+    email: 'felipe@g.com',
+    password: 'felipe',
+  },
+  {
+    name: 'hugo',
+    email: 'hugo@g.com',
+    password: 'hugo',
+  },
+  {
+    name: 'ari',
+    email: 'ari@g.com',
+    password: 'ari',
+  },
+];
+
+const comments = {
+
+};
+
 const populateAnime = () => Promise.all(animes.map(x => new Anime(x).save()));
 
 const populateEpisode = async () => {
@@ -87,7 +114,22 @@ const populateEpisode = async () => {
   }))
 };
 
+const populateUser = () => Promise.all(users.map(async x => {
+  const user = new User(x);
+  await user.setupRole('Account');
+  return user
+    .hashPassword()
+    .then(() => {
+      return user.save();
+    });
+}));
+
 module.exports = {
   populateAnime,
   populateEpisode,
+  populateUser,
+
+  animes,
+  episodes,
+  users,
 }

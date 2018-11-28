@@ -3,11 +3,9 @@ process.env.TEST_SUITE = 'anime';
 const request = require('supertest');
 const expect = require('chai').expect;
 
-const config = require('../app.config');
-
 const app = require('../app');
 
-const { Anime, User } = require('../core/mongodb').mongoose.models;
+const { Anime } = require('../core/mongodb').mongoose.models;
 
 const authUtils = require('./utils/auth');
 const populators = require('./utils/populators');
@@ -124,3 +122,98 @@ describe('Create anime', () => {
 
 });
 
+
+describe('Options get anime', () => {
+
+  test('Get animes with sortBy', async (done) => {
+
+    const animes = await Anime.find({});
+    request(app)
+      .get('/animes?sortBy=name')
+      .expect(200)
+      .then(res => res.body)
+      .then(res => {
+        expect(res.status).to.eql('OK');
+        expect(res.message).to.eql('OK');
+        expect(res.content.animes.length).to.eql(animes.length);
+        done();
+      });
+  });
+
+  test('Get animes with order', async (done) => {
+
+    const animes = await Anime.find({});
+    request(app)
+      .get('/animes?order=asc')
+      .expect(200)
+      .then(res => res.body)
+      .then(res => {
+        expect(res.status).to.eql('OK');
+        expect(res.message).to.eql('OK');
+        expect(res.content.animes.length).to.eql(animes.length);
+        done();
+      });
+  });
+
+  test('Get animes with pages', async (done) => {
+
+    request(app)
+      .get('/animes?page=1&pageSize=1')
+      .expect(200)
+      .then(res => res.body)
+      .then(res => {
+        expect(res.status).to.eql('OK');
+        expect(res.message).to.eql('OK');
+        expect(res.content.animes.length).to.eql(1);
+        done();
+      });
+  });
+
+  test('Invalid sort by', (done) => {
+
+    request(app)
+      .get('/animes?sortBy=meh')
+      .expect(400)
+      .end(done);
+  });
+
+  test('Invalid order', (done) => {
+
+    request(app)
+      .get('/animes?order=meh')
+      .expect(400)
+      .end(done);
+  });
+
+  test('Invalid page', (done) => {
+
+    request(app)
+      .get('/animes?page=meh')
+      .expect(400)
+      .end(done);
+  });
+
+  test('Invalid pageSize(meh)', (done) => {
+
+    request(app)
+      .get('/animes?pageSize=meh')
+      .expect(400)
+      .end(done);
+  });
+
+  test('Invalid pageSize(0)', (done) => {
+
+    request(app)
+      .get('/animes?pageSize=0')
+      .expect(400)
+      .end(done);
+  });
+
+  test('Invalid pageSize(31)', (done) => {
+
+    request(app)
+      .get('/animes?pageSize=31')
+      .expect(400)
+      .end(done);
+  });
+});

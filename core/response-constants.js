@@ -12,7 +12,7 @@ const PAGE_NOT_NUMBER = 'Page is not a number';
 const PAGE_SIZE_NOT_NUMBER = 'Page size is not a number';
 const PAGE_SIZE_BAD_RANGE = 'Page size is out of the range [1,30]';
 const INVALID_SORT_OPTIONS = (option, type, validFields) => `${option} is not a valid option for ${type}. 
-                                                              ${validFields.join(', ')} is/are available.`;
+${validFields.join(', ')} is/are available.`;
 
 const DIFF_PASSWORD_CONFIRM = 'Password and confirmation password differs';
 

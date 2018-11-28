@@ -26,6 +26,8 @@ const routes = (app) => {
   router.all('/*',
     logMiddleware.logIp);
 
+  router.get('/', (req, res) => res.send({ hello: true }));
+
   /**
    * @apiDefine UserNotFound
    *    User was not found in database

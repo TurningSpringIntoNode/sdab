@@ -28,7 +28,7 @@ const getEvaluations = (req, res) => {
   const query = {};
 
   if (evaluatedObject) {
-    query.evalutedObject = evaluatedObject;
+    query.evaluatedObject = evaluatedObject;
   }
 
   Evaluation
@@ -63,7 +63,7 @@ const getEvaluationsOfUser = (req, res) => {
 };
 
 const updateEvaluation = (req, res) => {
-  const { evaluationId } = req;
+  const { evaluationId } = req.params;
   const { score } = req.body;
 
   Evaluation
@@ -84,7 +84,7 @@ const updateEvaluation = (req, res) => {
 };
 
 const deleteEvaluation = (req, res) => {
-  const { evaluationId } = req;
+  const { evaluationId } = req.params;
 
   Evaluation
     .findByIdAndDelete(evaluationId)
