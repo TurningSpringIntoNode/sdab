@@ -7,5 +7,5 @@
 [![BCH compliance](https://bettercodehub.com/edge/badge/TurningSpringIntoNode/sdab?branch=master)](https://bettercodehub.com/)
 [![codebeat badge](https://codebeat.co/badges/bce420f3-14d3-48f8-8614-5284f4144015)](https://codebeat.co/projects/github-com-turningspringintonode-sdab-master)
 
-Doc: http://obese-roof.surge.sh
-Deploy: http://34.239.129.125/
+[Doc](http://obese-roof.surge.sh)
+[Deploy](http://34.239.129.125/)
