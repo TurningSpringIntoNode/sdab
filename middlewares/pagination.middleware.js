@@ -15,7 +15,7 @@ const addPagination = (req, res, next) => {
     responseWriter.badResponse(res, 400, constants.PAGE_NOT_NUMBER);
   } else if (pageSize && Number.isNaN(1 * pageSize)) {
     responseWriter.badResponse(res, 400, constants.PAGE_SIZE_NOT_NUMBER);
-  } else if (pageSize && (1*pageSize < 1 || 1*pageSize > 30)) {
+  } else if (pageSize && (1 * pageSize < 1 || 1 * pageSize > 30)) {
     responseWriter.badResponse(res, 400, constants.PAGE_SIZE_BAD_RANGE);
   } else {
     if (pageSize) {
