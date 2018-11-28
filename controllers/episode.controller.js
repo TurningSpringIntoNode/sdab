@@ -50,25 +50,20 @@ const getEpisodeById = (req, res) => {
 
 
 const createEpisode = (req, res) => {
-  const video = {
-    id: req.file.public_id,
-    url: req.file.url,
-  };
+  const { name, chapter, description } = req.body;
+  const { public_id, url } = req.file;
 
-  const {
-    name, chapter, description,
-  } = req.body;
-
-  const {
-    animeId,
-  } = req.params;
+  const { animeId } = req.params;
 
   const episode = new Episode({
     name,
     chapter,
     description,
     anime: animeId,
-    video,
+    video: {
+      id: public_id,
+      url,
+    },
   });
 
   episode
@@ -88,6 +83,9 @@ const createEpisode = (req, res) => {
 const updateEpisode = (req, res) => {
   const { animeId, episodeId } = req.params;
 
+  const { name, chapter, description } = req.body;
+  const { public_id, url } = req.file;
+
   Episode
     .findOne({
       anime: animeId,
@@ -95,12 +93,21 @@ const updateEpisode = (req, res) => {
     })
     .then((episode) => {
       if (episode) {
+        episode.name = name;
+        episode.chapter = chapter;
+        episode.description = description;
+        episode.video.url = url;
+        episode.video.id = public_id;
         episode
-          .toJSONAsync()
-          .then((episodeJson) => {
-            responseWriter.goodResponse(res, {
-              episode: episodeJson,
-            });
+          .save()
+          .then((episodeDb) => {
+            episodeDb
+              .toJSONAsync()
+              .then((episodeJson) => {
+                responseWriter.goodResponse(res, {
+                  episode: episodeJson,
+                });
+              });
           });
       } else {
         responseWriter.badResponse(res, 404, constants.EPISODE_NOT_FOUND);
