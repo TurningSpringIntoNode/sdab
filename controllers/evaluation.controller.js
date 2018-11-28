@@ -28,7 +28,7 @@ const getEvaluations = (req, res) => {
   const query = {};
 
   if (evaluatedObject) {
-    query.evalutedObject = evaluatedObject;
+    query.evaluatedObject = evaluatedObject;
   }
 
   Evaluation

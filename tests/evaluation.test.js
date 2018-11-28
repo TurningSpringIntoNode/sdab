@@ -1,11 +1,11 @@
-process.env.TEST_SUITE = 'comment';
+process.env.TEST_SUITE = 'evaluation';
 
 const request = require('supertest');
 const expect = require('chai').expect;
 
 const app = require('../app');
 
-const { Anime, Comment } = require('../core/mongodb').mongoose.models;
+const { Anime, Evaluation } = require('../core/mongodb').mongoose.models;
 
 const authUtils = require('./utils/auth');
 const populators = require('./utils/populators');
@@ -16,19 +16,19 @@ beforeAll(async () => {
   await populators.populateUser();
 });
 
-describe('Comment crud', () => {
+describe('Evaluation crud', () => {
 
-  test('Create comment', async (done) => {
+  test('Create evaluation', async (done) => {
     const animes = await Anime.find({});
-    const message = 'meh';
+    const score = 3;
     authUtils
       .getUserToken()
       .then(token => {
         request(app)
-          .post(`/animes/${animes[0]._id.toHexString()}/comments`)
+          .post(`/animes/${animes[0]._id.toHexString()}/evaluations`)
           .set('authorization', `Bearer ${token}`)
           .send({
-            message,
+            score,
           })
           .expect(200)
           .then(res => res.body)
@@ -36,28 +36,28 @@ describe('Comment crud', () => {
             expect(res.status).to.eql('OK');
             expect(res.message).to.eql('OK');
             expect(res).to.have.property('content');
-            expect(res.content).to.have.property('comment');
-            expect(res.content.comment).to.have.property('message');
-            expect(res.content.comment.message).to.eql(message);
+            expect(res.content).to.have.property('evaluation');
+            expect(res.content.evaluation).to.have.property('score');
+            expect(res.content.evaluation.score).to.eql(score);
             done();
           });
       });
   });
 
-  test('Get comments', async (done) => {
+  test('Get evaluations', async (done) => {
     const animes = await Anime.find({});
-    const comments = await Comment.find({ commentedObject: animes[0]._id.toHexString() });
+    const evaluations = await Evaluation.find({ evaluatedObject: animes[0]._id.toHexString() });
 
     request(app)
-      .get(`/animes/${animes[0]._id.toHexString()}/comments`)
+      .get(`/animes/${animes[0]._id.toHexString()}/evaluations`)
       .expect(200)
       .then(res => res.body)
       .then(res => {
         expect(res.status).to.eql('OK');
         expect(res.message).to.eql('OK');
         expect(res).to.have.property('content');
-        expect(res.content).to.have.property('comments');
-        expect(res.content.comments.length).to.eql(comments.length);
+        expect(res.content).to.have.property('evaluations');
+        expect(res.content.evaluations.length).to.eql(evaluations.length);
         done();
       });
 
