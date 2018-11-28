@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 const { Anime, Episode } = require('../core/mongodb').mongoose.models;
 
 const { cloudinary } = require('../core/cloudinary');
@@ -12,8 +14,10 @@ const getAnimes = (req, res) => {
 
   const query = {};
 
-  if (search) {
-    query.name = new RegExp(search, 'i');
+  const safeSearch = _.escapeRegExp(search);
+
+  if (safeSearch) {
+    query.name = new RegExp(safeSearch, 'i');
   }
 
   if (genre) {
@@ -140,6 +144,8 @@ const deleteAnime = (req, res) => {
 
 const getGenres = (req, res) => {
   let { search } = req.query;
+
+  search = _.escapeRegExp(search);
 
   if (!search) {
     search = '';
