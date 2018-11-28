@@ -50,11 +50,10 @@ const getEpisodeById = (req, res) => {
 
 
 const createEpisode = (req, res) => {
+  const { name, chapter, description } = req.body;
+  const { public_id, url } = req.file;
 
-  const { name, chapter, description, } = req.body;
-  const { public_id, url, } = req.file;
-
-  const { animeId, } = req.params;
+  const { animeId } = req.params;
 
   const episode = new Episode({
     name,
@@ -84,8 +83,8 @@ const createEpisode = (req, res) => {
 const updateEpisode = (req, res) => {
   const { animeId, episodeId } = req.params;
 
-  const { name, chapter, description, } = req.body;
-  const { public_id, url, } = req.file;
+  const { name, chapter, description } = req.body;
+  const { public_id, url } = req.file;
 
   Episode
     .findOne({
@@ -101,7 +100,7 @@ const updateEpisode = (req, res) => {
         episode.video.id = public_id;
         episode
           .save()
-          .then(episodeDb => {
+          .then((episodeDb) => {
             episodeDb
               .toJSONAsync()
               .then((episodeJson) => {
