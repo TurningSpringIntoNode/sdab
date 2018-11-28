@@ -99,7 +99,7 @@ const updateAnime = (req, res) => {
     .then((anime) => {
       if (anime) {
         anime.name = name;
-        anime.gender = genre;
+        anime.genre = genre;
         anime.resume = resume;
         anime.thumb.url = url;
         anime.thumb.id = public_id;
