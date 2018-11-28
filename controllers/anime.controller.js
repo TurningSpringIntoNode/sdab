@@ -1,6 +1,12 @@
+const _ = require('lodash');
+
 const { Anime, Episode } = require('../core/mongodb').mongoose.models;
 
 const { cloudinary } = require('../core/cloudinary');
+
+const responseWriter = require('../utils/response-writer');
+
+const constants = require('../core/response-constants');
 
 const getAnimes = (req, res) => {
   const { search, genre } = req.query;
@@ -8,8 +14,10 @@ const getAnimes = (req, res) => {
 
   const query = {};
 
-  if (search) {
-    query.name = new RegExp(search, 'i');
+  const safeSearch = _.escapeRegExp(search);
+
+  if (safeSearch) {
+    query.name = new RegExp(safeSearch, 'i');
   }
 
   if (genre) {
@@ -23,24 +31,12 @@ const getAnimes = (req, res) => {
       Promise
         .all(animes.map(anime => anime.toJSONAsync()))
         .then((animesJson) => {
-          res
-            .send({
-              status: 'OK',
-              message: 'OK',
-              content: {
-                animes: animesJson,
-              },
-            });
+          responseWriter.goodResponse(res, {
+            animes: animesJson,
+          });
         });
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'ERROR',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const getAnimeById = (req, res) => {
@@ -53,32 +49,15 @@ const getAnimeById = (req, res) => {
         anime
           .toJSONAsync()
           .then((animeJson) => {
-            res
-              .send({
-                status: 'OK',
-                message: 'OK',
-                content: {
-                  anime: animeJson,
-                },
-              });
+            responseWriter.goodResponse(res, {
+              anime: animeJson,
+            });
           });
       } else {
-        res
-          .status(404)
-          .send({
-            status: 'ERROR',
-            message: 'Anime not found',
-          });
+        responseWriter.badResponse(res, 404, constants.ANIME_NOT_FOUND);
       }
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'ERROR',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const createAnime = (req, res) => {
@@ -101,23 +80,12 @@ const createAnime = (req, res) => {
       animeDb
         .toJSONAsync()
         .then((animeJson) => {
-          res.send({
-            status: 'OK',
-            message: 'OK',
-            content: {
-              anime: animeJson,
-            },
+          responseWriter.goodResponse(res, {
+            anime: animeJson,
           });
         });
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'ERROR',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const updateAnime = (req, res) => {
@@ -141,33 +109,16 @@ const updateAnime = (req, res) => {
             animeDb
               .toJSONAsync()
               .then((animeJson) => {
-                res
-                  .send({
-                    status: 'OK',
-                    message: 'OK',
-                    content: {
-                      anime: animeJson,
-                    },
-                  });
+                responseWriter.goodResponse(res, {
+                  anime: animeJson,
+                });
               });
           });
       } else {
-        res
-          .status(404)
-          .send({
-            status: 'ERROR',
-            message: 'Anime not found',
-          });
+        responseWriter.badResponse(res, 404, constants.ANIME_NOT_FOUND);
       }
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'ERROR',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const deleteAnime = (req, res) => {
@@ -183,27 +134,18 @@ const deleteAnime = (req, res) => {
             Episode
               .deleteManyByAnimeId(animeId)
               .then(() => {
-                res
-                  .send({
-                    status: 'OK',
-                    message: 'OK',
-                  });
+                responseWriter.goodResponse(res, {});
               });
           });
       });
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'ERROR',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const getGenres = (req, res) => {
   let { search } = req.query;
+
+  search = _.escapeRegExp(search);
 
   if (!search) {
     search = '';
@@ -232,22 +174,11 @@ const getGenres = (req, res) => {
     ], (err, result) => {
       const { genres } = result[0];
       if (err) {
-        res
-          .status(500)
-          .send({
-            status: 'ERROR',
-            message: 'ERROR',
-          });
+        responseWriter.failedToComplete(res);
       } else {
-        res
-          .send({
-            status: 'OK',
-            message: 'OK',
-            content: {
-              genres: genres.sort().slice(req.pagination.skip,
-                req.pagination.skip + req.pagination.limit),
-            },
-          });
+        responseWriter.goodResponse(res, {
+          genres: genres.sort().slice(req.pagination.skip, req.pagination.skip + req.pagination.limit),
+        });
       }
     });
 };

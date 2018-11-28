@@ -1,5 +1,7 @@
 const { Comment } = require('../core/mongodb').mongoose.models;
 
+const responseWriter = require('../utils/response-writer');
+
 const createComment = (req, res) => {
   const { message } = req.body;
   const { commentedObject } = req;
@@ -13,23 +15,11 @@ const createComment = (req, res) => {
   comment
     .save()
     .then((commentDb) => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-          content: {
-            comment: commentDb,
-          },
-        });
+      responseWriter.goodResponse(res, {
+        comment: commentDb,
+      });
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'OK',
-          message: 'Internal server error',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const getComments = (req, res) => {
@@ -44,23 +34,11 @@ const getComments = (req, res) => {
   Comment
     .find(query, {}, req.pagination)
     .then((comments) => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-          content: {
-            comments,
-          },
-        });
+      responseWriter.goodResponse(res, {
+        comments,
+      });
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'OK',
-          message: 'Internal server error',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const getCommentsOfUser = (req, res) => {
@@ -77,23 +55,11 @@ const getCommentsOfUser = (req, res) => {
   Comment
     .find(query, {}, req.pagination)
     .then((comments) => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-          content: {
-            comments,
-          },
-        });
+      responseWriter.goodResponse(res, {
+        comments,
+      });
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'OK',
-          message: 'Internal server error',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const updateComment = (req, res) => {
@@ -111,23 +77,11 @@ const updateComment = (req, res) => {
       },
     })
     .then((comment) => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-          content: {
-            comment,
-          },
-        });
+      responseWriter.goodResponse(res, {
+        comment,
+      });
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'OK',
-          message: 'Internal server error',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const deleteComment = (req, res) => {
@@ -136,20 +90,9 @@ const deleteComment = (req, res) => {
   Comment
     .findByIdAndDelete(commentId)
     .then(() => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-        });
+      responseWriter.goodResponse(res, {});
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'OK',
-          message: 'Internal server error',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 

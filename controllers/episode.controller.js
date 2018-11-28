@@ -1,5 +1,7 @@
 const { Episode } = require('../core/mongodb').mongoose.models;
 
+const responseWriter = require('../utils/response-writer');
+const constants = require('../core/response-constants');
 
 const getEpisodes = (req, res) => {
   const { animeId } = req.params;
@@ -14,24 +16,12 @@ const getEpisodes = (req, res) => {
       Promise
         .all(episodes.map(episode => episode.toJSONAsync()))
         .then((episodesJson) => {
-          res
-            .send({
-              status: 'OK',
-              message: 'OK',
-              content: {
-                episodes: episodesJson,
-              },
-            });
+          responseWriter.goodResponse(res, {
+            episodes: episodesJson,
+          });
         });
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'ERROR',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const getEpisodeById = (req, res) => {
@@ -47,32 +37,15 @@ const getEpisodeById = (req, res) => {
         episode
           .toJSONAsync()
           .then((episodeJson) => {
-            res
-              .send({
-                status: 'OK',
-                message: 'OK',
-                content: {
-                  episode: episodeJson,
-                },
-              });
+            responseWriter.goodResponse(res, {
+              episode: episodeJson,
+            });
           });
       } else {
-        res
-          .status(404)
-          .send({
-            status: 'ERROR',
-            message: 'Episode not found',
-          });
+        responseWriter.badResponse(res, 404, constants.EPISODE_NOT_FOUND);
       }
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'ERROR',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 
@@ -104,24 +77,12 @@ const createEpisode = (req, res) => {
       episodeDb
         .toJSONAsync()
         .then((episodeJson) => {
-          res
-            .send({
-              status: 'OK',
-              message: 'OK',
-              content: {
-                episode: episodeJson,
-              },
-            });
+          responseWriter.goodResponse(res, {
+            episode: episodeJson,
+          });
         });
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'ERROR',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const updateEpisode = (req, res) => {
@@ -137,31 +98,15 @@ const updateEpisode = (req, res) => {
         episode
           .toJSONAsync()
           .then((episodeJson) => {
-            res
-              .send({
-                status: 'OK',
-                message: 'OK',
-                content: {
-                  episode: episodeJson,
-                },
-              });
+            responseWriter.goodResponse(res, {
+              episode: episodeJson,
+            });
           });
       } else {
-        res
-          .send({
-            status: 'ERROR',
-            message: 'Episode not found',
-          });
+        responseWriter.badResponse(res, 404, constants.EPISODE_NOT_FOUND);
       }
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'ERROR',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 const deleteEpisode = (req, res) => {
@@ -173,20 +118,9 @@ const deleteEpisode = (req, res) => {
       anime: animeId,
     })
     .then(() => {
-      res
-        .send({
-          status: 'OK',
-          message: 'OK',
-        });
+      responseWriter.goodResponse(res, {});
     })
-    .catch(() => {
-      res
-        .status(500)
-        .send({
-          status: 'ERROR',
-          message: 'ERROR',
-        });
-    });
+    .catch(responseWriter.failedToComplete(res));
 };
 
 module.exports = {
